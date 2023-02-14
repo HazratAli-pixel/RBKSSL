@@ -14,12 +14,12 @@
 		if(isset($_REQUEST['del']))
 		{
 			$did=intval($_GET['del']);
-			$sql = "delete from medicine_list WHERE  item_code=:did";
+			$sql = "delete from reference WHERE  ID=:did";
 			$query = $dbh->prepare($sql);
 			$query-> bindParam(':did',$did, PDO::PARAM_STR);
 			$query -> execute();
 			$msg="Record deleted Successfully";
-			header("refresh:3;customer_list.php");
+			header("refresh:3;ref_list.php");
 		}
 		if(isset($_POST['submit']))
 	  		{
@@ -29,7 +29,7 @@
 			$c_address=$_POST['c_address'];
 			$status=$_POST['radio_value'];
 
-			$sql="INSERT INTO customertable (Name, Phone,Address,Status) 
+			$sql="INSERT INTO reference (Name, Phone,Address,Status) 
 			VALUES(:c_name,:c_phone,:c_address,:radio_value)";
 			$query = $dbh->prepare($sql);
 			$query->bindParam(':c_name',$c_name,PDO::PARAM_STR);
@@ -44,22 +44,22 @@
 		if(isset($_GET['close'])){    
 			$cmpid=$_GET['close'];
 			$sts=0;
-			$sql ="update customertable set Status=:status where ID=:cusId";
+			$sql ="update reference set Status=:status where ID=:cusId";
 			$query = $dbh->prepare($sql);
 			$query-> bindParam(':status',$sts, PDO::PARAM_STR);
 			$query-> bindParam(':cusId',$cmpid, PDO::PARAM_STR);
 			$query -> execute();
-			echo "<script>window.location.href='customer_list.php'</script>";
+			echo "<script>window.location.href='ref_list.php'</script>";
 			}
 		if(isset($_GET['active'])){    
 			$cmpid=$_GET['active'];
 			$sts=1;
-			$sql ="update customertable set Status=:status where ID=:cusId";
+			$sql ="update reference set Status=:status where ID=:cusId";
 			$query = $dbh->prepare($sql);
 			$query-> bindParam(':status',$sts, PDO::PARAM_STR);
 			$query-> bindParam(':cusId',$cmpid, PDO::PARAM_STR);
 			$query -> execute();
-			echo "<script>window.location.href='customer_list.php'</script>";
+			echo "<script>window.location.href='ref_list.php'</script>";
 			}
 	?>
 <!doctype html>
@@ -99,8 +99,9 @@
 										Customer Information
 									</div>
 									<div >
-                                        <a href="customer_ledger.php" class="btn btn-warning mr-3"><i class="fa fa-info-circle me-3" aria-hidden="true"></i> Customer Ledger</a>                                              
-                                        <button type="button" class="btn btn-info mr-3" data-toggle="modal" data-target="#exampleModal2"><i class="fas fa-plus mr-2" style="margin-right: 10px;"></i> Add Customer</button>                                              
+                                        <a href="#" class="btn btn-warning mr-3"><i class="fa fa-info-circle me-3" aria-hidden="true"></i> Customer Ledger</a>                                              
+                                        <button type="button" class="btn btn-info mr-3" data-toggle="modal" data-target="#exampleModal5"><i class="fas fa-plus mr-2" style="margin-right: 10px;"></i> Add Customer</button> 
+										<!-- eikhane data-target="#exampleModal2" hbe-->
 									</div>
 								</div>
                             </div>
@@ -111,10 +112,12 @@
 										<tr>
 										    <th>#</th>
 											<th>Name</th>
+											<th>Father</th>
+											<th>Mother</th>
+											<th>NID</th>
 											<th>Address</th>
 											<th>Mobile</th>
 											<th class="text-center">Status</th>
-											<th class="text-end">Due Balance</th>
                                             <th>Action</th>
 										</tr>
 									</thead>
@@ -133,34 +136,29 @@
 										<tr>
 											<td><?php echo htmlentities($cnt);?></td>
 											<td><?php echo htmlentities($result->Name);?></td>
+											<td><?php echo htmlentities($result->Father);?></td>
+											<td><?php echo htmlentities($result->Mother);?></td>
+											<td><?php echo htmlentities($result->NID);?></td>
 											<td><?php echo htmlentities($result->Address);?></td>
-                                            <td><?php echo htmlentities($result->Phone);?></td>
+											<td><?php echo htmlentities($result->Phone);?></td>
 											<td class="text-center"><?php 
 											// $rno=mt_rand(10000,99999);  
 											if($result->Status==1){
 												?>
-												<a href="customer_list.php?close=<?php echo $result->ID?>" class="mr-25" data-toggle="tooltip" data-original-title="want to close?"> <button type="button" class="btn btn-success">Active</button></a>
+												<a href="ref_list.php?close=<?php echo $result->ID?>" class="mr-25" data-toggle="tooltip" data-original-title="want to close?"> <button type="button" class="btn btn-success">Active</button></a>
 												<?php
 											}
 											else { ?>
-												<a href="customer_list.php?active=<?php echo $result->ID;?>" class="mr-25" data-toggle="tooltip" data-original-title="want to active?"><button type="button" class="btn btn-warning">Close</button></a>
+												<a href="ref_list.php?active=<?php echo $result->ID;?>" class="mr-25" data-toggle="tooltip" data-original-title="want to active?"><button type="button" class="btn btn-warning">Close</button></a>
 												<?php
 											}
 											
 											?></td>
-											<?php 
-											$sql2 = "SELECT * from customerledger WHERE CustomerID=:id ORDER BY ID DESC limit 1"; 
-											 $query = $dbh -> prepare($sql2);
-											 $query->bindParam(':id',$result->ID,PDO::PARAM_STR);
-											 $query->execute();
-											 $result2=$query->fetch(PDO::FETCH_OBJ);
-											?>
-											<td class="text-end"><?php echo $result2->NewDue;?></td>
 											<td>
 											
-											<a href="customer_list.php?edit=<?php echo htmlentities($result->ID);?>" > <i class="fas fa-edit" aria-hidden="true"></i></a> 
+											<a href="ref_list.php?edit=<?php echo htmlentities($result->ID);?>" > <i class="fas fa-edit" aria-hidden="true"></i></a> 
                                             <a href="#" > <i class="fas fa-eye" aria-hidden="true"></i></a> 
-											<a href="customer_list.php?del=<?php echo htmlentities($result->ID);?>" onclick="return confirm('Do you really want to delete this record')"> <i style="color: red;" class="far fa-trash-alt" aria-hidden="true"></i></a>
+											<a href="ref_list.php?del=<?php echo htmlentities($result->ID);?>" onclick="return confirm('Do you really want to delete this record')"> <i style="color: red;" class="far fa-trash-alt" aria-hidden="true"></i></a>
 											</td>
 										</tr>
 										<?php $cnt=$cnt+1; }} ?>

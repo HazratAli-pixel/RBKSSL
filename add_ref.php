@@ -18,7 +18,7 @@ include('includes/config.php');
 			$nid=$_POST['nid'];
 			$phone=$_POST['phone'];
 			$address=$_POST['address'];
-			$status="0";
+			$status=1;
 
 			$sql="INSERT INTO reference (Name,Father,Mother,Phone,NID,Address,Status) 
 			VALUES(:name,:father,:mother,:phone,:nid,:address,:status)";

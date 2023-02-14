@@ -11,10 +11,10 @@
 				<li><a href="#"><i class="typcn typcn-group mr-2"></i> Customer</a>
 					<ul>
 						<li style="margin-left: 50px;"><a href="add_customer.php">Add Customer</a></li>
-						<li style="margin-left: 50px;"><a href="add_ref.php">Add Reference</a></li>
-						<li style="margin-left: 50px;"><a href="ref_list.php">Add Ref list</a></li>
 						<li style="margin-left: 50px;"><a href="customer_list.php">Customer List</a></li>
 						<li style="margin-left: 50px;"><a href="customer_ledger.php">Customer Ledger</a></li>
+						<li style="margin-left: 50px;"><a href="add_ref.php">Add Reference</a></li>
+						<li style="margin-left: 50px;"><a href="ref_list.php">Ref list</a></li>
 					</ul>
 				</li>
 				<li><a href="#"><i class="typcn typcn-group-outline mr-2"></i> Company</a>

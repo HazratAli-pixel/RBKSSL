@@ -14,12 +14,11 @@
 		if(isset($_REQUEST['del']))
 		{
 			$did=intval($_GET['del']);
-			$sql = "delete from medicine_list WHERE  item_code=:did";
+			$sql = "delete from customertable WHERE  ID=:did";
 			$query = $dbh->prepare($sql);
 			$query-> bindParam(':did',$did, PDO::PARAM_STR);
 			$query -> execute();
 			$msg="Record deleted Successfully";
-			header("refresh:3;customer_list.php");
 		}
 		if(isset($_POST['submit']))
 	  		{
@@ -109,12 +108,15 @@
 								<table id="zctb" class="display table table-striped table-bordered table-hover" cellspacing="0" width="100%">
 									<thead>
 										<tr>
-										    <th>#</th>
+										    <th>SL</th>
+										    <th>ID</th>
 											<th>Name</th>
+											<th>Father</th>
+											<th>Mother</th>
+											<th>NID</th>
+											<th>Phone</th>
 											<th>Address</th>
-											<th>Mobile</th>
 											<th class="text-center">Status</th>
-											<th class="text-end">Due Balance</th>
                                             <th>Action</th>
 										</tr>
 									</thead>
@@ -132,9 +134,13 @@
                                         {				?>	
 										<tr>
 											<td><?php echo htmlentities($cnt);?></td>
+											<td><?php echo htmlentities($result->ID);?></td>
 											<td><?php echo htmlentities($result->Name);?></td>
+											<td><?php echo htmlentities($result->Fname);?></td>
+											<td><?php echo htmlentities($result->Mname);?></td>
+											<td><?php echo htmlentities($result->NID);?></td>
+											<td><?php echo htmlentities($result->Phone);?></td>
 											<td><?php echo htmlentities($result->Address);?></td>
-                                            <td><?php echo htmlentities($result->Phone);?></td>
 											<td class="text-center"><?php 
 											// $rno=mt_rand(10000,99999);  
 											if($result->Status==1){
@@ -148,14 +154,6 @@
 											}
 											
 											?></td>
-											<?php 
-											$sql2 = "SELECT * from customerledger WHERE CustomerID=:id ORDER BY ID DESC limit 1"; 
-											 $query = $dbh -> prepare($sql2);
-											 $query->bindParam(':id',$result->ID,PDO::PARAM_STR);
-											 $query->execute();
-											 $result2=$query->fetch(PDO::FETCH_OBJ);
-											?>
-											<td class="text-end"><?php echo $result2->NewDue;?></td>
 											<td>
 											
 											<a href="customer_list.php?edit=<?php echo htmlentities($result->ID);?>" > <i class="fas fa-edit" aria-hidden="true"></i></a> 
