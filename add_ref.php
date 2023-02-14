@@ -18,31 +18,29 @@ include('includes/config.php');
 			$nid=$_POST['nid'];
 			$phone=$_POST['phone'];
 			$address=$_POST['address'];
-			$state=$_POST['state'];
-			$status=$_POST['radio_value'];
+			$status="0";
 
-			$sql="INSERT INTO customertable (Name,Fname,Mname,NID,Phone,Address,State,Status) 
-			VALUES(:name,:father,:mother,:nid,:phone,:address,:state,:status)";
+			$sql="INSERT INTO reference (Name,Father,Mother,Phone,NID,Address,Status) 
+			VALUES(:name,:father,:mother,:phone,:nid,:address,:status)";
 			$query = $dbh->prepare($sql);
 			$query->bindParam(':name',$name,PDO::PARAM_STR);
 			$query->bindParam(':father',$father,PDO::PARAM_STR);
 			$query->bindParam(':mother',$mother,PDO::PARAM_STR);
-			$query->bindParam(':nid',$nid,PDO::PARAM_STR);
 			$query->bindParam(':phone',$phone,PDO::PARAM_STR);
+			$query->bindParam(':nid',$nid,PDO::PARAM_STR);
 			$query->bindParam(':address',$address,PDO::PARAM_STR);
-			$query->bindParam(':state',$state,PDO::PARAM_STR);
 			$query->bindParam(':status',$status,PDO::PARAM_STR);
 			$query->execute();
 			$lastInsertId = $dbh->lastInsertId();
 		if($lastInsertId)
 			{
 			$msg=" Your info submitted successfully";
-			header("refresh:2;customer_list.php"); 
+			header("refresh:2;ref_list.php"); 
 			}
 		else 
 			{
 			$error=" Something went wrong. Please try again";
-			header("refresh:2;add_customer.php"); 
+			header("refresh:2;add_ref.php"); 
 			}
 	
 		}
@@ -102,7 +100,7 @@ include('includes/config.php');
 									<div class="card" style="width: 100%;">
 										<div class="card-header d-flex justify-content-between align-items-center h-100px">
 		  									<div style="font-size: 20px; " class="bg-primary;">
-												Customer Information
+												Reference Information
 											</div>
 											<div >
 												<a href="customer_list.php"><button type="button" class="btn btn-info"><i class="fas fa-align-justify mr-2" style="margin-right: 10px;"></i> Customer List</button></a>
@@ -153,36 +151,12 @@ include('includes/config.php');
 												</div>
                                                 <div class="col-12 col-md-6">
 													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">State :</label>
-														<div class="col-sm-8">
-														<input type="text" class="form-control" name="state" placeholder="State">
-														</div>
-													</div>
-												</div>
-                                                <div class="col-12 col-md-6">
-													<div class="row mb-3">
 														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">NID :</label>
 														<div class="col-sm-8">
 														<input type="text" class="form-control" name="nid" placeholder="NID">
 														</div>
 													</div>
-												</div>
-												<div class="col-12 col-md-6">
-													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Status :</label>
-														<div class="col-sm-8 d-flex align-items-center">
-															<div class="form-check form-check-inline">
-																<input class="form-check-input" type="radio" value="1" name="radio_value" id="inlineRadio1" value="option1">
-																<label class="form-check-label" for="inlineRadio1">Active</label>
-															</div>
-															<div class="form-check form-check-inline">
-																<input class="form-check-input" type="radio" value="0" name="radio_value" id="inlineRadio2" value="option2">
-																<label class="form-check-label" for="inlineRadio2">Inactive</label>
-															</div>
-														</div>
-													</div>	                                                											
-												</div>
-																
+												</div>			
 												<div class="hr-dashed"></div>
 
 												<div class="col-12 col-md-6">

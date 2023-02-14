@@ -92,14 +92,14 @@ include('includes/config.php');
 
 <body>
 	
-	<div  class="login-page bk-img" style="background-image: url(img/pms.jpg);">
+	<div  class="login-page bk-img" style="background-image: url(img/rbkssll.jpg);">
 		<div style="background-color: rgba(182, 192, 209,0.7);">
 		<div class="container " >
 			<div class="row">
 				<div class="col-12" style="height: 100vh;" >
 					<div id="LoginModel"  class="card col-lg-4 col-md-8 col-sm-10">
 						<div class="card-header">
-							<h4 class="text-center text-bold  text-black ">Pharmacy Management Software</h4>
+							<h4 class="text-center text-bold  text-black ">Digital Shop Limited</h4>
 						</div>	
 						<div class="card-body">
 							<form method="post">
@@ -118,7 +118,7 @@ include('includes/config.php');
 									<select name="position" class="form-control mb" required>
 										<option selected disabled>Your Positon......</option>
 										<option>Admin</option>
-										<option>Pharmacist</option>
+										<option>Seler</option>
 										<option>Cashier</option>
 									</select>
 								<div class="d-flex justify-content-between align-items-center" >

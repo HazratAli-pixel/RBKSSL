@@ -94,7 +94,7 @@ else{
 												?>
 									<div class="card text-center">
 										<div class="card-header bg-style2">
-										<h5 class="fw-bold">Total Listed Medicine</h5>
+										<h5 class="fw-bold">Total Listed Products</h5>
 										</div>
 										<div class="card-body">
 											<div class="d-flex justify-content-center align-items-center">
@@ -115,7 +115,7 @@ else{
 												?>
 									<div class="card text-center">
 										<div class="card-header bg-style2">
-										<h5 class="fw-bold">Out of Stock</h5>
+										<h5 class="fw-bold">Todays EMI list</h5>
 										</div>
 										<div class="card-body">
 											<div class="d-flex justify-content-center align-items-center">
@@ -139,7 +139,7 @@ else{
 												?>
 									<div class="card text-center">
 										<div class="card-header bg-style2">
-										<h5 class="fw-bold">Experied Medicine</h5>
+										<h5 class="fw-bold">Due EMI list</h5>
 										</div>
 										<div class="card-body">
 											<div class="d-flex justify-content-center align-items-center">
@@ -683,7 +683,7 @@ else{
 								<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 mb-2">
 									<div class="card text-center">
 										<div class="card-header bg-style2">
-											<h5 class="fw-bold">Total Due Amount</h5>
+											<h5 class="fw-bold">Todays Collection</h5>
 										</div>
 										<div class="card-body">
 											<div class="d-flex justify-content-center align-items-center">
@@ -698,7 +698,7 @@ else{
 								<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 mb-2">
 									<div class="card text-center">
 										<div class="card-header bg-style2">
-											<h5 class="fw-bold">Total Due Amount</h5>
+											<h5 class="fw-bold">Nextday Collection</h5>
 										</div>
 										<div class="card-body">
 											<div class="d-flex justify-content-center align-items-center">
