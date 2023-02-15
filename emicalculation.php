@@ -61,14 +61,18 @@ include('includes/config.php');
 		
 		<title>RBKSSL-EMI Calculation</title>
 		<link rel="shortcut icon" href="./assets/pic/pmslogo.png" type="image/x-icon">
-		<!-- Font awesome -->
-		<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
-		<!-- Sandstone Bootstrap CSS -->
-		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-		<!-- Bootstrap Datatables -->
-		<!-- Admin Stye -->
-		<link rel="stylesheet" href="css/style.css">
-		<link href="https://cdnjs.cloudflare.com/ajax/libs/typicons/2.1.2/typicons.min.css" rel="stylesheet">
+	<!-- Font awesome -->
+	<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/typicons/2.1.2/typicons.min.css" rel="stylesheet">
+	<!-- Sandstone Bootstrap CSS -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+		
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css">
+	<link rel="stylesheet" href="css/style.css">
+
+	<script src="https://kit.fontawesome.com/b6e439dc17.js" crossorigin="anonymous"></script>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/typicons/2.1.2/typicons.min.css" rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 		<script language="javascript">
 			function isNumberKey(evt)
@@ -131,7 +135,7 @@ include('includes/config.php');
 													<div class="row mb-3">
 														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Time : <i class="text-danger">* </i>:</label>
 														<div class="col-sm-8">
-														<input type="Number" id="month" onkeyup="calculation()" class="form-control" name="month" placeholder="Enter time in month" required>
+														<input type="Number" id="month" onkeyup="calculation()" onchange="emicalculation()" class="form-control" name="month" placeholder="Enter time in month" required>
 														</div>
 													</div>
 												</div>
@@ -146,7 +150,8 @@ include('includes/config.php');
 													$y=1;
 													for ($i = $for_start; $i <= $for_end; $i = strtotime("+1 $type", $i)) {
 														//echo $y."--";
-														//echo date('l Y-m-d', $i) . '<br />';
+														// echo date('l ', $i) . '<br />';
+														// echo date('Y-m-d', $i) . '<br />';
 														$y++;
 													}
 												?>
@@ -155,11 +160,10 @@ include('includes/config.php');
 													<div class="row mb-3">
 														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">EMI Type <i class="text-danger">* </i>:</label>
 														<div class="col-sm-8 ">															
-															<select id="type" onchange="calculation()" name="type" class="form-control form-select form-select-md" required>
-																<option value="" Disabled selected class="">Select Type</option>
-																<option Value="Everyday">Everyday</option>
-																<option Value="Weekly">Weekly</option>
-																<option Value="Monthly">Monthly</option>
+															<select id="type" onchange="emicalculation()" name="type" class="form-control form-select form-select-md" required>
+																<option Value="day">Everyday</option>
+																<option Value="week" selected>Weekly</option>
+																<option Value="month">Monthly</option>
 															</select>
 														</div>
 													</div>
@@ -169,16 +173,14 @@ include('includes/config.php');
 													<div class="row mb-3">
 														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Day <i class="text-danger">* </i>:</label>
 														<div class="col-sm-8">															
-															<select id="day" onkeyup="calculation()" name="day" class="form-control form-select form-select-md" required>
-																<option value="" Disabled selected class="">Select Day</option>
-																<option Value="1"><?php echo $y-1; ?></php></option>
-																<option Value="1">Saturday</option>
-																<option Value="7">Sunday</option>
-																<option Value="30">Monday</option>
-																<option Value="30">Tuesday</option>
-																<option Value="30">Wenesday</option>
-																<option Value="30">Thursday</option>
-																<option Value="30">Friday</option>
+															<select id="day" onchange="emicalculation()" name="day" class="form-control form-select form-select-md" required>
+																<option Value="Saturday" selected>Saturday</option>
+																<option Value="Sunday">Sunday</option>
+																<option Value="Monday">Monday</option>
+																<option Value="Tuesday">Tuesday</option>
+																<option Value="Wednesday">Wednesday</option>
+																<option Value="Thursday">Thursday</option>
+																<option Value="Friday">Friday</option>
 															</select>
 														</div>
 													</div>
@@ -188,7 +190,8 @@ include('includes/config.php');
 													<div class="row mb-3">
 														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Start Time : </label>
 														<div class="col-sm-8">
-														<input type="date" class="form-control" id="start_time" name="start_time" required>
+															<?php date_default_timezone_set('Asia/Dhaka'); ?>
+														<input type="date" onchange="emicalculation()" value="<?php echo date('Y-m-d'); ?>" class="form-control" id="start_time" name="start_time" required>
 														</div>
 													</div>
 												</div>
@@ -225,6 +228,23 @@ include('includes/config.php');
 												</div>
 												</div>						
 											</form>	
+											<div class="p-3">
+												<div class="col-12 table-responsive">
+													<table class="display table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+														<thead>
+															<tr>
+																<th>SL</th>
+																<th>Date</th>
+																<th>Day</th>
+																<th>EMI</th>
+															</tr>
+														</thead>	
+														<tbody id="emilist">
+															
+														</tbody>
+													</table>
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -242,6 +262,7 @@ include('includes/config.php');
 		<script src="js/jquery.dataTables.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 		<script src="js/dataTables.bootstrap.min.js"></script>
+		<script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
 		<script src="js/Chart.min.js"></script>
 		<script src="js/fileinput.js"></script>
 		<script src="js/chartData.js"></script>
@@ -253,22 +274,44 @@ include('includes/config.php');
 			let type = document.getElementById('type');
 			let day = document.getElementById('day');
 			let day2 = document.getElementById('day2');
+			let emilist = document.getElementById('emilist');
+			let start_time = document.getElementById('start_time');
 			let total_interest = document.getElementById('total_interest');
 			let emi = document.getElementById('emi');
 
-			toString
-
 			function calculation() {
-				let emi_amount= (Number(amount.value) * (Number(rate.value)/100)*(Number(month.value)/12)+Number(amount.value))/Number(month.value);
-				total_interest.value = Number(amount.value) * (Number(rate.value)/100)*(Number(month.value)/12);
-				emi.value=emi_amount;
-				if(type.value.toString() == "Weekly"){
-					day2.removeAttribute("hidden");
+				let monthlyinterest = Number(rate.value)/12/100;
+				let number1= Number(amount.value)* monthlyinterest;
+				let number2= Math.pow((1+monthlyinterest), Number(month.value));
+				let number3= Math.pow((1+monthlyinterest), Number(month.value))-1;
+				let emi_amount = number1 * (number2/number3)
+				total_interest.value = (emi_amount*Number(month.value) - Number(amount.value)).toFixed(2)
+				emi.value= emi_amount.toFixed(2);
+				
+			}
+			function emicalculation (){
+				let day5 = day.value
+				let type2 = type.value
+				let start_time2 = start_time.value
+				let month2 = month.value
+				let loanamount = Number(amount.value);
+				let emi2 = Number(emi.value);
+
+				if(type.value.toString() == "week"){
+				day2.removeAttribute("hidden");
 				}
 				else{
 					day2.setAttribute("hidden","");
 				}
-			}
+				const xmlhttp = new XMLHttpRequest();
+				xmlhttp.onreadystatechange = function () {
+					if (this.readyState == 4 && this.status == 200) {
+							emilist.innerHTML = this.responseText;
+					}
+				};
+				xmlhttp.open('GET', `query3.php?day=${day5}&type=${type2}&starttime=${start_time2}&month=${month2}&emi=${emi2}&loanamount=${loanamount}`, true);
+				xmlhttp.send();
+}
 
 		</script>
 	</body>
