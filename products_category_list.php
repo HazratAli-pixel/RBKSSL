@@ -32,16 +32,6 @@ else{
 
 			$query->execute();
 			$lastInsertId = $dbh->lastInsertId();
-		// if($lastInsertId)
-		// 	{
-		// 	$msg=" Your info submitted successfully";
-		// 	header("refresh:3;medicine_unit_list.php"); 
-		// 	}
-		// else 
-		// 	{
-		// 	$error=" Something went wrong. Please try again";
-		// 	header("refresh:3;medicine_unit_add.php"); 
-		// 	}
 	
 		}
 		$id=$_POST[''];
@@ -72,7 +62,7 @@ else{
 	<meta name="author" content="">
 	<meta name="theme-color" content="#3e454c">
 	
-	<title>PMS | Medicine category List  </title>
+	<title>D-shop | Products category List  </title>
 	<link rel="shortcut icon" href="./assets/pic/pmslogo.png" type="image/x-icon">
 	<!-- Font awesome -->
 	<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
@@ -102,7 +92,7 @@ else{
 							<div  class="card-header">
                                 <div class="d-flex justify-content-between align-items-center h-100px">
 		  							<div style="font-size: 20px; " class="bg-primary;">
-										Medicine Unit List
+									  Products Unit List
 									</div>
 									<div >
                                         <!-- <a href="medicine_unit_add.php"><button style="margin-right: 15px;" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fas fa-plus mr-2" style="margin-right: 10px;"></i> Add Unit</button></a> -->
@@ -172,7 +162,7 @@ else{
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Medicne Information</h5>
+					<h5 class="modal-title" id="exampleModalLabel">Products Information</h5>
 					<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body" id="mbody2">
@@ -180,9 +170,9 @@ else{
 						<form method="post" class="row" onsubmit="return" >
 						<div class="">
 							<div class="row mb-3">
-								<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Medicine Category : </label>
+								<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Products Category : </label>
 								<div class="col-sm-8">
-									<input type="text" class="form-control" name="type" placeholder="Medicine Category">
+									<input type="text" class="form-control" name="type" placeholder="Products Category">
 								</div>
 							</div>
 						</div>
@@ -220,7 +210,7 @@ else{
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Medicne Information</h5>
+					<h5 class="modal-title" id="exampleModalLabel">Products Information</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body" id="mbody3">

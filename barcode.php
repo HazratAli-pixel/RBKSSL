@@ -59,11 +59,11 @@ else{
 							<div class="panel-heading">
                                 <div class="d-flex justify-content-between align-items-center h-100px">
 		  							<div style="font-size: 20px; " class="bg-primary;">
-										Company Information
+										Product Barcode
 									</div>
 									<div >
 										<button onclick="window.print();"  type="button" class="btn btn-info" style="margin-right: 15px;"><i class="fas fa-print mr-2" style="margin-right: 10px;"></i> Print</button>
-                                        <a href="medicine_list.php"><button type="button" class="btn btn-info" style="margin-right: 15px;"><i class="fas fa-align-justify mr-2" style="margin-right: 10px;"></i> Medicine List</button></a>
+                                        <a href="products_list.php"><button type="button" class="btn btn-info" style="margin-right: 15px;"><i class="fas fa-align-justify mr-2" style="margin-right: 10px;"></i> Products List</button></a>
 									</div>
 									
 								</div>

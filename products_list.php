@@ -16,7 +16,7 @@ else{
 		$query-> bindParam(':did',$did, PDO::PARAM_STR);
 		$query -> execute();
 		$msg="Record deleted Successfully";
-        header("refresh:3;medicine_list.php");
+        header("refresh:3;products_list.php");
 	}
 }
  ?>
@@ -89,7 +89,7 @@ else{
 										Medicine Information
 									</div>
 									<div >
-                                        <a href="medicine_add.php"><button type="button" class="btn btn-info" style="margin-right: 15px;"><i class="fas fa-plus mr-2" style="margin-right: 10px;"></i> Add Medicine</button></a>
+                                        <a href="products_add.php"><button type="button" class="btn btn-info" style="margin-right: 15px;"><i class="fas fa-plus mr-2" style="margin-right: 10px;"></i> Add Medicine</button></a>
                                                 
 									</div>
 								</div>
@@ -102,10 +102,8 @@ else{
 									<thead>
 										<tr>
 										    <th>#</th>
-											<th>Medicine Name</th>
-											<th>Generic Name</th>
+											<th>Product Name</th>
 											<th>Category</th>
-											<th>Shelf</th>
 											<th>Prics</th>
 											<th>Company Price</th>
 											<th>Strength</th>										
@@ -129,12 +127,10 @@ else{
 										<tr>
 											<td><?php echo htmlentities($cnt);?></td>
 											<td><?php echo htmlentities($result->medicine_name);?></td>
-											<td><?php echo htmlentities($result->generic_name);?></td>
                                             <td><?php echo htmlentities($result->category);?></td>
-											<td><?php echo htmlentities($result->shelf);?></td>
 											<td><?php echo htmlentities($result->selling_pricce);?></td>
 											<td><?php echo htmlentities($result->company_price);?></td>
-											<td><?php echo htmlentities($result->strength).($result->unit);?></td>  
+											<td><?php echo htmlentities($result->strength)." ".($result->unit);?></td>  
 											<td><?php echo htmlentities($result->menufacturer);?></td>	
 											<td>
 											<?php
@@ -144,10 +140,10 @@ else{
 											?></td>
 											
 											<td>											
-											<a href="medicine_edit.php?edit=<?php echo htmlentities($result->item_code);?>" > <i class="fas fa-edit" aria-hidden="true"></i></a> 
+											<a href="products_edit.php?edit=<?php echo htmlentities($result->item_code);?>" > <i class="fas fa-edit" aria-hidden="true"></i></a> 
                                             <a href="barcode.php?bcode=<?php echo htmlentities($result->item_code);?>" > <i class="fas fa-barcode" aria-hidden="true"></i></a> 
-                                            <a href="medicine_view.php?view=<?php echo htmlentities($result->item_code);?>" > <i class="fas fa-eye" aria-hidden="true"></i></a>                                         
-											<a href="medicine_list.php?del=<?php echo htmlentities($result->item_code);?>" onclick="return confirm('Do you really want to delete this record')"> 
+                                            <a href="products_view.php?view=<?php echo htmlentities($result->item_code);?>" > <i class="fas fa-eye" aria-hidden="true"></i></a>                                         
+											<a href="products_list.php?del=<?php echo htmlentities($result->item_code);?>" onclick="return confirm('Do you really want to delete this record')"> 
 											<i style="color: red;" class="far fa-trash-alt" aria-hidden="true"></i></a>
 											</td>
 										</tr>

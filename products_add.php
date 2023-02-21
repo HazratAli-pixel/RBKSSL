@@ -14,40 +14,31 @@ if(strlen($_COOKIE['Username'])==0 || strlen($_SESSION['alogin'])==0)
 	  		{
 			$barcode=$_POST['barcode'];
 			$medicinename=$_POST['medicinename'];
-			$strength=$_POST['strength'];
-			$genericname=$_POST['genericname'];
-			$boxsize=$_POST['boxsize'];
-			$unit=$_POST['unit'];
-			$shelf=$_POST['shelf'];
-			$medicinedetails=$_POST['medicinedetails'];
-			$category=$_POST['category'];
-			$medicinetype=$_POST['medicinetype'];
-			$medicinephoto=$_POST['medicinephoto'];
 			$companyID=$_POST['companyID'];;
-			$vat=$_POST['vat'];
-			$igta=$_POST['igta'];
+			$medicinedetails=$_POST['medicinedetails'];
+			$boxsize=$_POST['boxsize'];
+			$strength=$_POST['strength'];
+			$unit=$_POST['unit'];
+			$category=$_POST['category'];
+			$medicinephoto=$_POST['medicinephoto'];
 			$status=$_POST['radio_value'];
 
 			$file_name = $_FILES['medicnephoto']['name'];
 			$file_tmp_name = $_FILES['medicinephoto']['tmp_name'];
-
 			$location = "Medicinephoto/".$file_name;
 			move_uploaded_file($file_tmp_name, $location);
 			//$status=1;
 		
-			$sql="INSERT INTO medicine_list (medicine_name, generic_name, unit, box_size, strength, shelf, medicine_details, category, 
-			medicine_type, menufacturer, item_code, status) VALUES(:medicinename,:genericname,:unit,:boxsize,
-			:strength,:shelf,:medicinedetails,:category,:medicinetype,:companyID,:barcode,:radio_value)";
+			$sql="INSERT INTO medicine_list (medicine_name, unit, box_size,strength, medicine_details, category, menufacturer, item_code, status) 
+			VALUES(:medicinename,:unit,:boxsize,:medicinedetails,:category,:companyID,:barcode,:radio_value)";
 			$query = $dbh->prepare($sql);
 			$query->bindParam(':medicinename',$medicinename,PDO::PARAM_STR);
-			$query->bindParam(':genericname',$genericname,PDO::PARAM_STR);
 			$query->bindParam(':unit',$unit,PDO::PARAM_STR);
 			$query->bindParam(':boxsize',$boxsize,PDO::PARAM_STR);
 			$query->bindParam(':strength',$strength,PDO::PARAM_STR);
 			$query->bindParam(':shelf',$shelf,PDO::PARAM_STR);
 			$query->bindParam(':medicinedetails',$medicinedetails,PDO::PARAM_STR);
 			$query->bindParam(':category',$category,PDO::PARAM_STR);
-			$query->bindParam(':medicinetype',$medicinetype,PDO::PARAM_STR);
 			$query->bindParam(':companyID',$companyID,PDO::PARAM_STR);
 			$query->bindParam(':barcode',$barcode,PDO::PARAM_STR);
 			$query->bindParam(':radio_value',$status,PDO::PARAM_STR);
@@ -78,7 +69,7 @@ if(strlen($_COOKIE['Username'])==0 || strlen($_SESSION['alogin'])==0)
 		<meta name="author" content="Hazrat Ali">
 		<meta name="theme-color" content="#3e454c">
 		
-		<title>PMS| Medicine Add</title>
+		<title>D_shop | Products Add</title>
 		<link rel="shortcut icon" href="./assets/pic/pmslogo.png" type="image/x-icon">
 		<!-- Font awesome -->
 		<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
@@ -114,10 +105,10 @@ if(strlen($_COOKIE['Username'])==0 || strlen($_SESSION['alogin'])==0)
 									<div class="card" style="width: 100%;">
 										<div class="card-header d-flex justify-content-between align-items-center h-100px">
 		  									<div style="font-size: 20px; " class="bg-primary;">
-												Medicine Information
+											  Product Information
 											</div>
 											<div >
-												<a href="products_list.php"><button type="button" class="btn btn-info"><i class="fas fa-align-justify mr-2" style="margin-right: 10px;"></i> Medicine List</button></a>
+												<a href="products_list.php"><button type="button" class="btn btn-info"><i class="fas fa-align-justify mr-2" style="margin-right: 10px;"></i>Products List</button></a>
 												
 											</div>
 										</div>
@@ -133,25 +124,45 @@ if(strlen($_COOKIE['Username'])==0 || strlen($_SESSION['alogin'])==0)
 												</div>
 												<div class="col-md-6">
 													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Medicine Name <i class="text-danger">* </i>:</label>
+														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Product Name <i class="text-danger">* </i>:</label>
 														<div class="col-sm-8">
-														<input type="text" class="form-control" name="medicinename" placeholder="Medicine Name" required>
+														<input type="text" class="form-control" name="medicinename" placeholder="Product Name" required>
+														</div>
+													</div>
+												</div>
+												<?php 
+													$companyname ="SELECT * from company";
+													$cquery = $dbh -> prepare($companyname);
+                                                    $cquery->bindParam(':barcode',$id,PDO::PARAM_STR);
+													$cquery->execute();
+													$results=$cquery->fetchAll(PDO::FETCH_OBJ);							   
+												?>
+												
+												<div class="col-md-6">
+													<div class="row mb-3">
+														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Company Name <i class="text-danger">* </i>:</label>
+														<div class="col-sm-8">
+														<select name="companyID" class="form-control form-select form-select-md" required>
+																<option value="" Disabled selected class="">Select Company</option>
+																<?php																
+																foreach($results as $result){
+																	if($result->status==1){
+																	?>																
+																	<option  value="<?php echo htmlentities($result->ID);?>"><?php echo htmlentities($result->name);?></option>
+																<?php } 
+																else{  ?>
+																	<option disabled><?php echo htmlentities($result->name)." --Need to active";?></option>
+															 <?php } 
+															 }?>
+															</select>
 														</div>
 													</div>
 												</div>
 												<div class="col-md-6">
 													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Strength<i class="text-danger">* </i> : </label>
+														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Product Details:</label>
 														<div class="col-sm-8">
-														<input type="text" class="form-control" name="strength" placeholder="Strength" required>
-														</div>
-													</div>
-												</div>
-												<div class="col-md-6">
-													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Generic Name :</label>
-														<div class="col-sm-8">
-														<input type="text" class="form-control" name="genericname" placeholder="Generic Name">
+														<textarea style="resize: none;" rows="5" cols="50" class="form-control" name="medicinedetails" placeholder="Product Details" rows="1"></textarea>
 														</div>
 													</div>
 												</div>
@@ -160,6 +171,14 @@ if(strlen($_COOKIE['Username'])==0 || strlen($_SESSION['alogin'])==0)
 													<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Box Size :</label>
 														<div class="col-sm-8">
 														<input type="text" class="form-control" name="boxsize" placeholder="Box Size">
+														</div>
+													</div>
+												</div>
+												<div class="col-md-6">
+													<div class="row mb-3">
+														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Strength<i class="text-danger">* </i> : </label>
+														<div class="col-sm-8">
+														<input type="text" class="form-control" name="strength" placeholder="Strength" required>
 														</div>
 													</div>
 												</div>
@@ -189,23 +208,7 @@ if(strlen($_COOKIE['Username'])==0 || strlen($_SESSION['alogin'])==0)
 														</div>
 													</div>
 												</div>
-												<div class="col-md-6">
-													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Shelf :</label>
-														<div class="col-sm-8">
-														<input type="text" class="form-control" name="shelf" placeholder="Shelf Number">
-														</div>
-													</div>
-												</div>
-												
-												<div class="col-md-6">
-													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Medicine Details:</label>
-														<div class="col-sm-8">
-														<textarea style="resize: none;" class="form-control" name="medicinedetails" placeholder="About Medicine" rows="1"></textarea>
-														</div>
-													</div>
-												</div>	
+													
 												<?php 
 													$medcinetype ="SELECT * from medicine_category";
 													$cquery = $dbh -> prepare($medcinetype);
@@ -214,7 +217,7 @@ if(strlen($_COOKIE['Username'])==0 || strlen($_SESSION['alogin'])==0)
 												?>
 												<div class="col-md-6">
 													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Medicine Category <i class="text-danger">* </i>:</label>
+														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Product Category <i class="text-danger">* </i>:</label>
 														<div class="col-sm-8">															
 															<select name="category" class="form-control form-select form-select-md " required>
 																<option value="" Disabled selected class="">Select category</option>
@@ -232,36 +235,10 @@ if(strlen($_COOKIE['Username'])==0 || strlen($_SESSION['alogin'])==0)
 														</div>
 													</div>
 												</div>
-												<?php 
-													$medcinetype ="SELECT * from medicine_type";
-													$cquery = $dbh -> prepare($medcinetype);
-													$cquery->execute();
-													$results=$cquery->fetchAll(PDO::FETCH_OBJ);							   
-												?>
-												<div class="col-md-6">
-													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Medicine type:</label>
-														<div class="col-sm-8">															
-															<select name="medicinetype" class="form-control form-select form-select-md">
-																<option value="" Disabled selected class="">Select type</option>
-																<?php																
-																foreach($results as $result){
-																	if($result->Status==1){
-																	?>																
-																	<option date-tokens="<?php echo htmlentities($result->MedicineType);?>"><?php echo htmlentities($result->MedicineType);?></option>
-																<?php } 
-																else{  ?>
-																	<option disabled><?php echo htmlentities($result->MedicineType)." --Need to active";?></option>
-															 <?php } 
-															 }?>
-															</select>
-														</div>
-													</div>
-												</div>
 
 												<div class="col-md-6">
 													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Medicine Photo :</label>
+														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Product Photo :</label>
 														<div class="col-sm-8">
 														<input type="file" class="form-control" name="medicinephoto">
 														</div>
@@ -269,33 +246,7 @@ if(strlen($_COOKIE['Username'])==0 || strlen($_SESSION['alogin'])==0)
 												</div>
 
 
-												<?php 
-													$companyname ="SELECT * from company";
-													$cquery = $dbh -> prepare($companyname);
-                                                    $cquery->bindParam(':barcode',$id,PDO::PARAM_STR);
-													$cquery->execute();
-													$results=$cquery->fetchAll(PDO::FETCH_OBJ);							   
-												?>
-												<div class="col-md-6">
-													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Company Name <i class="text-danger">* </i>:</label>
-														<div class="col-sm-8">
-														<select name="companyID" class="form-control form-select form-select-md" required>
-																<option value="" Disabled selected class="">Select Company</option>
-																<?php																
-																foreach($results as $result){
-																	if($result->status==1){
-																	?>																
-																	<option  value="<?php echo htmlentities($result->ID);?>"><?php echo htmlentities($result->name);?></option>
-																<?php } 
-																else{  ?>
-																	<option disabled><?php echo htmlentities($result->name)." --Need to active";?></option>
-															 <?php } 
-															 }?>
-															</select>
-														</div>
-													</div>
-												</div>
+												
 												<div class="col-md-6">
 													<div class="row mb-3">
 														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Status<i class="text-danger">* </i> :</label>
@@ -310,16 +261,7 @@ if(strlen($_COOKIE['Username'])==0 || strlen($_SESSION['alogin'])==0)
 															</div>
 														</div>
 													</div>
-												</div>												
-												<div class="col-md-6">
-													<div class="row mb-3">
-														<label for="inputPassword3" class="col-sm-4 col-form-label text-start text-sm-end">Preview :</label>
-														<div class="col-sm-8">
-															<img src="img/medicine-demo.jpg"  width="100px" alt="medicine-demo-pic">
-														</div>
-													</div>
-												</div>
-				
+												</div>					
 												<div class="hr-dashed"></div>
 
 													<div class="col-md-12">

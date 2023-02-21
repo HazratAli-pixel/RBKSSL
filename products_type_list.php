@@ -16,7 +16,7 @@ else{
 		$query-> bindParam(':did',$did, PDO::PARAM_STR);
 		$query -> execute();
 		$msg="Record deleted Successfully";
-        header("refresh:3;medicine_category_list.php");
+        header("refresh:3;products_category_list.php");
 	}
 	$id=$_POST[''];
 	if(isset($_POST['update']))
@@ -61,7 +61,7 @@ else{
 	<meta name="author" content="">
 	<meta name="theme-color" content="#3e454c">
 	
-	<title>PMS | Category List  </title>
+	<title>D-shop | Category List  </title>
 	<link rel="shortcut icon" href="./assets/pic/pmslogo.png" type="image/x-icon">
 	<!-- Font awesome -->
 	<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
@@ -92,7 +92,7 @@ else{
 							<div  class="card-header">
                                 <div class="d-flex justify-content-between align-items-center h-100px">
 		  							<div style="font-size: 20px; " class="bg-primary;">
-										Medicine Type List
+									  Product Type List
 									</div>
 									<div >
 									<button style="margin-right: 15px;" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal2"><i class="fas fa-plus mr-2" style="margin-right: 10px;"></i> Add Type</button>
@@ -147,7 +147,7 @@ else{
 											<td>
 											 <button type="button"  onClick="edit_unit(this.id)" id="type-<?php echo htmlentities($result->ID);?>"><i class="fas fa-edit" aria-hidden="true"></i></button> 
 											 <a href="#" > <i class="fas fa-eye" aria-hidden="true"></i></a> 
-											<a href="medicine_type_list.php?del=<?php echo htmlentities($result->ID);?>" onclick="return confirm('Do you really want to delete this record')"> <i style="color: red;" class="far fa-trash-alt" aria-hidden="true"></i></a>
+											<a href="products_type_list.php?del=<?php echo htmlentities($result->ID);?>" onclick="return confirm('Do you really want to delete this record')"> <i style="color: red;" class="far fa-trash-alt" aria-hidden="true"></i></a>
 											</td>
 										</tr>
 										<?php $cnt=$cnt+1; }} ?>
@@ -167,7 +167,7 @@ else{
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Medicne Information</h5>
+					<h5 class="modal-title" id="exampleModalLabel">Products Information</h5>
 					<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body" id="mbody2">
@@ -175,9 +175,9 @@ else{
 						<form method="post" class="row" onsubmit="return" >
 						<div class="">
 							<div class="row mb-3">
-								<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Medicine Type : </label>
+								<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Products Type : </label>
 								<div class="col-sm-8">
-									<input type="text" class="form-control" name="type" placeholder="Medicine type">
+									<input type="text" class="form-control" name="type" placeholder="Product type">
 								</div>
 							</div>
 						</div>
@@ -215,7 +215,7 @@ else{
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Medicne Information</h5>
+					<h5 class="modal-title" id="exampleModalLabel">Products Information</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body" id="mbody3">

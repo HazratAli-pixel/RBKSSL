@@ -10,70 +10,6 @@ if(strlen($_COOKIE['Username'])==0 || strlen($_SESSION['alogin'])==0)
 		}
 	else{ 
 	
-		if(isset($_POST['submit']))
-	  		{			
-            $barcode=$_POST['barcode'];
-			$medicinename=$_POST['medicinename'];
-			$strength=$_POST['strength'];
-			$genericname=$_POST['genericname'];
-			$boxsize=$_POST['boxsize'];
-			$unit=$_POST['unit'];
-			$shelf=$_POST['shelf'];
-			$medicinedetails=$_POST['medicinedetails'];
-			$category=$_POST['category'];
-			$price=$_POST['price'];
-			$medicinetype=$_POST['medicinetype'];
-			$medicinephoto=$_POST['medicinephoto'];
-			$companyname=$_POST['companyname'];
-			$companyprice=$_POST['companyprice'];
-			$vat=$_POST['vat'];
-			$igta=$_POST['igta'];
-			$status=$_POST['radio_value'];
-
-			$file_name = $_FILES['medicnephoto']['name'];
-			$file_tmp_name = $_FILES['medicinephoto']['tmp_name'];
-
-			$location = "Medicinephoto/".$file_name;
-			move_uploaded_file($file_tmp_name, $location);
-
-			$sql="UPDATE medicine_list SET medicine_name=:medicinename, generic_name=:genericname, unit=:unit, box_size=:boxsize, strength=:strength, shelf=:shelf, 
-            medicine_details=:medicinedetails, category=:category, medicine_type=:medicinetype, menufacturer=:companyname, company_price=:companyprice, 
-            selling_pricce=:price, status=:radio_value WHERE item_code=:barcode";
-			$query = $dbh->prepare($sql);
-			$query->bindParam(':medicinename',$medicinename,PDO::PARAM_STR);
-			$query->bindParam(':genericname',$genericname,PDO::PARAM_STR);
-			$query->bindParam(':unit',$unit,PDO::PARAM_STR);
-			$query->bindParam(':boxsize',$boxsize,PDO::PARAM_STR);
-			$query->bindParam(':strength',$strength,PDO::PARAM_STR);
-			$query->bindParam(':shelf',$shelf,PDO::PARAM_STR);
-			$query->bindParam(':medicinedetails',$medicinedetails,PDO::PARAM_STR);
-			$query->bindParam(':category',$category,PDO::PARAM_STR);
-			$query->bindParam(':medicinetype',$medicinetype,PDO::PARAM_STR);
-			$query->bindParam(':companyname',$companyname,PDO::PARAM_STR);
-			$query->bindParam(':companyprice',$companyprice,PDO::PARAM_STR);
-			$query->bindParam(':price',$price,PDO::PARAM_STR);
-			$query->bindParam(':radio_value',$status,PDO::PARAM_STR);
-			//$query->bindParam(':medicinephoto',$medicinephoto,PDO::PARAM_STR);
-            $query->bindParam(':barcode',$id,PDO::PARAM_STR);
-			//$query->bindParam(':vat',$vat,PDO::PARAM_STR);
-			//$query->bindParam(':igta',$igta,PDO::PARAM_STR);
-			//$msg=" Update successfully";
-			$result= $query->execute();
-            //$lastInsertId = $dbh->lastInsertId();
-        if($result)
-        {
-            $flag=1; 
-            $msg=" Update successfully"; 
-            header("refresh:3;medicine_edit.php");
-            
-        }			
-		else {
-            $flag=0; 
-            $error=" Something went wrong. Please try again";
-            header("refresh:3;medicine_edit.php");
-        }
-		}
-	
 	?>
 	<!doctype html>
 	<html lang="en" class="no-js">
@@ -115,7 +51,6 @@ if(strlen($_COOKIE['Username'])==0 || strlen($_SESSION['alogin'])==0)
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col-md-12">
-							<h2 class="page-title">Edit Medicine Info</h2>
                             <?php if($error){?>
                                 <div class="alert alert-warning alert-dismissible fade show" role="alert">
                                 <strong>ERROR !</strong> : <?php echo htmlentities($error);?>
@@ -134,12 +69,12 @@ if(strlen($_COOKIE['Username'])==0 || strlen($_SESSION['alogin'])==0)
 									<div class="card" style="width: 100%;">
 										<div class="card-header d-flex justify-content-between align-items-center h-100px">
 		  									<div style="font-size: 20px; " class="bg-primary;">
-												Medicine Information
+												Products Information
 											</div>
 											<div >
-												<a href="medicine_edit.php?edit=<?php echo $_GET['view']; ?>"><button type="button" class="btn btn-info" style="margin-right: 15px;"><i class="fas fa-edit mr-2" style="margin-right: 10px;"></i> Edit Medicine</button></a>
-                                                <a href="medicine_add.php"><button type="button" class="btn btn-info" style="margin-right: 15px;"><i class="fas fa-plus mr-2" style="margin-right: 10px;"></i> Add Medicine</button></a>
-                                                <a href="medicine_list.php"><button type="button" class="btn btn-info" style="margin-right: 15px;"><i class="fas fa-align-justify mr-2" style="margin-right: 10px;"></i> Medicine List</button></a>
+												<a href="products_edit.php?edit=<?php echo $_GET['view']; ?>"><button type="button" class="btn btn-info" style="margin-right: 15px;"><i class="fas fa-edit mr-2" style="margin-right: 10px;"></i> Edit Prouct</button></a>
+                                                <a href="products_add.php"><button type="button" class="btn btn-info" style="margin-right: 15px;"><i class="fas fa-plus mr-2" style="margin-right: 10px;"></i> Add Products</button></a>
+                                                <a href="products_list.php"><button type="button" class="btn btn-info" style="margin-right: 15px;"><i class="fas fa-align-justify mr-2" style="margin-right: 10px;"></i> Products List</button></a>
 											</div>
 										</div>
 										<div class="card-body">
@@ -161,7 +96,7 @@ if(strlen($_COOKIE['Username'])==0 || strlen($_SESSION['alogin'])==0)
 												</div>
 												<div class="col-md-6">
 													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Medicine Name <i class="text-danger">* </i>:</label>
+														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Product Name <i class="text-danger">* </i>:</label>
 														<div class="col-sm-8">
 														<input type="text" disabled class="form-control" name="medicinename" value="<?php echo htmlentities($result->medicine_name);?>">
 														</div>
@@ -177,25 +112,6 @@ if(strlen($_COOKIE['Username'])==0 || strlen($_SESSION['alogin'])==0)
 												</div>
 												<div class="col-md-6">
 													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Generic Name :</label>
-														<div class="col-sm-8">
-														<input type="text" disabled class="form-control" name="genericname" value="<?php echo htmlentities($result->generic_name);?>">
-														</div>
-													</div>
-												</div>
-												<div class="col-md-6">
-													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Box Size <i class="text-danger">* </i>:</label>
-														<div class="col-sm-8">														
-															<select disabled name="boxsize" class="form-control form-select form-select-md " >
-																<option value="<?php echo htmlentities($result->box_size);?>"selected class=""><?php echo htmlentities($result->box_size);?></option>
-																<option value="11">11</option>																
-															</select>														
-														</div>
-													</div>
-												</div>
-												<div class="col-md-6">
-													<div class="row mb-3">
 														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Unit <i class="text-danger">* </i>:</label>
 														<div class="col-sm-8">
 														<select disabled name="unit" class="form-control form-select form-select-md ">
@@ -205,20 +121,12 @@ if(strlen($_COOKIE['Username'])==0 || strlen($_SESSION['alogin'])==0)
 														</div>
 													</div>
 												</div>
-												<div class="col-md-6">
-													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Shelf :</label>
-														<div class="col-sm-8">
-														<input type="text" disabled class="form-control" name="shelf" value="<?php echo htmlentities($result->shelf);?>">
-														</div>
-													</div>
-												</div>
 												
 												<div class="col-md-6">
 													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Medicine Details:</label>
+														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Product Details:</label>
 														<div class="col-sm-8">
-														<textarea disabled style="resize: none;" class="form-control" name="medicinedetails" rows="1"><?php echo htmlentities($result->medicine_details);?></textarea>
+														<textarea disabled style="resize: none;" class="form-control" name="medicinedetails" rows="5"><?php echo htmlentities($result->medicine_details);?></textarea>
 														</div>
 													</div>
 												</div>							
@@ -244,20 +152,12 @@ if(strlen($_COOKIE['Username'])==0 || strlen($_SESSION['alogin'])==0)
 												</div>
 												<div class="col-md-6">
 													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Medicine Type <i class="text-danger">* </i>:</label>
+														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Product Type <i class="text-danger">* </i>:</label>
 														<div class="col-sm-8">
 															<select disabled name="medicinetype" class="form-control form-select form-select-md ">
                                                             <option value="<?php echo htmlentities($result->medicine_type);?>"selected class=""><?php echo htmlentities($result->medicine_type);?></option>
 																<option value="11">11</option>																
 															</select>
-														</div>
-													</div>
-												</div>
-												<div class="col-md-6">
-													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Medicine Photo <i class="text-danger">* </i>:</label>
-														<div class="col-sm-8">
-														<input type="file" disabled class="form-control" name="medicinephoto" value="<?php echo htmlentities($result->image);?>">
 														</div>
 													</div>
 												</div>
@@ -278,22 +178,6 @@ if(strlen($_COOKIE['Username'])==0 || strlen($_SESSION['alogin'])==0)
 														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Company Price <i class="text-danger">* </i>:</label>
 														<div class="col-sm-8">
 														<input type="float" disabled name="companyprice" class="form-control" id="" value="<?php echo htmlentities($result->company_price);?>">
-														</div>
-													</div>
-												</div>
-												<div class="col-md-6">
-													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Vat :</label>
-														<div class="col-sm-8">
-														<input type="text" disabled class="form-control" name="vat" value="<?php echo htmlentities($result->vat);?>">
-														</div>
-													</div>
-												</div>
-												<div class="col-md-6">
-													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">IGTA :</label>
-														<div class="col-sm-8">
-														<input type="text" disabled class="form-control" name="igta" value="<?php echo htmlentities($result->igta);?>">
 														</div>
 													</div>
 												</div>
@@ -325,15 +209,7 @@ if(strlen($_COOKIE['Username'])==0 || strlen($_SESSION['alogin'])==0)
                                                             <?php }?>
 														</div>
 													</div>
-												</div>												
-												<div class="col-md-6">
-													<div class="row mb-3">
-														<label for="inputPassword3" class="col-sm-4 col-form-label text-start text-sm-end">Preview :</label>
-														<div class="col-sm-8">
-															<img src="img/medicine-demo.jpg"  width="100px" alt="medicine-demo-pic">
-														</div>
-													</div>
-												</div>
+												</div>	
 				
 															
 											</form>	
