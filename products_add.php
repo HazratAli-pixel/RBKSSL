@@ -56,7 +56,7 @@ if(strlen($_COOKIE['Username'])==0 || strlen($_SESSION['alogin'])==0)
 		if($lastInsertId)
 			{
 			$msg=" Your info submitted successfully";
-			header("refresh:2;medicine_add.php"); 
+			header("refresh:2;products_add.php"); 
 			}
 		else 
 			{
@@ -117,7 +117,7 @@ if(strlen($_COOKIE['Username'])==0 || strlen($_SESSION['alogin'])==0)
 												Medicine Information
 											</div>
 											<div >
-												<a href="medicine_list.php"><button type="button" class="btn btn-info"><i class="fas fa-align-justify mr-2" style="margin-right: 10px;"></i> Medicine List</button></a>
+												<a href="products_list.php"><button type="button" class="btn btn-info"><i class="fas fa-align-justify mr-2" style="margin-right: 10px;"></i> Medicine List</button></a>
 												
 											</div>
 										</div>

@@ -24,14 +24,21 @@
 						<li style="margin-left: 50px;"><a href="purchase_list.php">Company Ledger</a></li>
 					</ul>
 				</li>
-				<li><a href="#"><i class="fas fa-pills"></i> Medicine</a> 
+				<li><a href="#"><i class="typcn typcn-group-outline mr-2"></i> EMI</a>
 					<ul>
-						<li style="margin-left: 50px;"><a href="./medicine_category_list.php">Categroy List</a></li>
-						<li style="margin-left: 50px;"><a href="./medicine_unit_list.php">Unit List</a></li>
-						<li style="margin-left: 50px;"><a href="./medicine_type_list.php">Type List</a></li>
+						<li style="margin-left: 50px;"><a href="emicalculation.php">EMI Calculation</a></li>
+						<li style="margin-left: 50px;"><a href="company_list.php">Company List</a></li>
+						<li style="margin-left: 50px;"><a href="purchase_list.php">Company Ledger</a></li>
+					</ul>
+				</li>
+				<li><a href="#"><i class="fas fa-pills"></i> Products</a> 
+					<ul>
+						<li style="margin-left: 50px;"><a href="./products_category_list.php">Categroy List</a></li>
+						<li style="margin-left: 50px;"><a href="./products_unit_list.php">Unit List</a></li>
+						<li style="margin-left: 50px;"><a href="./products_type_list.php">Type List</a></li>
 						<li style="margin-left: 50px;"><a href="#">Leaf Setting</a></li>
-						<li style="margin-left: 50px;"><a href="./medicine_add.php">Add Medicine</a></li>
-						<li style="margin-left: 50px;"><a href="./medicine_list.php">Medicine List</a></li>
+						<li style="margin-left: 50px;"><a href="./products_add.php">Add Products</a></li>
+						<li style="margin-left: 50px;"><a href="./products_list.php">Products List</a></li>
 					</ul>
 				</li>
 				<li><a href="#"><i class="typcn typcn-shopping-cart mr-2"></i> Purchase</a>

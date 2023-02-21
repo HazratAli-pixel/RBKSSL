@@ -49,8 +49,8 @@ if(isset($_GET['starttime'])){
 		$dates = date('l', $i);
 		$Data.="<tr>						
 		<td class='text-center'>$y</td>
-		<td class='text-center'>$dates</td>
 		<td class='text-center'>$datess</td>
+		<td class='text-center'>$dates</td>
 		<td class='text-center'>$emi</td>
 	</tr>";
 		$y++;

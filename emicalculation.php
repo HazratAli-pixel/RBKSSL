@@ -119,7 +119,7 @@ include('includes/config.php');
 													<div class="row mb-3">
 														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Loan Amount : </label>
 														<div class="col-sm-8">
-														<input type="number" id="amount" onkeyup="calculation()" class="form-control" name="loan" placeholder="Loan Amount">
+														<input type="number" id="amount" onkeyup="calculation()" onchange="emicalculation()" class="form-control" name="loan" placeholder="Loan Amount">
 														</div>
 													</div>
 												</div>
@@ -127,7 +127,7 @@ include('includes/config.php');
 													<div class="row mb-3">
 														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Interest Rate : <i class="text-danger">* </i>:</label>
 														<div class="col-sm-8">
-														<input type="Number" id="rate" onkeyup="calculation()" class="form-control" name="interestrate" placeholder="Interest Rate" required>
+														<input type="Number" id="rate" onkeyup="calculation()" onchange="emicalculation()" class="form-control" name="interestrate" placeholder="Interest Rate" required>
 														</div>
 													</div>
 												</div>
@@ -162,8 +162,8 @@ include('includes/config.php');
 														<div class="col-sm-8 ">															
 															<select id="type" onchange="emicalculation()" name="type" class="form-control form-select form-select-md" required>
 																<option Value="day">Everyday</option>
-																<option Value="week" selected>Weekly</option>
-																<option Value="month">Monthly</option>
+																<option Value="week">Weekly</option>
+																<option Value="month" selected>Monthly</option>
 															</select>
 														</div>
 													</div>
@@ -195,14 +195,14 @@ include('includes/config.php');
 														</div>
 													</div>
 												</div>
-												<div class="col-12 col-md-6">
+												<!-- <div class="col-12 col-md-6">
 													<div class="row mb-3">
 														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Total EMI : </label>
 														<div class="col-sm-8">
 														<input type="text" class="form-control" id="total_emi" name="total_emi" value="0.00" readonly>
 														</div>
 													</div>
-												</div>
+												</div> -->
 												<div class="col-12 col-md-6">
 													<div class="row mb-3">
 														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Total Interest : </label>
@@ -213,7 +213,7 @@ include('includes/config.php');
 												</div>			
 												<div class="col-12 col-md-6">
 													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">EMI : </label>
+														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Monthly EMI : </label>
 														<div class="col-sm-8">
 														<input type="text" class="form-control" id="emi" name="emi" value="0.00" readonly>
 														</div>
@@ -228,15 +228,16 @@ include('includes/config.php');
 												</div>
 												</div>						
 											</form>	
-											<div class="p-3">
+											<br>
+											<div class="p-1">
 												<div class="col-12 table-responsive">
 													<table class="display table table-striped table-bordered table-hover" cellspacing="0" width="100%">
-														<thead>
+														<thead class="bg-black text-white">
 															<tr>
-																<th>SL</th>
-																<th>Date</th>
-																<th>Day</th>
-																<th>EMI</th>
+																<th class="text-center">SL</th>
+																<th class="text-center">Date</th>
+																<th class="text-center">Day</th>
+																<th class="text-center">EMI</th>
 															</tr>
 														</thead>	
 														<tbody id="emilist">
