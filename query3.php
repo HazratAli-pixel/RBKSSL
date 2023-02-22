@@ -14,7 +14,7 @@ include('includes/config.php');
 
 if(isset($_GET['starttime'])){
 	$day = $_GET['day'];
-	$emi = $_GET['emi'];
+	$emi = round($_GET['emi'],2);
 	$loanamount = $_GET['loanamount'];
 	$type = $_GET['type'];
 	$starttime = $_GET['starttime'];
@@ -31,18 +31,21 @@ if(isset($_GET['starttime'])){
 		for ($i = $for_start; $i <= $for_end; $i = strtotime("+1 $type", $i)) {
 			$weekcount++;
 		}
-		$temp = $emi*$month;
-		$emi = number_format($temp/$weekcount,2);
+		$temp =round($emi*$month,2) ;
+		$emi = round($temp/$weekcount,2);
 	}
 	else if($type =="day"){
 		for ($i = $for_start; $i <= $for_end; $i = strtotime("+1 $type", $i)) {
 			$daycount++;
 		}
-		$temp = $emi*$month;
-		$emi = number_format($temp/$daycount,2);
+		$temp =round($emi*$month,2) ;
+		$emi = round($temp/$daycount,2);
 	}
-
-
+	else{
+		$temp =round($emi*$month,2) ;
+	}
+	
+	$temp2=round($temp-$emi,2);
 	for ($i = $for_start; $i <= $for_end; $i = strtotime("+1 $type", $i)) {
 		//echo $y."--";
 		$datess = date('Y-m-d', $i);
@@ -51,52 +54,25 @@ if(isset($_GET['starttime'])){
 		<td class='text-center'>$y</td>
 		<td class='text-center'>$datess</td>
 		<td class='text-center'>$dates</td>
+		<td class='text-center'>$temp</td>
 		<td class='text-center'>$emi</td>
-	</tr>";
+		<td class='text-center'>$temp2</td>
+		</tr>";
+		if($temp2<0){
+			break;
+		}
+		$temp=round($temp-$emi,2);
+		$temp2=round($temp-$emi,2);
 		$y++;
 	}
+	$Data = $Data."^".($y-1);
 	echo $Data;
 
 
 
 }
 
-// foreach($results as $result){
-// 	$Data.="<tr>						
-// 		<td class='text-center'>$cnt</td>
-// 		<td class='text-center'>$result->medicine_name</td>
-// 		<td class='text-center'>$result->BatchId</td>
-// 		<td class='text-center'>$result->Qty</td>
-// 		<td class='text-center'>$result->NetPrice</td>
-// 		<td class='text-center'>$result->Price</td>
-// 	</tr>";
-// 	$cnt++;
-// }
 
-	// $month="12";
-	// $day="Sunday";
-	// $given_year = strtotime("25-feb-2023");
-	// $for_start = strtotime("$day", $given_year);
-	// $for_end = strtotime("$month month", $given_year);
-	// $type= "week";
-	// $y=1;
-	// for ($i = $for_start; $i <= $for_end; $i = strtotime("+1 $type", $i)) {
-	// 	//echo $y."--";
-	// 	echo date('l Y-m-d', $i) . '<br />';
-	// 	$y++;
-	// }
-
-
-// if(isset($_GET['StatusCng'])){
-// 	$batchNumber = $_GET['StatusCng'];
-// 	$status = $_GET['Status'];
-// 		$sql = "UPDATE stocktable set Status=:status WHERE BatchNumber=:batchNumber";
-// 		$query = $dbh -> prepare($sql);
-// 		$query->bindParam(':status',$status,PDO::PARAM_STR);
-// 		$query->bindParam(':batchNumber',$batchNumber,PDO::PARAM_STR);
-// 		$query->execute();
-// 		echo "Update Successful";
-// }
 
 
 

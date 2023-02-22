@@ -114,99 +114,110 @@ include('includes/config.php');
 											</div>
 										</div>
 										<div class="card-body">
-											<form method="post" enctype="multipart/form-data" class="d-flex flex-column justify-content-between align-items-center" >
-                                                <div class="col-12 col-md-6">
-													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Loan Amount : </label>
-														<div class="col-sm-8">
-														<input type="number" id="amount" onkeyup="calculation()" onchange="emicalculation()" class="form-control" name="loan" placeholder="Loan Amount">
+											<form method="post" enctype="multipart/form-data" class="" >
+                                                <div class="d-flex flex-column flex-md-row justify-content-between">
+													<div class="col-12 col-md-6 col-lg-6">
+														<div class="row mb-3">
+															<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Name : </label>
+															<div class="col-sm-8">
+															<input type="text" id="" class="form-control" name="name" placeholder="Enter Name">
+															</div>
+														</div>
+														<div class="row mb-3">
+															<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Reference-1 : </label>
+															<div class="col-sm-8">
+															<input type="text" id="" class="form-control" name="name" placeholder="Enter Reference-1">
+															</div>
+														</div>
+														<div class="row mb-3">
+															<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Reference-2 : </label>
+															<div class="col-sm-8">
+															<input type="text" id="" class="form-control" name="name" placeholder="Enter Reference-1">
+															</div>
+														</div>
+														<div class="row mb-3">
+															<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Invoice ID : </label>
+															<div class="col-sm-8">
+															<input type="number" id="" class="form-control" name="name" placeholder="Enter Invoice">
+															</div>
+														</div>
+														<div class="hr-dashed"></div>
+														<div class="row mb-3">
+															<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Loan Amount : </label>
+															<div class="col-sm-8">
+															<input type="number" id="amount" onkeyup="calculation()" onchange="emicalculation()" class="form-control" name="loan" placeholder="Loan Amount">
+															</div>
+														</div>
+														<div class="row mb-3">
+															<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Interest Rate : <i class="text-danger">* </i>:</label>
+															<div class="col-sm-8">
+															<input type="Number" id="rate" onkeyup="calculation()" onchange="emicalculation()" class="form-control" name="interestrate" placeholder="Interest Rate" required>
+															</div>
 														</div>
 													</div>
-												</div>
-												<div class="col-12 col-md-6">
-													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Interest Rate : <i class="text-danger">* </i>:</label>
-														<div class="col-sm-8">
-														<input type="Number" id="rate" onkeyup="calculation()" onchange="emicalculation()" class="form-control" name="interestrate" placeholder="Interest Rate" required>
+													<div class="col-12 col-md-6 col-lg-6">
+														<div class="row mb-3">
+															<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Time : <i class="text-danger">* </i>:</label>
+															<div class="col-sm-8">
+																<input type="Number" id="month" onkeyup="calculation()" onchange="emicalculation()" class="form-control" name="month" placeholder="Enter time in month" required>
+															</div>
 														</div>
-													</div>
-												</div>
-												<div class="col-12 col-md-6">
-													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Time : <i class="text-danger">* </i>:</label>
-														<div class="col-sm-8">
-														<input type="Number" id="month" onkeyup="calculation()" onchange="emicalculation()" class="form-control" name="month" placeholder="Enter time in month" required>
+														<div class="row mb-3">
+															<label for="" class="col-sm-4 col-form-label text-start text-sm-end">EMI Type <i class="text-danger">* </i>:</label>
+															<div class="col-sm-8 ">															
+																<select id="type" onchange="emicalculation()" name="type" class="form-control form-select form-select-md" required>
+																	<option Value="day">Everyday</option>
+																	<option Value="week">Weekly</option>
+																	<option Value="month" selected>Monthly</option>
+																</select>
+															</div>
 														</div>
-													</div>
-												</div>
-											
-												<div class="col-12 col-md-6">
-													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">EMI Type <i class="text-danger">* </i>:</label>
-														<div class="col-sm-8 ">															
-															<select id="type" onchange="emicalculation()" name="type" class="form-control form-select form-select-md" required>
-																<option Value="day">Everyday</option>
-																<option Value="week">Weekly</option>
-																<option Value="month" selected>Monthly</option>
-															</select>
-														</div>
-													</div>
-												</div>
 
-												<div id="day2" class="col-12 col-md-6" hidden>
-													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Day <i class="text-danger">* </i>:</label>
-														<div class="col-sm-8">															
-															<select id="day" onchange="emicalculation()" name="day" class="form-control form-select form-select-md" required>
-																<option Value="Saturday" selected>Saturday</option>
-																<option Value="Sunday">Sunday</option>
-																<option Value="Monday">Monday</option>
-																<option Value="Tuesday">Tuesday</option>
-																<option Value="Wednesday">Wednesday</option>
-																<option Value="Thursday">Thursday</option>
-																<option Value="Friday">Friday</option>
-															</select>
+														<div class="row mb-3">
+															<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Day <i class="text-danger">* </i>:</label>
+															<div class="col-sm-8">															
+																<select id="day" onchange="emicalculation()" name="day" class="form-control form-select form-select-md" required>
+																	<option Value="Saturday" selected>Saturday</option>
+																	<option Value="Sunday">Sunday</option>
+																	<option Value="Monday">Monday</option>
+																	<option Value="Tuesday">Tuesday</option>
+																	<option Value="Wednesday">Wednesday</option>
+																	<option Value="Thursday">Thursday</option>
+																	<option Value="Friday">Friday</option>
+																</select>
+															</div>
+														</div>
+														<div class="row mb-3">
+															<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Start Time : </label>
+															<div class="col-sm-8">
+																<?php date_default_timezone_set('Asia/Dhaka'); ?>
+															<input type="date" onchange="emicalculation()" value="<?php echo date('Y-m-d'); ?>" class="form-control" id="start_time" name="start_time" required>
+															</div>
+														</div>
+														<div class="row mb-3">
+															<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Total EMI : </label>
+															<div class="col-sm-8">
+															<input type="text" class="form-control" id="total_emi" name="total_emi" value="0.00" readonly>
+															</div>
+														</div>
+														<div class="row mb-3">
+															<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Total Interest : </label>
+															<div class="col-sm-8">
+															<input type="text" class="form-control" id="total_interest" name="total_interest" value="0.00" readonly>
+															</div>
+														</div>
+														<div class="row mb-3">
+															<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Monthly EMI : </label>
+															<div class="col-sm-8">
+															<input type="text" class="form-control" id="emi" name="emi" value="0.00" readonly>
+															</div>
 														</div>
 													</div>
 												</div>
 												
-												<div class="col-12 col-md-6">
-													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Start Time : </label>
-														<div class="col-sm-8">
-															<?php date_default_timezone_set('Asia/Dhaka'); ?>
-														<input type="date" onchange="emicalculation()" value="<?php echo date('Y-m-d'); ?>" class="form-control" id="start_time" name="start_time" required>
-														</div>
-													</div>
-												</div>
-												<!-- <div class="col-12 col-md-6">
-													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Total EMI : </label>
-														<div class="col-sm-8">
-														<input type="text" class="form-control" id="total_emi" name="total_emi" value="0.00" readonly>
-														</div>
-													</div>
-												</div> -->
-												<div class="col-12 col-md-6">
-													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Total Interest : </label>
-														<div class="col-sm-8">
-														<input type="text" class="form-control" id="total_interest" name="total_interest" value="0.00" readonly>
-														</div>
-													</div>
-												</div>			
-												<div class="col-12 col-md-6">
-													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Monthly EMI : </label>
-														<div class="col-sm-8">
-														<input type="text" class="form-control" id="emi" name="emi" value="0.00" readonly>
-														</div>
-													</div>
-												</div>			
-												<div class="hr-dashed"></div>
 
-												<div class="col-12 col-md-6">
-														<div class="d-grid gap-2 d-md-flex d-sm-flex justify-content-md-end justify-content-sm-end justify-content-lg-end">
+												<div class="col-12">
+														<div class="d-grid gap-2 d-flex justify-content-end ">
 														<button style="min-width: 150px;" class="btn btn-danger me-md-2" type="reset">Reset</button>
 														<button style="min-width: 150px;" class="btn btn-success" type="submit" name="submit" >Submit</button>
 												</div>
@@ -226,7 +237,7 @@ include('includes/config.php');
 																<th class="text-center">Rest Balance</th>
 															</tr>
 														</thead>	
-														<tbody id="emilist">
+														<tbody id="emilist2">
 															
 														</tbody>
 													</table>
@@ -260,10 +271,10 @@ include('includes/config.php');
 			let month = document.getElementById('month');
 			let type = document.getElementById('type');
 			let day = document.getElementById('day');
-			let day2 = document.getElementById('day2');
-			let emilist = document.getElementById('emilist');
+			let emilist2 = document.getElementById('emilist2');
 			let start_time = document.getElementById('start_time');
 			let total_interest = document.getElementById('total_interest');
+			let totalemi = document.getElementById('total_emi');
 			let emi = document.getElementById('emi');
 
 			function calculation() {
@@ -277,6 +288,7 @@ include('includes/config.php');
 				
 			}
 			function emicalculation (){
+				// alert('fsdaf')
 				let day5 = day.value
 				let type2 = type.value
 				let start_time2 = start_time.value
@@ -284,21 +296,18 @@ include('includes/config.php');
 				let loanamount = Number(amount.value);
 				let emi2 = Number(emi.value);
 
-				if(type.value.toString() == "week"){
-				day2.removeAttribute("hidden");
-				}
-				else{
-					day2.setAttribute("hidden","");
-				}
 				const xmlhttp = new XMLHttpRequest();
 				xmlhttp.onreadystatechange = function () {
 					if (this.readyState == 4 && this.status == 200) {
-							emilist.innerHTML = this.responseText;
+						let data = this.responseText.split("^");
+						emilist2.innerHTML = data[0];
+						totalemi.value = data[1];
 					}
 				};
 				xmlhttp.open('GET', `query3.php?day=${day5}&type=${type2}&starttime=${start_time2}&month=${month2}&emi=${emi2}&loanamount=${loanamount}`, true);
 				xmlhttp.send();
-}
+			}
+
 
 		</script>
 	</body>
