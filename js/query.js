@@ -10,12 +10,13 @@ function reply_click(clicked_id) {
 
 			if (result == 1) {
 				m_title.innerHTML = "Massage";
-				m_body.innerHTML = "<h3>Max Item Added</h3>";
+				m_body.innerHTML = "<h3>Max Item Added..!!!</h3>";
+				
 				$('#exampleModal').modal('show');
 			}
 			else if (result == 3) {
 				m_title.innerHTML = "Massage";
-				m_body.innerHTML = "<h4>Item not available in stock</h4>";
+				m_body.innerHTML = "<h4>Item not available in stock.</h4>";
 				$('#exampleModal').modal('show');
 			}
 			else if(result==2){
@@ -51,7 +52,7 @@ function show_item(clicked_id) {
 	xmlhttp.onreadystatechange = function () {
 		if (this.readyState == 4 && this.status == 200) {
 				// alert(this.responseText);
-				m_title.innerHTML = "Medicine Information";
+				m_title.innerHTML = "Product Information";
 				m_body.innerHTML = this.responseText;
 				$('#exampleModal').modal('show');
 		}

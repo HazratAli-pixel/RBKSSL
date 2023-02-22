@@ -92,7 +92,6 @@ use function Symfony\Component\VarDumper\Dumper\esc;
 				$Data.="<tr>						
 							<td class='text-center'> <p class='form-control'>$value[ProductName]</p>  </td>
 							<td class='text-center'> <p class='form-control'>$value[Batch]</p> </td>
-							<td class='text-center'> <p class='form-control' readonly>$value[Exdate]</p></td>
 							<td class='text-center'>
 								<input type='number' class='form-control $value[SellQty] text-center' id='$value[ItemId]' onChange='changeQty(this.id,this.value)' value='$value[SellQty]' min='1' max='120'>
 							</td>

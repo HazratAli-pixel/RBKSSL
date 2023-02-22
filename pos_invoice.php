@@ -40,7 +40,7 @@ include('includes/config.php');
 		<meta name="author" content="Hazrat Ali">
 		<meta name="theme-color" content="#3e454c">
 			
-		<title>PMS| Message</title>
+		<title>D-shop | POS</title>
 		<link rel="shortcut icon" href="./assets/pic/pmslogo.png" type="image/x-icon">
 		<!-- Font awesome -->
 		<link rel="stylesheet" href="includes/style.css">
@@ -108,7 +108,7 @@ include('includes/config.php');
 								<div class="card-body" >
 									<div class="row d-flex">
 										<!-- button Part start here -->
-										<div class="col-12 col-md-2 col-lg-1">
+										<!-- <div class="col-12 col-md-2 col-lg-1">
 											<div id="button_list" class="d-flex flex-row justify-content-center flex-wrap flex-sm-row flex-md-column flex-lg-column flex-xl-column">
 												<?php $sql = "SELECT * from  medicine_category order by  MedicineCategory ASC";
 												$query = $dbh -> prepare($sql);
@@ -129,14 +129,14 @@ include('includes/config.php');
 													}
 												}?>
 											</div>
-										</div>
+										</div> -->
 										<!-- button Part ends here -->
 
 										<!-- Medicine list Part starts here -->
-										<div class="col-12 col-md-10 col-lg-3">
+										<div class="col-12 col-md-10 col-lg-2">
 											<div class="row px-2 d-flex flex-column flex-sm-row flex-md-row justify-content-between">
 												<div class="col-md-12 ">
-													<input class="form-control" onkeyup="myFunction()" id="myInput" type="search" placeholder="Search Medicine">
+													<input class="form-control" onkeyup="myFunction()" id="myInput" type="search" placeholder="Search Products">
 												</div>
 											</div>
 											<div class="row  p-2">
@@ -145,8 +145,8 @@ include('includes/config.php');
 														<thead>
 															<tr class="bg-style">
 																<!-- <th class = "text-center w-25">SL</th> -->
-																<th class = "text-center w-50">Medicine Name</th>
-																<th class = "text-center w-50" >action </th>
+																<th class = "text-center">Products Name</th>
+																<!-- <th class = "text-center w-50" >action </th> -->
 															</tr>
 														</thead>
 														<tbody id="myTable">
@@ -167,10 +167,10 @@ include('includes/config.php');
 																			<td class="text-center fw-bold" ><?php echo htmlentities($result->medicine_name);?>  
 																				<input type="hidden" name= "MedicineName" value="<?php echo htmlentities($result->medicine_name);?>">
 																			</td>
-																			<td style="text-align: center; ">
+																			<!-- <td style="text-align: center; ">
 																				<p  id="<?php echo htmlentities($result->item_code);?>" style="user-select: none" class="btn w-100 btn-primary" value="">add</p>
 																				<input id="BtnNo" class="btn btn-sm btn-primary" type="hidden" value="<?php echo htmlentities($cnt);?>">
-																			</td>
+																			</td> -->
 																		</tr>
 																	<?php $cnt=$cnt+1; 
 																	}
@@ -179,6 +179,8 @@ include('includes/config.php');
 														</tbody>
 													</table>
 												</div>
+
+
 												<!-- <div class="row p-0 m-0">
 													<div class="col-12 flex-wrap d-flex justify-content-between w-100" style="overflow-x: hidden;overflow-y: scroll; height: 700px;" >
 														<?php $sql = "SELECT * from  medicine_list ORDER BY medicine_name ASC ";
@@ -214,12 +216,15 @@ include('includes/config.php');
 														}?>
 													</div>
 												</div> -->
+
+
+
 											</div>
 										</div>
 										<!-- Medicine list Part ends here -->
 
 										<!-- Calculation table start herer -->
-										<div class="col-12 col-md-12 col-lg-8">
+										<div class="col-12 col-md-12 col-lg-10 mb-5">
 											<div class="row">
 												<div class="col-12 d-flex justify-content-between ">
 													<div class="col-xl-3">
@@ -234,18 +239,10 @@ include('includes/config.php');
 														$results=$cquery->fetchAll(PDO::FETCH_OBJ);							   
 														?>
 														<div class="input-group mb-3">
-															<input onchange="DuePerson(this.value)" name="companyname" value="Walking Customer" class="form-control" list="datalistOptionss" id="exampleDataListf" >
-															<datalist id="datalistOptionss" required>
-																<?php 
-																foreach($results as $result)
-																{
-																	if($result->Status==1)
-																	{?>	
-																		<option id="" value="<?php echo htmlentities($result->ID."-".$result->Name."-".$result->Phone."-".$result->Address);?>">
-																		<?php 
-																	} 
-																}?>
-															</datalist>
+															<input onchange="DuePerson(this.value)" onkeyup="CustomerNameSearch(this.value)" name="companyname" value="Walking Customer" class="form-control" list="datalistOptionss" id="exampleDataListf" >
+																<datalist id="datalistOptionss" required>
+																	
+																</datalist>
 															<button class="btn btn-outline-primary " type="button" onclick="clean_filed()" id="cln_id">Clean</button>
 															<button class="btn btn-outline-primary" type="button" id="add_person" data-toggle="modal" data-target="#exampleModal2">Add</button>
 														</div>	
@@ -258,7 +255,6 @@ include('includes/config.php');
 														<tr class='bg-style'>						
 															<th style="text-align: center; width:20%">Name </th>
 															<th style="text-align: center; width:10%" >Batch </th>
-															<th style="text-align: center; width:10%" >Ex-Date </th>
 															<th style="text-align: center; width:10%" >Quantity </th>
 															<th style="text-align: center; width:8%" >price </th>
 															<th style="text-align: center; width:10%" >Total </th>
@@ -275,7 +271,6 @@ include('includes/config.php');
 																echo "<tr>						
 																		<td class='text-center'> <p class='form-control'>$value[ProductName]</p>  </td>
 																		<td class='text-center'> <p class='form-control'>$value[Batch]</p> </td>
-																		<td class='text-center'> <p class='form-control' readonly>$value[Exdate]</p></td>
 																		<td class='text-center'>
 																			<input type='number' class='form-control $value[SellQty] text-center' id='$value[ItemId]' onChange='changeQty(this.id,this.value)' value='$value[SellQty]' min='1' max='120'>
 																		</td>
@@ -289,67 +284,111 @@ include('includes/config.php');
 																			<p class='btn btn-outline-none p-0 m-0' onClick='show_item(this.id)' id='$value[ItemId]'><i style='color: red;' class='far fa-eye p-0 m-0' aria-hidden='true'></i></p>
 																		</td>
 																	</tr>";
-																// echo "<tr>						
-																// 		<td class='text-center'>$value[ProductName]</td>
-																// 		<td class='text-center'>
-																// 			<select name='cars' id='cars'>
-																// 				<option value='volvo'>Volvo</option>
-																// 				<option value='saab'>Saab</option>
-																// 				<option value='mercedes'>Mercedes</option>
-																// 				<option value='audi'>Audi</option>
-																// 			</select></td>
-																// 		<td class='text-center'>$value[Exdate]</td>
-																// 		<td class='text-center'>
-																// 			<input type='number' class='qty' id='$value[ItemId]' onChange='changeQty(this.id,this.value)' value='$value[SellQty]' min='1' max='120'>
-																// 		</td>
-																// 		<td class='iprice text-center'>$value[Price] <input type='hidden'  id='$value[Price]'  min='1' max='120'></td>
-																// 		<td class='itotal text-center'>$Itotal</td>
-																// 		<td class='text-center'>
-																// 			<button class='btn btn-outline-none tprice' onClick='remove_item(this.id)' id='$value[ItemId]'><i style='color: red;' class='far fa-trash-alt' aria-hidden='true'></i></button>
-																// 			<button class='btn btn-outline-none' onClick='show_item(this.id)' id='$value[ItemId]'><i style='color: red;' class='far fa-eye' aria-hidden='true'></i></button>
-																// 		</td>
-																// 	</tr>";
 															}
 														}?>
 													</tbody>
 												</table>
 											</div>
 											<div class="row">
-												<div class="col-12 d-flex flex-column justify-content-end">
-													<div class="row mb-2">
-														<label  for="" class="fw-bold col-9 text-end">Inoice Discount %: </label>
-														<div class="col-3">
-															<input id="ivoicediscount" onblur="InvoiceDiscount()" type="text" class="form-control text-end" value="" placeholder="0.00">
+												<div class="col-8">
+													<div class="row">
+														<div class="form-check form-switch pe-2">
+															<input class="form-check-input" value="1" type="checkbox" onclick="emi_display(this.value)" name="switch" id="flexSwitchCheckDefault2">
+															<label class="form-check-label" for="flexSwitchCheckDefault2">EMI</label>
 														</div>
 													</div>
-													<div class="row mb-2">
-														<label for="" class="fw-bold col-9 text-end">Total Discount : </label>
-														<div class="col-3">
-															<input id="totaldiscount" name="totaldiscount" type="text" disabled class="form-control text-end" value="" placeholder="0.00">
+													<div id="emi_info" class="d-flex justify-content-between d-none" >
+														<div class="p-1 col-6">
+															<div class="row mb-2">
+																<label  for="" class="fw-bold col-5 text-end">Name: </label>
+																<div class="col-7">
+																	<input id="ivoicediscount" type="text" class="form-control text-end" value="" placeholder="Name....">
+																</div>
+															</div>
+															<div class="row mb-2">
+																<label  for="" class="fw-bold col-5 text-end"> Reference-1: </label>
+																<div class="col-7">
+																	<input id="ivoicediscount" type="text" class="form-control text-end" value="" placeholder="Reference 1">
+																</div>
+															</div>
+															<div class="row mb-2">
+																<label  for="" class="fw-bold col-5 text-end">Reference-2: </label>
+																<div class="col-7">
+																	<input id="ivoicediscount" type="text" class="form-control text-end" value="" placeholder="Reference 2">
+																</div>
+															</div>
+															<div class="row mb-2">
+																<label  for="" class="fw-bold col-5 text-end">EMI type: </label>
+																<div class="col-7">
+																	<input id="ivoicediscount" type="text" class="form-control text-end" value="" placeholder="0.00">
+																</div>
+															</div>
+															<div class="row mb-2">
+																<label  for="" class="fw-bold col-5 text-end">EMI Day: </label>
+																<div class="col-7">
+																	<input id="ivoicediscount" type="text" class="form-control text-end" value="" placeholder="0.00">
+																</div>
+															</div>
+														</div>
+														<div class="p-1 col-6">
+															<div class="row mb-2">
+																<label  for="" class="fw-bold col-5 text-end">EMI: </label>
+																<div class="col-7">
+																	<input id="ivoicediscount" type="text" class="form-control text-end" value="" placeholder="0.00">
+																</div>
+															</div>
+															<div class="row mb-2">
+																<label  for="" class="fw-bold col-5 text-end">Loan Amount: </label>
+																<div class="col-7">
+																	<input id="ivoicediscount" type="text" class="form-control text-end" value="" placeholder="0.00">
+																</div>
+															</div>
+															<div class="row mb-2">
+																<label  for="" class="fw-bold col-5 text-end">EMI Start: </label>
+																<div class="col-7">
+																	<input id="ivoicediscount" type="calender" class="form-control text-end" value="" placeholder="0.00">
+																</div>
+															</div>
 														</div>
 													</div>
-													<div class="row mb-2">
-														<label for="" class="fw-bold col-9 text-end">Total Vat : </label>
-														<div class="col-3">
-															<input type="text" id="vat" disabled class="form-control text-end" name="" value="" placeholder="0.00">
+												</div>
+												<div class="col-4">
+													<div class="col-12 d-flex flex-column justify-content-end">
+														<div class="row mb-2">
+															<label  for="" class="fw-bold col-6 text-end">Inoice Discount %: </label>
+															<div class="col-6">
+																<input id="ivoicediscount" onblur="InvoiceDiscount()" type="text" class="form-control text-end" value="" placeholder="0.00">
+															</div>
 														</div>
-													</div>
-													<div class="row mb-2">
-														<label for="" class="fw-bold col-9 text-end">Grand Total : </label>
-														<div class="col-3">
-															<input name="grandtotal" id="Total" type="text" style="font-weight: bold; font-size:15px" disabled class="form-control text-end" name="mobile" value="" placeholder="0.00">
+														<div class="row mb-2">
+															<label for="" class="fw-bold col-6 text-end">Total Discount : </label>
+															<div class="col-6">
+																<input id="totaldiscount" name="totaldiscount" type="text" disabled class="form-control text-end" value="" placeholder="0.00">
+															</div>
 														</div>
-													</div>
-													<div class="row mb-2">
-														<label for="" class="fw-bold col-9 text-end">Privious Due : </label>
-														<div class="col-3">
-															<input onchange="FullPayment()" type="text" name="previousdue" id="previousdue" class="form-control text-end"  value="" placeholder="0.00">
+														<div class="row mb-2">
+															<label for="" class="fw-bold col-6 text-end">Total Vat : </label>
+															<div class="col-6">
+																<input type="text" id="vat" disabled class="form-control text-end" name="" value="" placeholder="0.00">
+															</div>
 														</div>
-													</div>
-													<div class="row mb-2">
-														<label for="" class="fw-bold col-9 text-end"> Total : </label>
-														<div class="col-3">
-															<input id="paidamount" type="text" disabled class="form-control text-end" name="" value="" placeholder="0.00">
+														<div class="row mb-2">
+															<label for="" class="fw-bold col-6 text-end">Grand Total : </label>
+															<div class="col-6">
+																<input name="grandtotal" id="Total" type="text" style="font-weight: bold; font-size:15px" disabled class="form-control text-end" name="mobile" value="" placeholder="0.00">
+															</div>
+														</div>
+														<div class="row mb-2">
+															<label for="" class="fw-bold col-6 text-end">Privious Due : </label>
+															<div class="col-6">
+																<input onchange="FullPayment()" type="text" name="previousdue" id="previousdue" class="form-control text-end"  value="" placeholder="0.00">
+															</div>
+														</div>
+														<div class="row mb-2">
+															<label for="" class="fw-bold col-6 text-end"> Total : </label>
+															<div class="col-6">
+																<input id="paidamount" type="text" disabled class="form-control text-end" name="" value="" placeholder="0.00">
+															</div>
 														</div>
 													</div>
 												</div>
@@ -478,6 +517,21 @@ include('includes/config.php');
 	</div>
 
 		<script>
+			let emiinfo= document.getElementById("emi_info");
+			function emi_display(clickedid){
+				let a = event.target.value
+				if(a==1){
+					document.getElementById("flexSwitchCheckDefault2").value = "2";
+					emiinfo.classList.remove("d-none")
+				}
+				else{
+					document.getElementById("flexSwitchCheckDefault2").value = "1";
+					emiinfo.classList.add("d-none")
+				}				
+			}
+		</script>												
+
+		<script>
 			let Iprice = document.getElementsByClassName('iprice');
 			let Iquantity = document.getElementsByClassName('qty');
 			
@@ -564,6 +618,21 @@ include('includes/config.php');
 			});
 			// FullPayment();
 			subTotal();
+
+
+			function CustomerNameSearch(inputValue){
+				const xmlhttp = new XMLHttpRequest();
+				xmlhttp.onreadystatechange = function () {
+					if (this.readyState == 4 && this.status == 200) {
+							// alert(this.responseText);
+							$('#datalistOptionss').html(this.responseText);
+					}
+				};
+
+				xmlhttp.open('GET', `query4.php?CustomberName=${inputValue}`, true);
+				xmlhttp.send();
+			}		
+	
 
 		</script>
 		

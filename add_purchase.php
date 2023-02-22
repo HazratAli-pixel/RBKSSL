@@ -53,8 +53,8 @@
 			$v= "sdafsadfsdaf";
 
 			foreach($batch_id as $key => $value){
-				$sql = "INSERT INTO purchaseslist (InvoiceId,ProductId,BatchId,ExDate,Qty,Mprice,MRP) VALUES 
-				('".$invoice_no."','".$product_id[$key]."','".$batch_id[$key]."','".$expeire_date[$key]."','".$product_quantity[$key]."','".$product_rate[$key]."','".$mrp[$key]."')";
+				$sql = "INSERT INTO purchaseslist (InvoiceId,ProductId,BatchId,Qty,Mprice,MRP) VALUES 
+				('".$invoice_no."','".$product_id[$key]."','".$batch_id[$key]."','".$product_quantity[$key]."','".$product_rate[$key]."','".$mrp[$key]."')";
 				$query = mysqli_query($con,$sql);
 			}
 			header("refresh:1;add_purchase.php");
@@ -207,14 +207,11 @@
                             				<table class="table table-bordered border-muted table-hover" id="purchaseTable">
                                 				<thead class="border border-dark border-2">
 													<tr class="">
-														<th class="text-center"><nobr>Medicine name<i class="text-danger">*</i></nobr></th> 
-														<th class="text-center"><nobr>Batch Id<i class="text-danger"></i></nobr></th>
-														<th class="text-center"><nobr>Expiry Date<i class="text-danger">*</i></nobr></th>
-														<th class="text-center"><nobr>Stock Qty</nobr></th>
-														<th class="text-center"><nobr>Box Qty<i class="text-danger">*</i></nobr></th>
+														<th class="text-center"><nobr>Product name<i class="text-danger">*</i></nobr></th> 
+														<th class="text-center"><nobr>Product Id<i class="text-danger"></i></nobr></th>
 														<th class="text-center"><nobr>Quantity <i class="text-danger">*</i></nobr></th>
 														<th class="text-center"><nobr>Manufacturer Price<i class="text-danger">*</i></nobr></th>
-														<th class="text-center"><nobr>Box MRP <i class="text-danger">*</i></nobr></th>
+														<th class="text-center"><nobr>MRP <i class="text-danger">*</i></nobr></th>
 														<th class="text-center"><nobr>Total Purchase Price</nobr></th>
 														<th class="text-center"><nobr>Action</nobr></th>
                                         			</tr>
@@ -230,16 +227,7 @@
 															<datalist id="datalistOptionss_1" required></datalist>
 														</td>
 														<td>
-															<input type="text" name="batch_id[]" id="batch_id_1" class="batch_class form-control text-end"  tabindex="7" placeholder="Batch Id">
-														</td>
-														<td>
-															<input type="date" name="expeire_date[]" id="expeire_date_1" class="form-control uidatepicker " tabindex="8"    placeholder="Expiry Date" onclick="checkExpiredate(1)" required>
-														</td>
-														<td class="wt">
-															<input type="text" id="available_quantity_1" class="form-control text-end stock_ctn_1" placeholder="0.00" readonly>
-														</td>
-														<td class="text-end">
-															<input type="text" name="box_quantity[]" id="box_quantity_1" class="form-control text-end store_cal_1 valid_number" onkeyup="purchase_calculation(1),checkqty(1);" onchange="purchase_calculation(1);" placeholder="0.00" value="" min="0" tabindex="10" required="required" readonly>
+															<input type="text" name="batch_id[]" id="batch_id_1" class="batch_class form-control text-end"  tabindex="7" placeholder="Product Id">
 														</td>
 													
 														<td class="text-end">
@@ -263,7 +251,7 @@
 												</tbody>
 												<tfoot>
 													<tr>
-														<td class="text-end" colspan="8"><b>Sub Total:</b></td>
+														<td class="text-end" colspan="5"><b>Sub Total:</b></td>
 														<td class="text-end">
 															<input type="text" id="sub_total"  class="text-end form-control" name="sub_total" placeholder="0.00" readonly="" />
 														</td>
@@ -272,7 +260,7 @@
 														</td>
 													</tr>
 													<tr>
-														<td class="text-end" colspan="8"><b>Vat:</b></td>
+														<td class="text-end" colspan="5"><b>Vat:</b></td>
 														<td class="text-end">
 															<input type="text" id="vat" onkeyup="purchase_vatcalculation()" class="text-end form-control valid_number" name="vat" placeholder="%" tabindex="15" />
 														</td>
@@ -281,7 +269,7 @@
 														</td>
 													</tr>
 													<tr>
-														<td class="text-end" colspan="8"><b>Discount:</b></td>
+														<td class="text-end" colspan="5"><b>Discount:</b></td>
 														<td class="text-end">
 															<input type="text" id="discount" onkeyup="disoucnt_calculation()" class="text-end form-control valid_number" name="discount" placeholder="0.00" tabindex="16" />
 														</td>
@@ -291,7 +279,7 @@
 													</tr>
 													<tr>
 														
-														<td class="text-end" colspan="8"><b>Grand Total:</b></td>
+														<td class="text-end" colspan="5"><b>Grand Total:</b></td>
 														<td class="text-end">
 															<input type="text" id="grandTotal" class="text-end form-control" name="grand_total_price" value="0.00" readonly="readonly" />
 														</td>
@@ -300,7 +288,7 @@
 														</td>
 													</tr>
 													<tr>
-														<td class="text-end" colspan="8"><b>Paid Amount:</b></td>
+														<td class="text-end" colspan="5"><b>Paid Amount:</b></td>
 														<td class="text-end">
 															<input type="text" id="paid_amount" class="text-end form-control valid_number" name="paid_amount" onkeyup="paid_calculation()" placeholder="0.00" tabindex="18" />
 														</td>
@@ -309,7 +297,7 @@
 														</td>
 													</tr>
 													<tr>
-														<td class="text-end" colspan="8"><b>Due Amount:</b></td>
+														<td class="text-end" colspan="5"><b>Due Amount:</b></td>
 														<td class="text-end">
 															<input type="text" id="due_amount" class="text-end form-control" name="due_amount" placeholder="0.00" readonly="readonly" />
 														</td>
@@ -327,8 +315,7 @@
 										<div class="col-md-6 text-end">
 											<div class="">
 												<input type="button" id="full_paid_purchase_tab" class="btn btn-warning" value="Full Paid" tabindex="17" onClick="full_paid_purchase()"/>
-												<button type="submit" name="submit"  class="btn btn-success" tabindex="19" id="save_purchase">
-												Save</button>
+												<button type="submit" name="submit"  class="btn btn-success" tabindex="19" id="save_purchase">Save</button>
 											</div>
 										</div>
 										
@@ -341,66 +328,7 @@
 			</div>
 		</div>		
 	</div>
-	<!-- Modal -->
-	<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">																				
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Customer Information</h5>
-					<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-				</div>
-				<div class="modal-body" id="mbody2">
-					<div class="card-body">
-						<form method="post" class="row">
-						<div class="">
-							<div class="row mb-3">
-								<label for="" class="col-sm-3 col-form-label text-start text-sm-end">Name : </label>
-								<div class="col-sm-9">
-									<input type="text" class="form-control" name="c_name" placeholder="customer name">
-								</div>
-							</div>
-							<div class="row mb-3">
-								<label for="" class="col-sm-3 col-form-label text-start text-sm-end">Phone : </label>
-								<div class="col-sm-9">
-									<input type="text" class="form-control" name="c_phone" placeholder="phone number">
-								</div>
-							</div>
-							<div class="row mb-3">
-								<label for="" class="col-sm-3 col-form-label text-start text-sm-end">Address : </label>
-								<div class="col-sm-9">
-									<input type="text" class="form-control" name="c_address" placeholder="address">
-								</div>
-							</div>
-							
-						</div>																
-						<div class="">
-							<div class="row mb-3">
-								<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Status :</label>
-								<div class="col-sm-8 d-flex align-items-center">
-									<div class="form-check form-check-inline">
-										<input class="form-check-input" type="radio" value="1" name="radio_value" id="inlineRadio1" value="option1">
-										<label class="form-check-label" for="inlineRadio1">Active</label>
-									</div>
-									<div class="form-check form-check-inline">
-										<input class="form-check-input" type="radio" value="0" name="radio_value" id="inlineRadio2" value="option2">
-										<label class="form-check-label" for="inlineRadio2">Inactive</label>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="hr-dashed"></div>
-						<div class="col-md-12">
-							<div class="d-grid gap-2 d-md-flex d-sm-flex justify-content-md-end justify-content-sm-end justify-content-lg-end">
-								<button style="min-width: 150px;" class="btn btn-danger me-md-2" type="reset">Reset</button>
-								<button style="min-width: 150px;" class="btn btn-success" onclick="customer_add()" name="submit" >Submit</button>
-							</div>
-						</div>					
-						</form>	
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+	
 
 <script>
 window.onload = function() {
@@ -428,11 +356,10 @@ function add_purchaseRow(click){
 				output+='<datalist id="datalistOptionss_'+count+'" required>';
 				output+='</datalist>';
 				output+='</td>';
-				output+='<td> <input type="text" name="batch_id[]" id="batch_id_'+count+'" class="form-control batch_class text-end"  tabindex="7" placeholder="Batch Id" /></td>';
-				output += '<td> <input type="date" name="expeire_date[]" id="expeire_date_'+count+'" class="form-control uidatepicker " tabindex="8"    placeholder="Expiry Date" onchange="checkExpiredate('+count+')" required></td>';
-				output += '<td class="wt">  <input type="text" id="available_quantity_'+count+'" class="form-control text-end stock_ctn_'+count+'" placeholder="0.00" readonly></td>';
-				output += '<td class="text-end">';
-				output+='<input type="text" name="box_quantity[]" id="box_quantity_'+count+'" class="form-control text-end store_cal_'+count+' valid_number" onkeyup="purchase_calculation('+count+'),checkqty('+count+');" onchange="purchase_calculation(1);" placeholder="0.00" value="" min="0" tabindex="10" required="required" readonly></td>';
+				output+='<td> <input type="text" name="batch_id[]" id="batch_id_'+count+'" class="form-control batch_class text-end"  tabindex="7" placeholder="Product Id" /></td>';
+				
+				
+				
 				output += '<td class="text-end">   <input type="text" name="product_quantity[]" id="quantity_'+count+'" class="form-control text-end store_cal_'+count+'" onkeyup="purchase_calculation('+count+'),checkqty('+count+');" onchange="purchase_calculation('+count+');" placeholder="0.00" value="" min="0" required="required">';
 				output+='<input type="hidden" name="unit_qty[]" id="unit_qty_'+count+'"></td>';
 				output += '<td class="test">    <input type="text" name="product_rate[]" onkeyup="purchase_calculation('+count+'),checkqty('+count+');" onchange="purchase_calculation('+count+');" id="product_rate_'+count+'" class="form-control product_rate_'+count+' text-end valid_number" placeholder="0.00" value="" min="0" tabindex="11" required="required" ></td>';
@@ -469,8 +396,7 @@ function product_list_purchase2(clicked_id){
 		if (this.readyState == 4 && this.status == 200) {
 				var newString = this.responseText.replace(/\s+/g,' ').trim();
 				$('.product_id_'+clicked_id).val(newString);
-				// $('.product_id_'+clicked_id).val(this.responseText);
-				// alert("AAA"+newString+"BBB");
+				$('#batch_id_'+clicked_id).val(newString);
 		}
 	};
 

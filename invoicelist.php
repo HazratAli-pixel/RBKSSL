@@ -152,6 +152,7 @@ else{
 											<thead class="bg-style">
 												<tr>
 													<th>#</th>
+													<th>Invoice</th>
 													<th>Name</th>
 													<th>Address</th>
 													<!-- <th class="text-center">Invoie</th> -->
@@ -170,7 +171,7 @@ else{
 												<?php 
 												$sql = "SELECT customertable.ID, customertable.Name, customertable.Phone, customertable.Address, invoice.ID,invoice.SellerID,invoice.NetPayment,
 												invoice.PreDue,	invoice.Total_with_due,invoice.discount,invoice.PaidAmount,invoice.DueAmount,invoice.date FROM invoice left JOIN customertable 
-												ON invoice.CustomerID = customertable.ID  ORDER BY invoice.ID DESC";
+												ON invoice.CustomerID = customertable.ID  ORDER BY invoice.ID DESC limit 30";
 												$query = $dbh -> prepare($sql);
 												$query->execute();
 												$results=$query->fetchAll(PDO::FETCH_OBJ);
@@ -181,6 +182,7 @@ else{
 												{				?>	
 												<tr id="invoice-<?php echo htmlentities($result->ID);?>">
 													<td><?php echo htmlentities($cnt);?></td>
+													<td><?php echo htmlentities($result->ID);?></td>
 													<td id="cusname-<?php echo htmlentities($result->ID);?>" ><?php echo htmlentities($result->Name);?>
 														<p hidden><?php echo htmlentities($result->ID);?></p>
 													</td>
