@@ -1,4 +1,7 @@
 <?php
+
+use LDAP\Result;
+
 session_start();
 error_reporting(0);
 include('includes/config.php');
@@ -12,37 +15,112 @@ include('includes/config.php');
 	
 		if(isset($_POST['submit']))
 	  		{
-			$name=$_POST['name'];
-			$father=$_POST['father'];
-			$mother=$_POST['mother'];
-			$nid=$_POST['nid'];
-			$phone=$_POST['phone'];
-			$address=$_POST['address'];
-			$state=$_POST['state'];
-			$status=$_POST['radio_value'];
+			$userid = $_SESSION['alogin'];
+			$customerID=$_POST['customerName'];
+			$ref_1=$_POST['ref_1'];
+			$ref_2=$_POST['ref_2'];
+			$inoviceId=$_POST['inoviceId'];
+			$loanamount=$_POST['loanamount'];
+			$interestrate=$_POST['interestrate'];
+			$month=$_POST['month'];
+			$type=$_POST['type'];
+			$day=$_POST['day'];
+			$start_time=$_POST['start_time'];
+			$total_emi=$_POST['total_emi'];
+			$total_interest=$_POST['total_interest'];
+			$usualEMI=$_POST['emi'];
+			$emi=$_POST['monthlyEMI'];
+			$status=0;
 
-			$sql="INSERT INTO customertable (Name,Fname,Mname,NID,Phone,Address,State,Status) 
-			VALUES(:name,:father,:mother,:nid,:phone,:address,:state,:status)";
+			$sql="INSERT INTO loan_table (SellerID, InvoiceID, CustomerID, Ref1_id, Ref2_id, loanAmount, EMItype, Day, Duration, InterestRate, Interest, EMI, totalEMI, Status) 
+			VALUES(:userid,:inoviceId,:customerID,:ref_1,:ref_2,:loanamount,:type,:day,:month,:interestrate,:total_interest,:usualEMI,:total_emi,:status)";
 			$query = $dbh->prepare($sql);
-			$query->bindParam(':name',$name,PDO::PARAM_STR);
-			$query->bindParam(':father',$father,PDO::PARAM_STR);
-			$query->bindParam(':mother',$mother,PDO::PARAM_STR);
-			$query->bindParam(':nid',$nid,PDO::PARAM_STR);
-			$query->bindParam(':phone',$phone,PDO::PARAM_STR);
-			$query->bindParam(':address',$address,PDO::PARAM_STR);
-			$query->bindParam(':state',$state,PDO::PARAM_STR);
+			$query->bindParam(':userid',$userid,PDO::PARAM_STR);
+			$query->bindParam(':inoviceId',$inoviceId,PDO::PARAM_STR);
+			$query->bindParam(':customerID',$customerID,PDO::PARAM_STR);
+			$query->bindParam(':ref_1',$ref_1,PDO::PARAM_STR);
+			$query->bindParam(':ref_2',$ref_2,PDO::PARAM_STR);
+			$query->bindParam(':loanamount',$loanamount,PDO::PARAM_STR);
+			$query->bindParam(':type',$type,PDO::PARAM_STR);
+			$query->bindParam(':day',$day,PDO::PARAM_STR);
+			$query->bindParam(':month',$month,PDO::PARAM_STR);
+			$query->bindParam(':interestrate',$interestrate,PDO::PARAM_STR);
+			$query->bindParam(':total_interest',$total_interest,PDO::PARAM_STR);
+			$query->bindParam(':usualEMI',$usualEMI,PDO::PARAM_STR);
+			$query->bindParam(':total_emi',$total_emi,PDO::PARAM_STR);
 			$query->bindParam(':status',$status,PDO::PARAM_STR);
 			$query->execute();
 			$lastInsertId = $dbh->lastInsertId();
 		if($lastInsertId)
 			{
-			$msg=" Your info submitted successfully";
-			header("refresh:2;customer_list.php"); 
+
+				
+				$given_year = strtotime("$start_time");
+				$for_start = strtotime("$day", $given_year);
+				$for_end = strtotime("$month month", $given_year);
+				$y=1;
+
+				$weekcount = 0;
+				$daycount = 0;
+				if($type =="week"){
+					for ($i = $for_start; $i <= $for_end; $i = strtotime("+1 $type", $i)) {
+						$weekcount++;
+					}
+					$temp =round($emi*$month,2) ;
+					$emi = round($temp/$weekcount,2);
+				}
+				else if($type =="day"){
+					for ($i = $for_start; $i <= $for_end; $i = strtotime("+1 $type", $i)) {
+						$daycount++;
+					}
+					$temp =round($emi*$month,2) ;
+					$emi = round($temp/$daycount,2);
+				}
+				else{
+					$temp =round($emi*$month,2) ;
+				}
+				$temp2=round($temp-$emi,2);
+
+
+				$sql2="INSERT INTO emi_table(loanID, EMI_SL, Date, Day, Balance, EMI,R_balance) 
+				VALUES(:loanID,:EMI_SL,:Date,:Day,:Balance,:EMI,:R_balance)";
+
+				for ($i = $for_start; $i <= $for_end; $i = strtotime("+1 $type", $i)) {
+					$datess = date('Y-m-d', $i);
+					$dates = date('l', $i);
+					$data = array(
+						':loanID'	=>	$lastInsertId,
+						':EMI_SL'	=>	$y,
+						':Date'	=>	$datess,
+						':Day'	=>	$dates,
+						':Balance'	=>	$temp,
+						':EMI'	=>	$emi,
+						':R_balance'	=>	$temp2
+						); 
+						$statement = $dbh->prepare($sql2);
+						$statement->execute($data);
+					$y++;
+					if($temp2<=0){
+						break;
+					}
+					$temp=round($temp-$emi,2);
+					$temp2=round($temp-$emi,2);
+				}
+				$lastInsertId2 = $dbh->lastInsertId();
+				if($lastInsertId2){
+					$msg=" Your info submitted successfully";
+					header("refresh:2;emisells.php"); 
+				}
+				else 
+					{
+					$error=" Something went wrong. Please try again";
+					header("refresh:2;emisells.php"); 
+					}
 			}
 		else 
 			{
 			$error=" Something went wrong. Please try again";
-			header("refresh:2;add_customer.php"); 
+			header("refresh:2;emisells.php"); 
 			}
 	
 		}
@@ -117,35 +195,77 @@ include('includes/config.php');
 											<form method="post" enctype="multipart/form-data" class="" >
                                                 <div class="d-flex flex-column flex-md-row justify-content-between">
 													<div class="col-12 col-md-6 col-lg-6">
+														<?php 
+															$sql ="SELECT * from customertable ";
+															$query = $dbh -> prepare($sql);;
+															$query->execute();
+															$results=$query->fetchAll(PDO::FETCH_OBJ);
+														?>
 														<div class="row mb-3">
 															<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Name : </label>
-															<div class="col-sm-8">
-															<input type="text" id="" class="form-control" name="name" placeholder="Enter Name">
+															<div class="col-sm-8 ">															
+																<select name="customerName"  class="form-control form-select form-select-md" required>
+																<?php
+																foreach($results as $result){?>
+																	<option Value="<?php echo $result->ID;?>"><?php echo $result->ID."-".$result->Name."-".$result->Phone."-".$result->Address;?></option>
+																<?php } ?>	
+																</select>
 															</div>
 														</div>
+														<?php 
+															$sql ="SELECT * from reference ";
+															$query = $dbh -> prepare($sql);;
+															$query->execute();
+															$results=$query->fetchAll(PDO::FETCH_OBJ);
+														?>
 														<div class="row mb-3">
 															<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Reference-1 : </label>
-															<div class="col-sm-8">
-															<input type="text" id="" class="form-control" name="name" placeholder="Enter Reference-1">
+															<div class="col-sm-8 ">															
+																<select name="ref_1" class="form-control form-select form-select-md" required>
+																<option Value="0" selected>No Need</option>
+																<?php
+																foreach($results as $result){?>
+																	<option Value="<?php echo $result->ID;?>"><?php echo $result->ID."-".$result->Name."-".$result->Phone."-".$result->Address;?></option>
+																<?php } ?>	
+																</select>
 															</div>
 														</div>
 														<div class="row mb-3">
 															<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Reference-2 : </label>
-															<div class="col-sm-8">
-															<input type="text" id="" class="form-control" name="name" placeholder="Enter Reference-1">
+															<div class="col-sm-8 ">															
+																<select name="ref_2" class="form-control form-select form-select-md" required>
+																<option Value="0" selected>No Need</option>
+																<?php
+																foreach($results as $result){?>
+																	<option Value="<?php echo $result->ID;?>"><?php echo $result->ID."-".$result->Name."-".$result->Phone."-".$result->Address;?></option>
+																<?php } ?>	
+																</select>
 															</div>
 														</div>
+														<?php 
+															$sql ="SELECT * from invoice ORDER BY ID DESC limit 15 ";
+															$query = $dbh -> prepare($sql);;
+															$query->execute();
+															$results=$query->fetchAll(PDO::FETCH_OBJ);
+															$query=$query->rowCount();
+														?>
 														<div class="row mb-3">
 															<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Invoice ID : </label>
-															<div class="col-sm-8">
-															<input type="number" id="" class="form-control" name="name" placeholder="Enter Invoice">
+															<div class="col-sm-8 ">															
+																<select name="inoviceId" class="form-control form-select form-select-md" required>
+																<?php
+																foreach($results as $result){?>
+																	<option Value="<?php echo $result->ID;?>"><?php echo $result->ID."-".$result->CustomerID."-".$result->NetPayment;?></option>
+																<?php } ?>	
+																</select>
 															</div>
 														</div>
+
 														<div class="hr-dashed"></div>
 														<div class="row mb-3">
 															<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Loan Amount : </label>
 															<div class="col-sm-8">
-															<input type="number" id="amount" onkeyup="calculation()" onchange="emicalculation()" class="form-control" name="loan" placeholder="Loan Amount">
+															<input type="number" id="amount" onkeyup="calculation()" onchange="emicalculation()" class="form-control" name="loanamount" placeholder="Loan Amount">
 															</div>
 														</div>
 														<div class="row mb-3">
@@ -154,14 +274,14 @@ include('includes/config.php');
 															<input type="Number" id="rate" onkeyup="calculation()" onchange="emicalculation()" class="form-control" name="interestrate" placeholder="Interest Rate" required>
 															</div>
 														</div>
-													</div>
-													<div class="col-12 col-md-6 col-lg-6">
 														<div class="row mb-3">
-															<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Time : <i class="text-danger">* </i>:</label>
+															<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Time (Month) : <i class="text-danger">* </i>:</label>
 															<div class="col-sm-8">
 																<input type="Number" id="month" onkeyup="calculation()" onchange="emicalculation()" class="form-control" name="month" placeholder="Enter time in month" required>
 															</div>
 														</div>
+													</div>
+													<div class="col-12 col-md-6 col-lg-6">
 														<div class="row mb-3">
 															<label for="" class="col-sm-4 col-form-label text-start text-sm-end">EMI Type <i class="text-danger">* </i>:</label>
 															<div class="col-sm-8 ">															
@@ -206,10 +326,16 @@ include('includes/config.php');
 															<input type="text" class="form-control" id="total_interest" name="total_interest" value="0.00" readonly>
 															</div>
 														</div>
-														<div class="row mb-3">
+														<div class="row mb-3" hidden>
 															<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Monthly EMI : </label>
 															<div class="col-sm-8">
-															<input type="text" class="form-control" id="emi" name="emi" value="0.00" readonly>
+															<input type="text" class="form-control" id="emi" name="monthlyEMI" value="0.00" readonly>
+															</div>
+														</div>
+														<div class="row mb-3">
+															<label for="" id="emi_label" class="col-sm-4 col-form-label text-start text-sm-end"> EMI : </label>
+															<div class="col-sm-8">
+															<input type="text" class="form-control" id="usual_emi" name="emi" value="0.00" readonly>
 															</div>
 														</div>
 													</div>
@@ -276,6 +402,7 @@ include('includes/config.php');
 			let total_interest = document.getElementById('total_interest');
 			let totalemi = document.getElementById('total_emi');
 			let emi = document.getElementById('emi');
+			let usual_emi = document.getElementById('usual_emi');
 
 			function calculation() {
 				let monthlyinterest = Number(rate.value)/12/100;
@@ -295,6 +422,15 @@ include('includes/config.php');
 				let month2 = month.value
 				let loanamount = Number(amount.value);
 				let emi2 = Number(emi.value);
+				if(type2 == "day"){
+					emi_label.innerHTML = "Daily EMI :";
+				}
+				else if(type2 == "week"){
+					emi_label.innerHTML = "Weekly EMI :";
+				}
+				else{
+					emi_label.innerHTML = "Monthly EMI :";
+				}
 
 				const xmlhttp = new XMLHttpRequest();
 				xmlhttp.onreadystatechange = function () {
@@ -302,12 +438,12 @@ include('includes/config.php');
 						let data = this.responseText.split("^");
 						emilist2.innerHTML = data[0];
 						totalemi.value = data[1];
+						usual_emi.value= data[2]
 					}
 				};
 				xmlhttp.open('GET', `query3.php?day=${day5}&type=${type2}&starttime=${start_time2}&month=${month2}&emi=${emi2}&loanamount=${loanamount}`, true);
 				xmlhttp.send();
 			}
-
 
 		</script>
 	</body>

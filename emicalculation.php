@@ -133,7 +133,7 @@ include('includes/config.php');
 												</div>
 												<div class="col-12 col-md-6">
 													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Time : <i class="text-danger">* </i>:</label>
+														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Time (Month) : <i class="text-danger">* </i>:</label>
 														<div class="col-sm-8">
 														<input type="Number" id="month" onkeyup="calculation()" onchange="emicalculation()" class="form-control" name="month" placeholder="Enter time in month" required>
 														</div>
@@ -153,7 +153,7 @@ include('includes/config.php');
 													</div>
 												</div>
 
-												<div id="day2" class="col-12 col-md-6" hidden>
+												<div id="day2" class="col-12 col-md-6">
 													<div class="row mb-3">
 														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Day <i class="text-danger">* </i>:</label>
 														<div class="col-sm-8">															
@@ -179,14 +179,14 @@ include('includes/config.php');
 														</div>
 													</div>
 												</div>
-												<!-- <div class="col-12 col-md-6">
+												<div class="col-12 col-md-6">
 													<div class="row mb-3">
 														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Total EMI : </label>
 														<div class="col-sm-8">
 														<input type="text" class="form-control" id="total_emi" name="total_emi" value="0.00" readonly>
 														</div>
 													</div>
-												</div> -->
+												</div>
 												<div class="col-12 col-md-6">
 													<div class="row mb-3">
 														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Total Interest : </label>
@@ -203,13 +203,13 @@ include('includes/config.php');
 														</div>
 													</div>
 												</div>			
-												<div class="hr-dashed"></div>
+												<!-- <div class="hr-dashed"></div>
 
 												<div class="col-12 col-md-6">
 														<div class="d-grid gap-2 d-md-flex d-sm-flex justify-content-md-end justify-content-sm-end justify-content-lg-end">
 														<button style="min-width: 150px;" class="btn btn-danger me-md-2" type="reset">Reset</button>
 														<button style="min-width: 150px;" class="btn btn-success" type="submit" name="submit" >Submit</button>
-												</div>
+												</div> -->
 												</div>						
 											</form>	
 											<br>
@@ -264,6 +264,7 @@ include('includes/config.php');
 			let emilist = document.getElementById('emilist');
 			let start_time = document.getElementById('start_time');
 			let total_interest = document.getElementById('total_interest');
+			let totalemi = document.getElementById('total_emi');
 			let emi = document.getElementById('emi');
 
 			function calculation() {
@@ -283,17 +284,12 @@ include('includes/config.php');
 				let month2 = month.value
 				let loanamount = Number(amount.value);
 				let emi2 = Number(emi.value);
-
-				if(type.value.toString() == "week"){
-				day2.removeAttribute("hidden");
-				}
-				else{
-					day2.setAttribute("hidden","");
-				}
 				const xmlhttp = new XMLHttpRequest();
 				xmlhttp.onreadystatechange = function () {
 					if (this.readyState == 4 && this.status == 200) {
-							emilist.innerHTML = this.responseText;
+						let data = this.responseText.split("^");
+						emilist.innerHTML = data[0];
+						totalemi.value = data[1];
 					}
 				};
 				xmlhttp.open('GET', `query3.php?day=${day5}&type=${type2}&starttime=${start_time2}&month=${month2}&emi=${emi2}&loanamount=${loanamount}`, true);

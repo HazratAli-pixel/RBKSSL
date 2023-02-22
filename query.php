@@ -214,14 +214,9 @@ use function Symfony\Component\VarDumper\Dumper\esc;
 				':PursingPrice'	=>	$_SESSION['items'][$count]['Price'],
 				':userid'	=>	$_SESSION['alogin']			
 				); 
-				// $data2 = array(
-				// 	':SellQty'	=>	$_SESSION['items'][$count]['SellQty'],
-				// 	':Batch'	=>	$_SESSION['items'][$count]['Batch']
-				// ); 
 				$statement = $dbh->prepare($sql2);
 				$statement->execute($data);
-				// $statement = $dbh->prepare($sql3);
-				// $statement->execute($data2);
+				
 			}
 			date_default_timezone_set('Asia/Dhaka');
 			$date = date('d/m/Y H:i');

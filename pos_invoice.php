@@ -231,13 +231,6 @@ include('includes/config.php');
 														<input class="form-control" id="AddItemById" type="search" placeholder="Bar Code / Item Code">
 													</div>
 													<div class="col-xl-5 ">
-														<?php 
-														$cname="SELECT * from customertable";
-														$cquery = $dbh -> prepare($cname);
-														$cquery->bindParam(':barcode',$id,PDO::PARAM_STR);
-														$cquery->execute();
-														$results=$cquery->fetchAll(PDO::FETCH_OBJ);							   
-														?>
 														<div class="input-group mb-3">
 															<input onchange="DuePerson(this.value)" onkeyup="CustomerNameSearch(this.value)" name="companyname" value="Walking Customer" class="form-control" list="datalistOptionss" id="exampleDataListf" >
 																<datalist id="datalistOptionss" required>
@@ -291,7 +284,7 @@ include('includes/config.php');
 											</div>
 											<div class="row">
 												<div class="col-8">
-													<div class="row">
+													<!-- <div class="row">
 														<div class="form-check form-switch pe-2">
 															<input class="form-check-input" value="1" type="checkbox" onclick="emi_display(this.value)" name="switch" id="flexSwitchCheckDefault2">
 															<label class="form-check-label" for="flexSwitchCheckDefault2">EMI</label>
@@ -350,7 +343,7 @@ include('includes/config.php');
 																</div>
 															</div>
 														</div>
-													</div>
+													</div> -->
 												</div>
 												<div class="col-4">
 													<div class="col-12 d-flex flex-column justify-content-end">

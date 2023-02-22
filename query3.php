@@ -58,14 +58,15 @@ if(isset($_GET['starttime'])){
 		<td class='text-center'>$emi</td>
 		<td class='text-center'>$temp2</td>
 		</tr>";
-		if($temp2<0){
+		$y++;
+		if($temp2<=0){
 			break;
 		}
+
 		$temp=round($temp-$emi,2);
 		$temp2=round($temp-$emi,2);
-		$y++;
 	}
-	$Data = $Data."^".($y-1);
+	$Data = $Data."^".($y-1)."^".$emi;
 	echo $Data;
 
 

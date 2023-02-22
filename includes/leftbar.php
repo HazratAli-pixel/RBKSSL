@@ -26,9 +26,9 @@
 				</li>
 				<li><a href="#"><i class="typcn typcn-group-outline mr-2"></i> EMI</a>
 					<ul>
+						<li style="margin-left: 50px;"><a href="emisells.php">EMI Sells</a></li>
+						<li style="margin-left: 50px;"><a href="emisellslist.php">EMI Sells List</a></li>
 						<li style="margin-left: 50px;"><a href="emicalculation.php">EMI Calculation</a></li>
-						<li style="margin-left: 50px;"><a href="company_list.php">Company List</a></li>
-						<li style="margin-left: 50px;"><a href="purchase_list.php">Company Ledger</a></li>
 					</ul>
 				</li>
 				<li><a href="#"><i class="fas fa-pills"></i> Products</a> 
