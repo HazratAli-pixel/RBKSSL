@@ -38,57 +38,57 @@ else{
 			$lastInsertId = $dbh->lastInsertId();
 			
 		}
-		if(isset($_POST['paydue']))
-		{
-			
-			$cusId=$_POST['cusID2'];
-			$cusName=$_POST['cusName2'];
-			$preDue=$_POST['preDue'];
-			$newDue=$_POST['newDue'];
-			$paidAmount=$_POST['paidAmount'];
-			$comments=$_POST['comments'];
-			$switch=$_POST['switch'];
-			$cusPhone2=$_POST['cusPhone2'];
-			$userid = $_SESSION['alogin'];
-			$sql="INSERT INTO customerledger (AdminID,CustomerID,PreDue,Credit,Comments) 
-			VALUES(:userid,:cusId,:preDue,:paidAmount,:comments)";
+	if(isset($_POST['paydue']))
+	{
+		
+		$cusId=$_POST['cusID2'];
+		$cusName=$_POST['cusName2'];
+		$preDue=$_POST['preDue'];
+		$newDue=$_POST['newDue'];
+		$paidAmount=$_POST['paidAmount'];
+		$comments=$_POST['comments'];
+		$switch=$_POST['switch'];
+		$cusPhone2=$_POST['cusPhone2'];
+		$userid = $_SESSION['alogin'];
+		$sql="INSERT INTO customerledger (AdminID,CustomerID,PreDue,Credit,Comments) 
+		VALUES(:userid,:cusId,:preDue,:paidAmount,:comments)";
 
-			$query = $dbh->prepare($sql);
-			$query->bindParam(':userid',$userid,PDO::PARAM_STR);
-			$query->bindParam(':cusId',$cusId,PDO::PARAM_STR);
-			$query->bindParam(':preDue',$preDue,PDO::PARAM_STR);
-			$query->bindParam(':paidAmount',$paidAmount,PDO::PARAM_STR);
-			$query->bindParam(':comments',$comments,PDO::PARAM_STR);
-			$query->execute();
-			$lastInsertId = $dbh->lastInsertId();
-			date_default_timezone_set('Asia/Dhaka');
-			$date = date('d/m/Y H:i');
-			
-			// $mssg = "Money recived. Amount tk:".urlencode($paidAmount)." TrxID: ".urlencode($lastInsertId)." Due amount : ".urlencode($newDue)."tk ".date('y/m/d')."-".date("h:i:s A").". Raha Phamacy";
-			$mssg = "Money recived. Amount tk:".$paidAmount." TrxID: ".$lastInsertId." Due amount : ".$newDue."tk ".$date.". Raha Phamacy";
+		$query = $dbh->prepare($sql);
+		$query->bindParam(':userid',$userid,PDO::PARAM_STR);
+		$query->bindParam(':cusId',$cusId,PDO::PARAM_STR);
+		$query->bindParam(':preDue',$preDue,PDO::PARAM_STR);
+		$query->bindParam(':paidAmount',$paidAmount,PDO::PARAM_STR);
+		$query->bindParam(':comments',$comments,PDO::PARAM_STR);
+		$query->execute();
+		$lastInsertId = $dbh->lastInsertId();
+		date_default_timezone_set('Asia/Dhaka');
+		$date = date('d/m/Y H:i');
+		
+		// $mssg = "Money recived. Amount tk:".urlencode($paidAmount)." TrxID: ".urlencode($lastInsertId)." Due amount : ".urlencode($newDue)."tk ".date('y/m/d')."-".date("h:i:s A").". Raha Phamacy";
+		$mssg = "Money recived. Amount tk:".$paidAmount." TrxID: ".$lastInsertId." Due amount : ".$newDue."tk ".$date.". Raha Phamacy";
 
-			if($switch==1){
-				// $mssg = $_POST["message"];
-				$url = "http://gsms.putulhost.com/smsapi";
-				$data = [
-				"api_key" => "C200114562795a9fbdc4e5.87112767",
-				"type" => "text",
-				"contacts" => "$cusPhone2",
-				"senderid" => "8809601001536",
-				"msg" => "$mssg"
-			];
-			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, $url);
-			curl_setopt($ch, CURLOPT_POST, 1);
-			curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-			$response = curl_exec($ch);
-			curl_close($ch);
-			//return $response;
-			echo "<script>window.location.href='customer_ledger.php'</script>";
-			}
+		if($switch==1){
+			// $mssg = $_POST["message"];
+			$url = "http://gsms.putulhost.com/smsapi";
+			$data = [
+			"api_key" => "C200114562795a9fbdc4e5.87112767",
+			"type" => "text",
+			"contacts" => "$cusPhone2",
+			"senderid" => "8809601001536",
+			"msg" => "$mssg"
+		];
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		$response = curl_exec($ch);
+		curl_close($ch);
+		//return $response;
+		echo "<script>window.location.href='customer_ledger.php'</script>";
 		}
+	}
 
  ?>
 

@@ -191,26 +191,24 @@ else{
 					</div>
 					<div class="card-body">
 						<div class="col-12 rounded">
-											<div class="col-12 d-flex flex-column justify-content-end">
-												<table class="display table table-striped table-bordered border border-dark table-hover">
-													<thead class="bg-style">
-														<tr>
-															<th>SN</th>
-															<th>Name</th>
-															<th>Batch</th>
-															<th>Qty</th>
-															<th>Price</th>
-															<th>Total</th>
-														</tr>
-													</thead>
-													<tbody id="invoice_details">
-														<!-- show invoice information here using ajax-->
-													</tbody>
-													
-												</table>
-											</div>
-												
-									</div>
+							<div class="col-12 d-flex flex-column justify-content-end">
+								<table class="display table table-striped table-bordered border border-dark table-hover">
+									<thead class="bg-style">
+										<tr>
+											<th>SN</th>
+											<th>Name</th>
+											<th>Batch</th>
+											<th>Qty</th>
+											<th>Price</th>
+											<th>Total</th>
+										</tr>
+									</thead>
+									<tbody id="invoice_details">
+										<!-- show invoice information here using ajax-->
+									</tbody>
+								</table>
+							</div>	
+						</div>
 					</div>
 				</div>
 			</div>

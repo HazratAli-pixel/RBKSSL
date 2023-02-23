@@ -9,6 +9,40 @@ if(strlen($_SESSION['alogin'])==0)
 	}
 else{
 	if(isset($_GET['loanid'])){
+		if(isset($_POST['submit'])){
+			
+			$userid = $_SESSION['alogin'];
+			$cusId = $_GET['customerID'];
+			// $cusId=$_POST['c_id'];
+			$preDue=$_POST['c_p_total_due'];
+			$paidAmount=$_POST['c_paid'];
+
+			$newDue=$_POST['c_new_due'];
+			$emiID=$_POST['emiID'];
+			
+			$status=1;
+
+			$sql = "UPDATE emi_table SET PaidAmount=:paidAmount, DueAmount=:newDue, CollectorID=:userid, Status=:status WHERE ID=:emiID";
+			$query = $dbh -> prepare($sql);
+			$query->bindParam(':paidAmount',$paidAmount,PDO::PARAM_STR);
+			$query->bindParam(':newDue',$newDue,PDO::PARAM_STR);
+			$query->bindParam(':userid',$userid,PDO::PARAM_STR);
+			$query->bindParam(':status',$status,PDO::PARAM_STR);
+			$query->bindParam(':emiID',$emiID,PDO::PARAM_STR);
+			$query->execute();
+			
+			$cusName=$_POST['cusName2'];
+
+			$sql2="INSERT INTO customerledger (AdminID,CustomerID,PreDue,Credit) 
+			VALUES(:userid,:cusId,:preDue,:paidAmount)";
+
+			$query2 = $dbh->prepare($sql2);
+			$query2->bindParam(':userid',$userid,PDO::PARAM_STR);
+			$query2->bindParam(':cusId',$cusId,PDO::PARAM_STR);
+			$query2->bindParam(':preDue',$preDue,PDO::PARAM_STR);
+			$query2->bindParam(':paidAmount',$paidAmount,PDO::PARAM_STR);
+			$query2->execute();
+		}
 
 	
  ?>
@@ -23,7 +57,7 @@ else{
 	<meta name="author" content="">
 	<meta name="theme-color" content="#3e454c">
 	
-	<title>PMS-Purchase invoice List </title>
+	<title>D-shop-Indivisual EMI List </title>
 	<link rel="shortcut icon" href="./assets/pic/pmslogo.png" type="image/x-icon">
 	<!-- Font awesome -->
 	<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
@@ -66,9 +100,11 @@ else{
                             </div>
 							<div class="card-body">
                                 <!-- <a href="download-records.php" style="color:red; font-size:16px;">Download Purchase list</a> -->
+								
+
 								<?php
 								$id = $_GET['customerID'];
-								$sql = "SELECT Name,Address, Phone FROM customertable WHERE ID=:id"; 
+								$sql = "SELECT customertable.Name,customertable.Address, customertable.Phone, customerledger.NewDue FROM customertable LEFT JOIN customerledger ON customerledger.CustomerID =customertable.ID WHERE customerledger.CustomerID=:id ORDER BY customerledger.ID DESC limit 1"; 
 								$query = $dbh -> prepare($sql);
 								$query->bindParam(':id',$id,PDO::PARAM_STR);
 								$query->execute();
@@ -77,18 +113,33 @@ else{
 								?>
 								<div class="row">
 									<div class="col-12  d-flex">
-										<div class="col-4 col-sm-3 col-md-3 col-lg-2 col-xl-1">
-											<h5 class="">Name : </h5> 
-											<h5 class="">Phone : </h5> 
-											<h5 class="">Address : </h5> 
-										</div>
-										<div class="col-6">
-											<h5 class=""><?php echo htmlentities($result2->Name);?></h5> 
-											<h5 class=""><?php echo htmlentities($result2->Phone);?></h5> 
-											<h5 class=""><?php echo htmlentities($result2->Address);?></h5> 
-										</div>											
+										<table>
+											<thead>
+												<tr>
+													<th>Name</th>
+													<td>:</td>
+													<td id="name"><?php echo htmlentities($result2->Name);?></td>
+												</tr>
+												<tr>
+													<th>Phone</th>
+													<td>:</td>
+													<td id="phone"><?php echo htmlentities($result2->Phone);?></td>
+												</tr>
+												<tr>
+													<th>Address</th>
+													<td>:</td>
+													<td><?php echo htmlentities($result2->Address);?></td>
+												</tr>
+												<tr>
+													<th>Total Due</th>
+													<td>:</td>
+													<td id="totalDue"><?php echo htmlentities($result2->NewDue);?></td>
+												</tr>
+											</thead>
+										</table>
 									</div>
 								</div>
+								<br>
 								<div class="row table-responsive">
 									<div class="col-12 col-md-12 col-lg-12 col-xl-12 d-flex row flex-sm-column">
 								
@@ -164,7 +215,7 @@ else{
 															<?php
 														}
 														else { ?>
-															<button type="button" class="btn btn-warning">Pay</button>
+															<p type="button" id="<?php echo htmlentities($result->ID);?>" onclick="payemi(event)" class="btn btn-warning">Pay</p>
 															<?php
 														}
 														
@@ -185,13 +236,14 @@ else{
 		</div>		
 	</div>
 	<!-- Modal -->
-	<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">																				
+
+	<div class="modal fade" id="emipaymodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">																				
 		<!-- <div class="modal-dialog modal-dialog-centered modal-xl"> -->
 		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Customer Information</h5>
-					<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+					<h5 class="modal-title" id="exampleModalLabel">EMI Payment</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body" id="mbody2">
 					<div class="card-body">
@@ -200,42 +252,71 @@ else{
 							<div class="row mb-3">
 								<label for="" class="col-sm-3 col-form-label text-start text-sm-end">Name : </label>
 								<div class="col-sm-9">
-									<input type="text" class="form-control" name="c_name" placeholder="customer name">
+									<input id="c_name" name="c_name" type="text" class="form-control" readonly>
+									<input id="c_id" name="c_id" type="text" class="form-control" hidden >
 								</div>
 							</div>
 							<div class="row mb-3">
 								<label for="" class="col-sm-3 col-form-label text-start text-sm-end">Phone : </label>
 								<div class="col-sm-9">
-									<input type="text" class="form-control" name="c_phone" placeholder="phone number">
+									<input id="c_phone" name="c_phone" type="text" class="form-control"  placeholder="Enter phone number">
 								</div>
 							</div>
 							<div class="row mb-3">
-								<label for="" class="col-sm-3 col-form-label text-start text-sm-end">Address : </label>
+								<label for="" class="col-sm-3 col-form-label text-start text-sm-end">Date : </label>
 								<div class="col-sm-9">
-									<input type="text" class="form-control" name="c_address" placeholder="address">
+									<input id="c_date"  type="text" class="form-control" name="c_date" readonly>
+								</div>
+							</div>
+							<div class="row mb-3">
+								<label for="" class="col-sm-3 col-form-label text-start text-sm-end">EMI No : </label>
+								<div class="col-sm-9">
+									<input id="c_emi_no" name="c_emi_no" type="text" class="form-control" readonly>
+								</div>
+							</div>
+						
+							<div class="hr-dashed"></div>
+								
+							<div class="row mb-3">
+								<label for="" class="col-sm-3 col-form-label text-start text-sm-end">EMI : </label>
+								<div class="col-sm-9">
+									<input id="c_emi" name="c_emi" type="text" class="form-control" name="c_address" readonly>
+									<input id="emiID" name="emiID" type="text" class="form-control" hidden>
+								</div>
+							</div>
+							<div class="row mb-3">
+								<label for="" class="col-sm-3 col-form-label text-start text-sm-end">Previous Due : </label>
+								<div class="col-sm-9">
+									<input id="c_p_due" name="c_p_due" type="text" class="form-control"  readonly>
+									<input id="c_p_total_due" name="c_p_total_due" type="text" class="form-control" hidden>
+								</div>
+							</div>
+							<div class="row mb-3">
+								<label for="" class="col-sm-3 col-form-label text-start text-sm-end">Paid : </label>
+								<div class="col-sm-9">
+									<input id="c_paid" name="c_paid" onkeyup="emipay(event)" type="double" class="form-control" placeholder="0.00">
+								</div>
+							</div>
+							<div class="row mb-3">
+								<label for="" class="col-sm-3 col-form-label text-start text-sm-end">Current Due : </label>
+								<div class="col-sm-9">
+									<input id="c_new_due" name="c_new_due" type="text" class="form-control" readonly>
+								</div>
+							</div>
+							<div class="row mb-2">
+								<div class="col-6 msg-btn d-flex justify-content-end">
+									<div class="form-check form-switch text-end">
+										<input class="form-check-input" value="1" type="checkbox" name="switch" id="flexSwitchCheckDefault">
+										<label class="form-check-label" for="flexSwitchCheckDefault">Want messgae?</label>
+									</div>
 								</div>
 							</div>
 							
-						</div>																
-						<div class="">
-							<div class="row mb-3">
-								<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Status :</label>
-								<div class="col-sm-8 d-flex align-items-center">
-									<div class="form-check form-check-inline">
-										<input class="form-check-input" type="radio" value="1" name="radio_value" id="inlineRadio1" value="option1">
-										<label class="form-check-label" for="inlineRadio1">Active</label>
-									</div>
-									<div class="form-check form-check-inline">
-										<input class="form-check-input" type="radio" value="0" name="radio_value" id="inlineRadio2" value="option2">
-										<label class="form-check-label" for="inlineRadio2">Inactive</label>
-									</div>
-								</div>
-							</div>
-						</div>
+						</div>	
 						<div class="hr-dashed"></div>
 						<div class="col-md-12">
 							<div class="d-grid gap-2 d-md-flex d-sm-flex justify-content-md-end justify-content-sm-end justify-content-lg-end">
-								<button style="min-width: 150px;" class="btn btn-danger me-md-2" type="reset">Reset</button>
+								<button id="fullPaid" onclick="fullemipay()" style="min-width: 150px;" class="btn btn-info me-md-2" type="button">Full Paid</button>
 								<button style="min-width: 150px;" class="btn btn-success" onclick="customer_add()" name="submit" >Submit</button>
 							</div>
 						</div>					
@@ -246,6 +327,53 @@ else{
 		</div>
 	</div>
 	<script>
+		// emipaymodal
+		const payemi = (event)=>{
+			let id = event.target.id;
+			$('#emipaymodal').modal('show');
+			let name, phone, date, emiNo, emi, predue, preEmiDue,NewDue;
+			name= document.getElementById('name').innerText;
+			phone= document.getElementById('phone').innerText;
+			predue= document.getElementById('totalDue').innerText;
+			date= document.getElementById("date-"+id).innerText;
+			emiNo= document.getElementById("emisl-"+id).innerText;
+			emi= document.getElementById("emi-"+id).innerText;
+		
+
+			let c_name = document.getElementById('c_name');
+			let c_phone = document.getElementById('c_phone');
+			let c_date = document.getElementById('c_date');
+			let c_emi_no = document.getElementById('c_emi_no');
+			let c_emi = document.getElementById('c_emi');
+			let emiID = document.getElementById('emiID');
+			let c_p_total_due = document.getElementById('c_p_total_due');
+
+			emiID.value = id;
+			c_p_total_due.value = predue;
+			c_name.value = name;
+			c_phone.value = phone;
+			c_date.value = date;
+			c_emi_no.value = emiNo;
+			c_emi.value = emi;
+		}
+		const emipay = (event) =>{
+			// let val = event.target.value;
+			let emi= document.getElementById('c_emi').value;
+			let c_paid= document.getElementById('c_paid').value;
+			let c_new_due= document.getElementById('c_new_due');
+			c_new_due.value = (emi-c_paid).toFixed(2);
+
+		}
+		const fullemipay = (event) =>{
+			let emi= document.getElementById('c_emi').value;
+			let c_paid= document.getElementById('c_paid');
+			let c_new_due= document.getElementById('c_new_due');
+			c_paid.value = emi;
+			c_new_due.value = (emi-(c_paid.value)).toFixed(2);
+
+
+
+		}
 		const StatusCng = (event)=>{
 			let clickedId = event.target.id
 			// event.target.classList.add('bg-success');

@@ -187,7 +187,7 @@ include('includes/config.php');
 												EMI Calculation
 											</div>
 											<div >
-												<!-- <a href="customer_list.php"><button type="button" class="btn btn-info"><i class="fas fa-align-justify mr-2" style="margin-right: 10px;"></i> Customer List</button></a> -->
+												<a href="emisellslist.php"><button type="button" class="btn btn-info"><i class="fas fa-align-justify mr-2" style="margin-right: 10px;"></i> EMI Person</button></a>
 												
 											</div>
 										</div>
@@ -271,7 +271,7 @@ include('includes/config.php');
 														<div class="row mb-3">
 															<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Interest Rate : <i class="text-danger">* </i>:</label>
 															<div class="col-sm-8">
-															<input type="Number" id="rate" onkeyup="calculation()" onchange="emicalculation()" class="form-control" name="interestrate" placeholder="Interest Rate" required>
+															<input type="double" id="rate" onkeyup="calculation()" onchange="emicalculation()" class="form-control" name="interestrate" placeholder="Interest Rate" required>
 															</div>
 														</div>
 														<div class="row mb-3">

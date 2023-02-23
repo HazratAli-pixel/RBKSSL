@@ -124,61 +124,7 @@ else{
 											</tbody>
 										</table>
 									</div>
-									<!-- <div class="col-12 col-md-4 col-lg-4 col-xl-3 right-side rounded p-2 h-75">
-											<div class="info text-center pt-2">
-												<h4 >Indivisual Invoice Details </h4>
-												<h4 name="cusName" id="cusName">Name</h4>
-												<div class="d-flex justify-content-center">
-													<p id="date">D: </p>
-													<p id="invoids" class="ps-3"> Invoice ID</p>
-												</div>
-												
-											</div>
-											<hr>
-											
-											<div class="col-12 d-flex flex-column justify-content-end">
-												<table class="display table table-striped table-bordered border border-dark table-hover">
-													<thead class="bg-style">
-														<tr>
-															<th>SN</th>
-															<th>Name</th>
-															<th>Batch</th>
-															<th>Qty</th>
-															<th>Price</th>
-															<th>Sell</th>
-														</tr>
-													</thead>
-													<tbody id="invoice_details">
-													</tbody>
-													<tfoot>
-														<tr>
-															<td class="text-end" colspan="5">Total</td>
-															<td id="invo1" class="text-end" >0.00</td>
-														</tr>
-														<tr>
-															<td class="text-end" colspan="5">Vat</td>
-															<td id="invo2" class="text-end" >0.00</td>
-														</tr>
-														<tr>
-															<td class="text-end" colspan="5">Discount</td>
-															<td id="invo3" class="text-end" >0.00</td>
-														</tr>
-														<tr>
-															<td class="text-end" colspan="5">Grand Total</td>
-															<td id="invo4" class="text-end" >0.00</td>
-														</tr>
-														<tr>
-															<td class="text-end" colspan="5">Paid Amount</td>
-															<td id="invo5" class="text-end" >0.00</td>
-														</tr>
-														<tr>
-															<td class="text-end bg-info" colspan="5">Due Amount</td>
-															<td id="invo6" class="text-end" >0.00</td>
-														</tr>
-													</tfoot>
-												</table>
-											</div>
-									</div> -->
+									
 								</div>
 							</div>
 						</div>
