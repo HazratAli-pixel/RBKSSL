@@ -8,6 +8,9 @@ if(strlen($_SESSION['alogin'])==0)
 	header('location:index.php');
 	}
 else{
+	if(isset($_GET['loanid'])){
+
+	
  ?>
 
 <!doctype html>
@@ -51,11 +54,11 @@ else{
 							<div  class="card-header">
                                 <div class="d-flex justify-content-between align-items-center h-100px">
 		  							<div style="font-size: 20px; " class="bg-primary;">
-										Loan Information
+										Indivisual Loan (EMI) Information
 									</div>
 									<div >
-										<!-- <a href="add_purchase.php" class="btn btn-info"> <i class="fas fa-align-justify mr-2"></i> Add List</a>
-										<a href="#" class="btn btn-info"> <i class="fa fa-credit-card" aria-hidden="true"></i> Pay Dues</a> -->
+										<a href="emisellslist.php" class="btn btn-info"> <i class="fas fa-align-justify mr-2"></i> Loan List</a>
+										<!-- <a href="#" class="btn btn-info"> <i class="fa fa-credit-card" aria-hidden="true"></i> Pay Dues</a> -->
                                         <!-- <button type="button" class="btn btn-info mr-3" data-toggle="modal" data-target="#exampleModal2"><i class="fa fa-credit-card" aria-hidden="true"></i> Pay Due</button> -->
                                         
 									</div>
@@ -63,36 +66,58 @@ else{
                             </div>
 							<div class="card-body">
                                 <!-- <a href="download-records.php" style="color:red; font-size:16px;">Download Purchase list</a> -->
+								<?php
+								$id = $_GET['customerID'];
+								$sql = "SELECT Name,Address, Phone FROM customertable WHERE ID=:id"; 
+								$query = $dbh -> prepare($sql);
+								$query->bindParam(':id',$id,PDO::PARAM_STR);
+								$query->execute();
+								$result2=$query->fetch(PDO::FETCH_OBJ);
+								
+								?>
+								<div class="row">
+									<div class="col-12  d-flex">
+										<div class="col-4 col-sm-3 col-md-3 col-lg-2 col-xl-1">
+											<h5 class="">Name : </h5> 
+											<h5 class="">Phone : </h5> 
+											<h5 class="">Address : </h5> 
+										</div>
+										<div class="col-6">
+											<h5 class=""><?php echo htmlentities($result2->Name);?></h5> 
+											<h5 class=""><?php echo htmlentities($result2->Phone);?></h5> 
+											<h5 class=""><?php echo htmlentities($result2->Address);?></h5> 
+										</div>											
+									</div>
+								</div>
 								<div class="row table-responsive">
 									<div class="col-12 col-md-12 col-lg-12 col-xl-12 d-flex row flex-sm-column">
 								
 										<table id="zctb" class="display table table-striped table-bordered table-hover" >
+
+
 											<thead class="bg-style">
 												<tr>
 													<th class="text-center">#</th>
-													<th class="text-center">Name</th>
-													<th class="text-center">Invoice</th>
-													<th class="text-center">Ref-1</th>
-													<th class="text-center">Ref-2</th>
-													<th class="text-center">Loan</th>
-													<th class="text-center">EMI Type</th>
-													<th class="text-center">Day</th>
-													<th class="text-center">Time</th>
-													<th class="text-center">EMI</th>
-													<th class="text-center">Total EMI</th>
+													<th class="text-center">EMI No</th>
 													<th class="text-center">Date</th>
+													<th class="text-center">Day</th>
+													<th class="text-center">Balance</th>
+													<th class="text-center">EMI</th>
+													<th class="text-center">R_Balance</th>
+													<th class="text-center">Paid</th>
+													<th class="text-center">Due</th>
+													<th class="text-center">Collector</th>
+													<th class="text-center">Collect Date</th>
 													<th class="text-center">Action</th>
 												</tr>
 											</thead>
 											<tbody>
 
-												<?php 
-												// $sql = "SELECT purchaseslist.BatchId,purchaseslist.ProductId,purchaseslist.Qty,purchaseslist.Mprice,purchaseslist.MRP,purchaseslist.date,purchaseslist.Status,
-												// medicine_list.medicine_name from purchaseslist LEFT JOIN medicine_list ON purchaseslist.ProductId = medicine_list.item_code 
-												// ORDER BY purchaseslist.Status ASC";
-												$sql = "SELECT loan_table.ID,loan_table.CustomerID,loan_table.InvoiceID, loan_table.Ref1_id,loan_table.Ref2_id, loan_table.loanAmount,loan_table.EMItype,loan_table.Day,loan_table.Duration,loan_table.EMI,
-												loan_table.totalEMI,loan_table.inputDate,loan_table.Status,loan_table.Interest, customertable.Name,customertable.Phone from loan_table LEFT JOIN customertable ON customertable.ID = loan_table.CustomerID ORDER By loan_table.Status DESC";
+												<?php
+												$loanid = $_GET['loanid'];
+												$sql = "SELECT * from emi_table WHERE loanID=:loanid ORDER By Status ASC";
 												$query = $dbh -> prepare($sql);
+												$query->bindParam(':loanid',$loanid,PDO::PARAM_STR);
 												$query->execute();
 												$results=$query->fetchAll(PDO::FETCH_OBJ);
 												$cnt=1;
@@ -102,21 +127,36 @@ else{
 												{				?>	
 												<tr id="row-<?php echo $cnt;?>">
 													<td class="text-center"><?php echo htmlentities($cnt);?></td>
-													<td class="text-center" id="name-<?php echo htmlentities($result->ID);?>" ><p class="btn btn-outline-primary"><?php echo htmlentities($result->Name);?></p>
-														<!-- <p hidden><?php echo htmlentities($result->ID);?></p> -->
+													<td class="text-center" id="emisl-<?php echo htmlentities($result->ID);?>" ><?php echo $result->EMI_SL;?> </td>
+													<td class="text-center" id="date-<?php echo htmlentities($result->ID);?>" ><?php echo $result->Date;?> </td>
+													<td class="text-center" id="day-<?php echo htmlentities($result->ID);?>"><?php echo $result->Day;?></td>
+													<td class="text-center" id="balance-<?php echo htmlentities($result->ID);?>" ><?php echo $result->Balance;?></td>
+													<td class="text-center" id="emi-<?php echo htmlentities($result->ID);?>" ><?php echo $result->EMI;?></td>
+													<td class="text-center" id="rbal-<?php echo htmlentities($result->ID);?>" ><?php echo $result->R_balance;?></td>
+													<td class="text-center" id="paid-<?php echo htmlentities($result->ID);?>" ><?php echo $result->PaidAmount;?></td>
+													<td class="text-center" id="due-<?php echo htmlentities($result->ID);?>" ><?php echo $result->DueAmount;?></td>
+													<td class="text-center" id="collector-<?php echo htmlentities($result->ID);?>" >
+													<?php 
+														if($result->Status==1){
+															echo $result->CollectorID;
+														}
+														else { 
+															echo "---";
+														}
+														?>
 													</td>
-													<td class="text-center" id="productID-<?php echo htmlentities($result->InvoiceID);?>" ><p class="btn btn-outline-success"><?php echo $result->InvoiceID;?></p></td>
-													<td class="text-center" id="Batch-<?php echo htmlentities($result->Ref1_id);?>" ><p class="btn btn-outline-primary"><?php echo $result->Ref1_id;?></p></td>
-													<td class="text-center" id="date-<?php echo htmlentities($result->Ref2_id);?>" ><p class="btn btn-outline-primary"><?php echo $result->Ref2_id;?></p></td>
-													<td class="text-center" id="Qty-<?php echo htmlentities($result->loanAmount);?>" ><?php echo $result->loanAmount;?></td>
-													<td class="text-center" id="Mprice-<?php echo htmlentities($result->EMItype);?>" ><?php echo $result->EMItype;?></td>
-													<td class="text-center" id="MRP-<?php echo htmlentities($result->Day);?>" ><?php echo $result->Day;?></td>
-													<td class="text-center" id="MRP-<?php echo htmlentities($result->Duration);?>" ><?php echo $result->Duration;?></td>
-													<td class="text-center" id="MRP-<?php echo htmlentities($result->EMI);?>" ><?php echo $result->EMI;?></td>
-													<td class="text-center" id="MRP-<?php echo htmlentities($result->totalEMI);?>" ><?php echo $result->totalEMI;?></td>
-													<td class="text-center" id="MRP-<?php echo htmlentities($result->ID);?>" ><?php echo substr($result->inputDate, 0,10);?></td>
+													<td class="text-center" id="status-<?php echo htmlentities($result->ID);?>" >
+													<?php 
+														if($result->Status==1){
+															echo substr($result->updateDate,0,10);
+														}
+														else { 
+															echo "----";
+														}
+														?>
+													</td>
 													
-													<td class="text-center">
+													<td class="text-center" id="action-<?php echo htmlentities($result->ID);?>">
 													<?php 
 														if($result->Status==1){
 															?>
@@ -124,7 +164,7 @@ else{
 															<?php
 														}
 														else { ?>
-															<a href="emidetails.php?loanid=<?php echo $result->ID;?>&customerID=<?php echo $result->CustomerID; ?>" title="<?php echo htmlentities($result->Name);?>" class="text-success mx-3 btn btn-warning text-black" id="ledger-<?php echo htmlentities($result->ID);?>" onclick="paydues(event)">Details</a>
+															<button type="button" class="btn btn-warning">Pay</button>
 															<?php
 														}
 														
@@ -135,6 +175,7 @@ else{
 											</tbody>
 										</table>
 									</div>
+									
 								</div>
 							</div>
 						</div>
@@ -259,4 +300,11 @@ else{
 </body>
 </html>
 
-<?php } ?>
+<?php 
+		}
+		else{
+			include_once('./includes/address.php');		
+			header('location:emisellslist.php');
+		}
+	} 
+?>
