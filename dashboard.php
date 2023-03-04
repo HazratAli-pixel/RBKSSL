@@ -51,7 +51,12 @@ else{
 <body>
 		<?php include('includes/header.php');?>
 		<div class="ts-main-content">
-		<?php include('includes/leftbar.php');?>
+		<?php 
+		include('includes/leftbar.php');
+		date_default_timezone_set('Asia/Dhaka');
+		$date = date('Y-m-d');
+		
+		?>
 			<div class="content-wrapper">
 				<div class="container-fluid">
 					<div class="col-12 text-center">
@@ -107,9 +112,13 @@ else{
 									</div>
 								</div>
 								<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 mb-2">
-												<?php 
-													$sql ="SELECT ID from stocktable where RestQty=0";
+												<?php
+													$sql ="SELECT emi_table.ID, emi_table.loanID, emi_table.EMI_SL, emi_table.Date, emi_table.Status as emitablestatus, emi_table.Day, 
+													emi_table.Balance,emi_table.EMI, emi_table.R_balance, loan_table.ID as loantableid, loan_table.EMItype, customertable.Name,customertable.Phone,
+													customertable.Address FROM emi_table RIGHT JOIN loan_table ON loan_table.ID = emi_table.loanID JOIN customertable ON 
+													loan_table.CustomerID = customertable.ID WHERE emi_table.Status = 0 AND emi_table.Date=:date";
 													$query = $dbh -> prepare($sql);;
+													$query->bindParam(':date',$date,PDO::PARAM_STR);
 													$query->execute();
 													$query=$query->rowCount();
 												?>
@@ -123,7 +132,7 @@ else{
 												<p class="ms-2">items</p>
 											</div>
 											
-											<a href="stockout.php" class="btn btn-primary">Full Detail</a>
+											<a href="todaysemi.php" class="btn btn-primary">Full Detail</a>
 										</div>
 									</div>
 								</div>
@@ -131,11 +140,14 @@ else{
 												<?php 
 												date_default_timezone_set('Asia/Dhaka');
 												$date = date('Y-m-d');
-													$sql ="SELECT ID from stocktable where Date<:date";
-													$query = $dbh -> prepare($sql);
-													$query->bindParam(':date',$date,PDO::PARAM_STR);
-													$query->execute();
-													$query=$query->rowCount();
+												$sql ="SELECT emi_table.ID, emi_table.loanID, emi_table.EMI_SL, emi_table.Date, emi_table.Status as emitablestatus, emi_table.Day, 
+												emi_table.Balance,emi_table.EMI, emi_table.R_balance, loan_table.ID as loantableid, loan_table.EMItype, customertable.Name,customertable.Phone,
+												customertable.Address FROM emi_table RIGHT JOIN loan_table ON loan_table.ID = emi_table.loanID JOIN customertable ON 
+												loan_table.CustomerID = customertable.ID WHERE emi_table.Status = 0 AND emi_table.Date<:date";
+												$query = $dbh -> prepare($sql);;
+												$query->bindParam(':date',$date,PDO::PARAM_STR);
+												$query->execute();
+												$query=$query->rowCount();
 												?>
 									<div class="card text-center">
 										<div class="card-header bg-style2">
@@ -201,16 +213,13 @@ else{
 														</thead>
 														<tbody>
 															<?php
-																date_default_timezone_set('Asia/Dhaka');
-																$date = date('Y-m-d');
+																
 																$sql ="SELECT sum(NetPayment) as amount, sum(PaidAmount) as PAmount from invoice where date=:date";
 																$query = $dbh -> prepare($sql);
 																$query->bindParam(':date',$date,PDO::PARAM_STR);
 																$query->execute();
 																$result=$query->fetch(PDO::FETCH_OBJ);
 																
-																date_default_timezone_set('Asia/Dhaka');
-																$date = date('Y-m-d');
 																$sql2 ="SELECT sum(G_total) as total from companyinvoice where Date=:date";
 																$query2 = $dbh -> prepare($sql2);
 																$query2->bindParam(':date',$date,PDO::PARAM_STR);
@@ -305,13 +314,22 @@ else{
 									</div>
 								</div>
 								<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 mb-2">
+								<?php 
+									date_default_timezone_set('Asia/Dhaka');
+									$date = date('Y-m-d');
+									$sql ="SELECT SUM(PaidAmount) as PaidAmount FROM emi_table WHERE CollectedDate =:date AND Status=1";
+									$query = $dbh -> prepare($sql);;
+									$query->bindParam(':date',$date,PDO::PARAM_STR);
+									$query->execute();
+									$result=$query->fetch(PDO::FETCH_OBJ);
+								?>
 									<div class="card text-center">
 										<div class="card-header bg-style2">
-											<h5 class="fw-bold">Total Due Amount</h5>
+											<h5 class="fw-bold">Todays EMI Collection</h5>
 										</div>
 										<div class="card-body">
 											<div class="d-flex justify-content-center align-items-center">
-												<h1 class=""><?php echo $dueamount ?></h1>
+												<h1 class=""><?php echo $result->PaidAmount; ?></h1>
 												<p class="ms-2">Taka</p>
 											</div>
 											
@@ -319,14 +337,55 @@ else{
 										</div>
 									</div>
 								</div>
+								<?php 
+									date_default_timezone_set('Asia/Dhaka');
+									$endDate = $date = date('Y-m-d');
+									$date=date_create($date);
+									date_add($date,date_interval_create_from_date_string("-7 days"));
+									$startDate = date_format($date,"Y-m-d");
+									
+									$sql2 ="SELECT SUM(PaidAmount) as PaidAmount8 FROM emi_table WHERE Status=1 AND CollectedDate BETWEEN :startDate AND :endDate ";
+									$query8 = $dbh -> prepare($sql2);;
+									$query8->bindParam(':startDate',$startDate,PDO::PARAM_STR);
+									$query8->bindParam(':endDate',$endDate,PDO::PARAM_STR);
+									$query8->execute();
+									$result8=$query8->fetch(PDO::FETCH_OBJ);
+								?>
 								<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 mb-2">
 									<div class="card text-center">
 										<div class="card-header bg-style2">
-											<h5 class="fw-bold">Total Due Amount</h5>
+											<h5 class="fw-bold">7 Days Collection</h5>
 										</div>
 										<div class="card-body">
 											<div class="d-flex justify-content-center align-items-center">
-												<h1 class=""><?php echo $dueamount ?></h1>
+												<h1 class=""><?php echo round($result8->PaidAmount8,2) ?> </h1>
+												<p class="ms-2">Taka</p>
+											</div>
+											
+											<a href="customer_ledger.php" class="btn btn-primary">Full Detail</a>
+										</div>
+									</div>
+								</div>
+								<?php 
+									date_default_timezone_set('Asia/Dhaka');
+									$startDate = $date = date('Y-m-d');
+									$date=date_create($date);
+									date_add($date,date_interval_create_from_date_string("-7 days"));
+									$endDate = date_format($date,"Y-m-d");
+									
+									$sql ="SELECT SUM(EMI) as DueAmount FROM emi_table WHERE Status=0";
+									$query = $dbh -> prepare($sql);
+									$query->execute();
+									$result=$query->fetch(PDO::FETCH_OBJ);
+								?>
+								<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 mb-2">
+									<div class="card text-center">
+										<div class="card-header bg-style2">
+											<h5 class="fw-bold">Due EMI Amount</h5>
+										</div>
+										<div class="card-body">
+											<div class="d-flex justify-content-center align-items-center">
+												<h1 class=""><?php echo round($result->DueAmount,2) ?></h1>
 												<p class="ms-2">Taka</p>
 											</div>
 											

@@ -31,21 +31,21 @@ if($query->rowCount() > 0)
 foreach($results as $result)
 {				
 
-echo '  
-<tr>  
-<td>'.$cnt.'</td> 
-<td>'.$complainNumber= $result->medicine_name.'</td> 
-<td>'.	$MobileNumber= $result->item_code.'</td> 		
-<td>'.	$MobileNumber= $result->unit.'</td> 		
-<td>'.	$MobileNumber= $result->menufacturer.'</td> 		
-</tr>  
-';
+	echo '  
+	<tr>  
+	<td>'.$cnt.'</td> 
+	<td>'.$complainNumber= $result->medicine_name.'</td> 
+	<td>'.	$MobileNumber= $result->item_code.'</td> 		
+	<td>'.	$MobileNumber= $result->unit.'</td> 		
+	<td>'.	$MobileNumber= $result->menufacturer.'</td> 		
+	</tr>  
+	';
+	$cnt++;
+}
 header("Content-type: application/octet-stream");
 header("Content-Disposition: attachment; filename=".$filename."-report.xlsx");
 header("Pragma: no-cache");
 header("Expires: 0");
-			$cnt++;
-			}
 	}
 ?>
 </table>

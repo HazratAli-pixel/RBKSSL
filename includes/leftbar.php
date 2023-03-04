@@ -28,6 +28,7 @@
 					<ul>
 						<li style="margin-left: 50px;"><a href="emisells.php">EMI Sells</a></li>
 						<li style="margin-left: 50px;"><a href="emisellslist.php">EMI Sells List</a></li>
+						<li style="margin-left: 50px;"><a href="todaysemi.php">Todays EMI List</a></li>
 						<li style="margin-left: 50px;"><a href="emicalculation.php">EMI Calculation</a></li>
 					</ul>
 				</li>

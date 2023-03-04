@@ -19,14 +19,19 @@ else{
 
 			$newDue=$_POST['c_new_due'];
 			$emiID=$_POST['emiID'];
+
+			date_default_timezone_set('Asia/Dhaka');
+			$date = date('Y-m-d');
+			
 			
 			$status=1;
 
-			$sql = "UPDATE emi_table SET PaidAmount=:paidAmount, DueAmount=:newDue, CollectorID=:userid, Status=:status WHERE ID=:emiID";
+			$sql = "UPDATE emi_table SET PaidAmount=:paidAmount, DueAmount=:newDue, CollectorID=:userid,CollectedDate=:date, Status=:status WHERE ID=:emiID";
 			$query = $dbh -> prepare($sql);
 			$query->bindParam(':paidAmount',$paidAmount,PDO::PARAM_STR);
 			$query->bindParam(':newDue',$newDue,PDO::PARAM_STR);
 			$query->bindParam(':userid',$userid,PDO::PARAM_STR);
+			$query->bindParam(':date',$date,PDO::PARAM_STR);
 			$query->bindParam(':status',$status,PDO::PARAM_STR);
 			$query->bindParam(':emiID',$emiID,PDO::PARAM_STR);
 			$query->execute();
