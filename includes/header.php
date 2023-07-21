@@ -29,8 +29,8 @@
 <div class="brand d-flex justify-content-between align-items-center">
 	<div class="">
 		<img class="brand-logo" src=<?php echo count($value) > 3? "../img/rbksslllogo.jpg": "./img/rbksslllogo.jpg"?> alt="logo">
-		<a  href="dashboard.php" style=" font-size:large;" class="title d-none d-md-inline-block d-lg-inline-block d-xl-inline-block d-xxl-inline-block" >Digital Shop </a>  
-		<a  href="dashboard.php" style=" font-size:small;" class="title d-inline-block d-md-none d-lg-none d-xl-none d-xxl-none" >Digital Shop</a>  
+		<a  href=<?php echo $links."/dashboard.php"; ?> style=" font-size:large;" class="title d-none d-md-inline-block d-lg-inline-block d-xl-inline-block d-xxl-inline-block" >Digital Shop </a>  
+		<a  href=<?php echo $links."/dashboard.php"; ?> style=" font-size:small;" class="title d-inline-block d-md-none d-lg-none d-xl-none d-xxl-none" >Digital Shop</a>  
 		</div>
 		<span class="menu-btn"><i class="fa fa-bars"></i></span>
 		<ul class="ts-profile-nav">

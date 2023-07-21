@@ -1,10 +1,10 @@
 <?php
 session_start();
 error_reporting(0);
-include('includes/config.php');
+include('../includes/config.php');
 if(strlen($_SESSION['alogin'])==0)
 	{
-	include_once('./includes/address.php');	
+	include_once('../includes/address.php');	
 	header('location:index.php');
 	}
 else{
@@ -21,7 +21,7 @@ else{
 	<meta name="theme-color" content="#3e454c">
 	
 	<title>Dshop-Due EMI List </title>
-	<link rel="shortcut icon" href="./assets/pic/pmslogo.png" type="image/x-icon">
+	<link rel="shortcut icon" href="../assets/pic/pmslogo.png" type="image/x-icon">
 	<!-- Font awesome -->
 	<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/typicons/2.1.2/typicons.min.css" rel="stylesheet">
@@ -29,7 +29,7 @@ else{
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 		
 	<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css">
-	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="../css/style.css">
 
 	<script src="https://kit.fontawesome.com/b6e439dc17.js" crossorigin="anonymous"></script>
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/typicons/2.1.2/typicons.min.css" rel="stylesheet">
@@ -38,10 +38,10 @@ else{
 
 </head>
 <body>
-	<?php include('includes/header.php');?>
+	<?php include('../includes/header.php');?>
 	<div class="ts-main-content">
 		<?php 
-		include('includes/leftbar.php');
+		include('../includes/leftbar.php');
 		date_default_timezone_set('Asia/Dhaka');
 		$date = date('Y-m-d');
 		
@@ -244,19 +244,19 @@ else{
 		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
-		<script src="./js/sweetalert.js"></script>
-		<script src="./js/query.js"></script>
+		<script src="../js/sweetalert.js"></script>
+		<script src="../js/query.js"></script>
 		<!-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> -->
-		<script src="js/jquery.min.js"></script>
-		<script src="js/bootstrap-select.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>
+		<script src="../js/jquery.min.js"></script>
+		<script src="../js/bootstrap-select.min.js"></script>
+		<script src="../js/bootstrap.min.js"></script>
 		<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 		<script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
-		<script src="js/Chart.min.js"></script>
-		<script src="js/fileinput.js"></script>
-		<script src="js/chartData.js"></script>
-		<script src="js/main.js"></script>
+		<script src="../js/Chart.min.js"></script>
+		<script src="../js/fileinput.js"></script>
+		<script src="../js/chartData.js"></script>
+		<script src="../js/main.js"></script>
     
 </body>
 </html>
