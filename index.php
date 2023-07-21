@@ -10,53 +10,54 @@ include('includes/config.php');
 			header("location:".$_SESSION['current_link']);
 		}
 	}
-	else if(isset($_POST['login']))
-	{
-		$userid = $email=$_POST['username'];
-		$password=md5($_POST['password']);
-		$position = $_POST['position'];
-		$sql ="SELECT UserName,Password,UserId FROM admin WHERE (UserName=:email and Password=:password and Position=:position) || 
-		(UserId=:userid and Password=:password and Position=:position)";
-		$query= $dbh -> prepare($sql);
-		$query-> bindParam(':email', $email, PDO::PARAM_STR);
-		$query-> bindParam(':password', $password, PDO::PARAM_STR);
-		$query-> bindParam(':position', $position, PDO::PARAM_STR);
-		$query-> bindParam(':userid', $userid, PDO::PARAM_STR);
-		$query-> bindParam(':password', $password, PDO::PARAM_STR);
-		$query-> bindParam(':position', $position, PDO::PARAM_STR);
-		$query-> execute();
-		$results=$query->fetch(PDO::FETCH_OBJ);
-		if($query->rowCount() > 0)
-		{
-			$_SESSION[$position]=$position;
-			$_SESSION['alogin']=$results->UserId;
-			setcookie("Username",$email,time()+60*60*24,'/');
-			$_SESSION['positon'] = $position;
-			if(strlen($_SESSION['current_link'])==0){
-				header('location:dashboard.php');
+	else {
+			if(isset($_POST['login']))
+			{
+				$userid = $email=$_POST['username'];
+				$password=md5($_POST['password']);
+				$position = $_POST['position'];
+				$sql ="SELECT UserName,Password,UserId FROM admin WHERE (UserName=:email and Password=:password and Position=:position) || 
+				(UserId=:userid and Password=:password and Position=:position)";
+				$query= $dbh -> prepare($sql);
+				$query-> bindParam(':email', $email, PDO::PARAM_STR);
+				$query-> bindParam(':password', $password, PDO::PARAM_STR);
+				$query-> bindParam(':position', $position, PDO::PARAM_STR);
+				$query-> bindParam(':userid', $userid, PDO::PARAM_STR);
+				$query-> bindParam(':password', $password, PDO::PARAM_STR);
+				$query-> bindParam(':position', $position, PDO::PARAM_STR);
+				$query-> execute();
+				$results=$query->fetch(PDO::FETCH_OBJ);
+				if($query->rowCount() > 0)
+				{
+					$_SESSION[$position]=$position;
+					$_SESSION['alogin']=$results->UserId;
+					setcookie("Username",$email,time()+60*60*24,'/');
+					$_SESSION['positon'] = $position;
+					if(strlen($_SESSION['current_link'])==0){
+						header('location:dashboard.php');
+					}
+					else{
+						header("location:".$_SESSION['current_link']);
+					}
+				}
+				else {
+					echo "<script> alert ('Invalid Details')</script>";
+				}
 			}
-			else{
-				header("location:".$_SESSION['current_link']);
+			else if(isset($_POST['search'])){
+				$userid =$_POST['userid'];
+				$sql ="SELECT admin.UserName,admin.Position,admin.ActiveStatus as sts, user_info.Phone1,user_info.Email1 FROM admin left JOIN user_info ON user_info.UserId=admin.UserId WHERE  admin.UserId=:userid";
+				$query= $dbh -> prepare($sql);
+				$query-> bindParam(':userid', $userid, PDO::PARAM_STR);
+				$query-> execute();
+				$result=$query->fetch(PDO::FETCH_OBJ);
+				if($query->rowCount() > 0){
+					$_SESSION['forgetuserid']=$userid;
+					header('location:searchresult.php');
+				}else{
+					echo "<script> alert ('No Result founds')</script>";
+				}
 			}
-		}
-		else {
-			echo "<script> alert ('Invalid Details')</script>";
-		}
-	}
-	else if(isset($_POST['search'])){
-		$userid =$_POST['userid'];
-		$sql ="SELECT admin.UserName,admin.Position,admin.ActiveStatus as sts, user_info.Phone1,user_info.Email1 FROM admin left JOIN user_info ON user_info.UserId=admin.UserId WHERE  admin.UserId=:userid";
-		$query= $dbh -> prepare($sql);
-		$query-> bindParam(':userid', $userid, PDO::PARAM_STR);
-		$query-> execute();
-		$result=$query->fetch(PDO::FETCH_OBJ);
-		if($query->rowCount() > 0){
-			$_SESSION['forgetuserid']=$userid;
-			header('location:searchresult.php');
-		}else{
-			echo "<script> alert ('No Result founds')</script>";
-		}
-	}
 ?>
 <!doctype html>
 <html lang="en" class="no-js">
@@ -209,4 +210,5 @@ include('includes/config.php');
 
 </body>
 </html>
+<?php } ?>
 

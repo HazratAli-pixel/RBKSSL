@@ -159,7 +159,7 @@ else{
 												<p class="ms-2">items</p>
 											</div>
 											
-											<a href="stockexpired.php" class="btn btn-primary">Full Detail</a>
+											<a href="emiduelist.php" class="btn btn-primary">Full Detail</a>
 										</div>
 									</div>
 								</div>
@@ -329,11 +329,19 @@ else{
 										</div>
 										<div class="card-body">
 											<div class="d-flex justify-content-center align-items-center">
-												<h1 class=""><?php echo $result->PaidAmount; ?></h1>
+											<?php 
+											if($result->PaidAmount > 0){
+
+												?> 
+												<h1 class=""><?php echo round($result->PaidAmount,2); ?></h1>
 												<p class="ms-2">Taka</p>
+												<?php
+
+											}else{ ?> 
+											<h1 class="">No Colletion</h1>
+											<?php } ?>	
 											</div>
-											
-											<a href="customer_ledger.php" class="btn btn-primary">Full Detail</a>
+											<a href="emisellslist.php" class="btn btn-primary">Full Detail</a>
 										</div>
 									</div>
 								</div>
@@ -358,11 +366,20 @@ else{
 										</div>
 										<div class="card-body">
 											<div class="d-flex justify-content-center align-items-center">
-												<h1 class=""><?php echo round($result8->PaidAmount8,2) ?> </h1>
-												<p class="ms-2">Taka</p>
+												<?php 
+												if($result8->PaidAmount8 > 0){
+
+													?> 
+													<h1 class=""><?php echo round($result8->PaidAmount8,2); ?></h1>
+													<p class="ms-2">Taka</p>
+													<?php
+
+												}else{ ?> 
+												<h1 class="text-red">No Colletion</h1>
+												<?php } ?>	
 											</div>
 											
-											<a href="customer_ledger.php" class="btn btn-primary">Full Detail</a>
+											<a href="emisellslist.php" class="btn btn-primary">Full Detail</a>
 										</div>
 									</div>
 								</div>
@@ -385,11 +402,19 @@ else{
 										</div>
 										<div class="card-body">
 											<div class="d-flex justify-content-center align-items-center">
-												<h1 class=""><?php echo round($result->DueAmount,2) ?></h1>
-												<p class="ms-2">Taka</p>
+											<?php 
+												if($result->DueAmount > 0){
+
+													?> 
+													<h1 class=""><?php echo round($result->DueAmount,2); ?></h1>
+													<p class="ms-2">Taka</p>
+													<?php
+
+												}else{ ?> 
+												<h1 class="text-red">No Colletion</h1>
+												<?php } ?>
 											</div>
-											
-											<a href="customer_ledger.php" class="btn btn-primary">Full Detail</a>
+											<a href="emisellslist.php" class="btn btn-primary">Full Detail</a>
 										</div>
 									</div>
 								</div>

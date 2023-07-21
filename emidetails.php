@@ -170,6 +170,8 @@ else{
 											<tbody>
 
 												<?php
+												date_default_timezone_set('Asia/Dhaka');
+												$date = date('Y-m-d');
 												$loanid = $_GET['loanid'];
 												$sql = "SELECT * from emi_table WHERE loanID=:loanid ORDER By Status ASC";
 												$query = $dbh -> prepare($sql);
@@ -180,8 +182,22 @@ else{
 												if($query->rowCount() > 0)
 												{
 												foreach($results as $result)
-												{				?>	
-												<tr id="row-<?php echo $cnt;?>">
+												{				
+													if($result->Date < $date & $result->Status==0 ){
+														$bgclr = 'bg-danger';
+														$text = 'text-white';
+													}
+													else if($result->Date == $date & $result->Status==0 ){
+														$bgclr = 'bg-info';
+														$text = '';
+													}
+													else{
+														$bgclr = '';
+														$text = '';
+													}	
+												
+												?>	
+												<tr id="row-<?php echo $cnt;?>" class="align-middle <?php echo $bgclr; echo " "; echo $text; ?>">
 													<td class="text-center"><?php echo htmlentities($cnt);?></td>
 													<td class="text-center" id="emisl-<?php echo htmlentities($result->ID);?>" ><?php echo $result->EMI_SL;?> </td>
 													<td class="text-center" id="date-<?php echo htmlentities($result->ID);?>" ><?php echo $result->Date;?> </td>

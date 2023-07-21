@@ -3,7 +3,7 @@
 define('DB_HOST','localhost');
 define('DB_USER','root');
 define('DB_PASS','');
-define('DB_NAME','pharmacy_management_system');
+define('DB_NAME','dshop');
 // Establish database connection.
 try
 {
@@ -17,7 +17,7 @@ exit("Error: " . $e->getMessage());
 
 <?php
 $domain = "localhost/url/";
-$con=mysqli_connect("localhost", "root", "", "pharmacy_management_system");
+$con=mysqli_connect("localhost", "root", "", "dshop");
 if(mysqli_connect_errno()){
 echo "Connection Fail".mysqli_connect_error();
 }

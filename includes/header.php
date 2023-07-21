@@ -6,6 +6,16 @@
 	$query->bindParam(':userid',$userId,PDO::PARAM_STR);
 	$query->execute();
 	$result=$query->fetch(PDO::FETCH_OBJ);	
+
+
+	$url= $_SERVER['REQUEST_URI'];
+	$hosts= $_SERVER['[HTTP_HOST] '];
+	$value =explode("/",$url);
+	$tesst = $value[2];
+	$tesst3 = $value[3];
+	$links= $hosts."/".$value[1];
+
+
 ?>
 <style>
 	.active-status{
@@ -18,7 +28,7 @@
 
 <div class="brand d-flex justify-content-between align-items-center">
 	<div class="">
-		<img class="brand-logo" src="./img/rbksslllogo.jpg" alt="">
+		<img class="brand-logo" src=<?php echo count($value) > 3? "../img/rbksslllogo.jpg": "./img/rbksslllogo.jpg"?> alt="logo">
 		<a  href="dashboard.php" style=" font-size:large;" class="title d-none d-md-inline-block d-lg-inline-block d-xl-inline-block d-xxl-inline-block" >Digital Shop </a>  
 		<a  href="dashboard.php" style=" font-size:small;" class="title d-inline-block d-md-none d-lg-none d-xl-none d-xxl-none" >Digital Shop</a>  
 		</div>
@@ -29,7 +39,8 @@
 				<!-- <a href="#"><img src="./UserPhoto/<?php echo $result->Photo ?>" class="ts-avatar hidden-side" alt=""> <?php echo $result->Name?> <i class="fa fa-angle-down hidden-side"></i></a> -->
 				<a type="button" class=" position-relative">
 					
-				<img src="./UserPhoto/<?php echo $result->Photo ?>" class="ts-avatar hidden-side" alt=""> <?php echo $result->Name?> <i class="fa fa-angle-down hidden-side"></i>
+				<img src= <?php echo count($value) > 3? "../UserPhoto/".$result->Photo : "./UserPhoto/".$result->Photo?>
+				 class="ts-avatar hidden-side" alt=""> <?php echo $result->Name?> <i class="fa fa-angle-down hidden-side"></i>
 					<!-- <span style="margin-left: -82px; margin-top:14px; padding:6px" class="position-absolute active-status border border-light rounded-circle">
 						<span class="visually-hidden">ali</span>
 					</span> -->

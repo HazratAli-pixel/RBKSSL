@@ -692,8 +692,7 @@ li {
     display: none;
   }
 }
-@media only screen and (min-width: 992px) {
-  .ts-sidebar {
+@media only screen and (min-width: 992px) {  .ts-sidebar {
     max-height: 100%;
     bottom: 0;
   }
@@ -713,6 +712,7 @@ li {
   padding: 12px 15px;
   color: #fff; 
 }
+
 .ts-sidebar-menu li {
   position: relative;
 }
@@ -817,3 +817,9 @@ li {
   
 }
 
+.hover_class:hover {
+  background-color: #969693;
+  color: #000;
+  border-radius: 10px;
+  margin-right: 10px;
+}
