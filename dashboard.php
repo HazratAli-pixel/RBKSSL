@@ -85,7 +85,7 @@ else{
 												<p class="ms-2">Person</p>
 											</div>
 											
-											<a href="customer_list.php" class="btn btn-primary">Full Detail</a>
+											<a href="<?php echo $links;?><?php echo $links;?>/customer/customer_list.php" class="btn btn-primary">Full Detail</a>
 										</div>
 									</div>
 								</div>
@@ -107,7 +107,7 @@ else{
 												<p class="ms-2">items</p>
 											</div>
 											
-											<a href="medicine_list.php" class="btn btn-primary">Full Detail</a>
+											<a href="<?php echo $links;?>/products/products_list.php" class="btn btn-primary">Full Detail</a>
 										</div>
 									</div>
 								</div>
@@ -132,7 +132,7 @@ else{
 												<p class="ms-2">items</p>
 											</div>
 											
-											<a href="todaysemi.php" class="btn btn-primary">Full Detail</a>
+											<a href="<?php echo $links;?>/emi/todaysemi.php" class="btn btn-primary">Full Detail</a>
 										</div>
 									</div>
 								</div>
@@ -159,7 +159,7 @@ else{
 												<p class="ms-2">items</p>
 											</div>
 											
-											<a href="emiduelist.php" class="btn btn-primary">Full Detail</a>
+											<a href="<?php echo $links;?>/emi/emiduelist.php" class="btn btn-primary">Full Detail</a>
 										</div>
 									</div>
 								</div>
@@ -294,7 +294,7 @@ else{
 												<p class="ms-2">Person</p>
 											</div>
 											
-											<a href="customer_ledger.php" class="btn btn-primary">Full Detail</a>
+											<a href="<?php echo $links;?>/customer/customer_ledger.php" class="btn btn-primary">Full Detail</a>
 										</div>
 									</div>
 								</div>
@@ -309,7 +309,7 @@ else{
 												<p class="ms-2">Taka</p>
 											</div>
 											
-											<a href="customer_ledger.php" class="btn btn-primary">Full Detail</a>
+											<a href="<?php echo $links;?>/customer/customer_ledger.php" class="btn btn-primary">Full Detail</a>
 										</div>
 									</div>
 								</div>
@@ -341,7 +341,7 @@ else{
 											<h1 class="">No Colletion</h1>
 											<?php } ?>	
 											</div>
-											<a href="emisellslist.php" class="btn btn-primary">Full Detail</a>
+											<a href="<?php echo $links;?>/emi/emisellslist.php" class="btn btn-primary">Full Detail</a>
 										</div>
 									</div>
 								</div>
@@ -379,7 +379,7 @@ else{
 												<?php } ?>	
 											</div>
 											
-											<a href="emisellslist.php" class="btn btn-primary">Full Detail</a>
+											<a href="<?php echo $links;?>/emi/emisellslist.php" class="btn btn-primary">Full Detail</a>
 										</div>
 									</div>
 								</div>
@@ -414,7 +414,7 @@ else{
 												<h1 class="text-red">No Colletion</h1>
 												<?php } ?>
 											</div>
-											<a href="emisellslist.php" class="btn btn-primary">Full Detail</a>
+											<a href="<?php echo $links;?>/emi/emisellslist.php" class="btn btn-primary">Full Detail</a>
 										</div>
 									</div>
 								</div>
@@ -441,7 +441,7 @@ else{
 												<p class="ms-2">Person</p>
 											</div>
 											
-											<a href="customer_list.php" class="btn btn-primary">Full Detail</a>
+											<a href="<?php echo $links;?>/customer/customer_list.php" class="btn btn-primary">Full Detail</a>
 										</div>
 									</div>
 										</div>
@@ -463,7 +463,7 @@ else{
 												<p class="ms-2">items</p>
 											</div>
 											
-											<a href="medicine_list.php" class="btn btn-primary">Full Detail</a>
+											<a href="<?php echo $links;?>/products/medicine_list.php" class="btn btn-primary">Full Detail</a>
 										</div>
 									</div>
 										</div>
@@ -484,7 +484,7 @@ else{
 												<p class="ms-2">items</p>
 											</div>
 											
-											<a href="stockout.php" class="btn btn-primary">Full Detail</a>
+											<a href="<?php echo $links;?>/stock/stockout.php" class="btn btn-primary">Full Detail</a>
 										</div>
 										</div>
 										</div>
@@ -508,7 +508,7 @@ else{
 												<p class="ms-2">items</p>
 											</div>
 											
-											<a href="stockexpired.php" class="btn btn-primary">Full Detail</a>
+											<a href="<?php echo $links;?>/stock/stockexpired.php" class="btn btn-primary">Full Detail</a>
 										</div>
 									</div>
 								</div>
@@ -745,7 +745,7 @@ else{
 												<p class="ms-2">Person</p>
 											</div>
 											
-											<a href="customer_ledger.php" class="btn btn-primary">Full Detail</a>
+											<a href="<?php echo $links;?>/customer/customer_ledger.php" class="btn btn-primary">Full Detail</a>
 										</div>
 									</div>
 								</div>
@@ -760,7 +760,7 @@ else{
 												<p class="ms-2">Taka</p>
 											</div>
 											
-											<a href="customer_ledger.php" class="btn btn-primary">Full Detail</a>
+											<a href="<?php echo $links;?>/customer/customer_ledger.php" class="btn btn-primary">Full Detail</a>
 										</div>
 									</div>
 								</div>
@@ -775,7 +775,7 @@ else{
 												<p class="ms-2">Taka</p>
 											</div>
 											
-											<a href="customer_ledger.php" class="btn btn-primary">Full Detail</a>
+											<a href="<?php echo $links;?>/customer/customer_ledger.php" class="btn btn-primary">Full Detail</a>
 										</div>
 									</div>
 								</div>
@@ -790,7 +790,7 @@ else{
 												<p class="ms-2">Taka</p>
 											</div>
 											
-											<a href="customer_ledger.php" class="btn btn-primary">Full Detail</a>
+											<a href="<?php echo $links;?>/customer/customer_ledger.php" class="btn btn-primary">Full Detail</a>
 										</div>
 									</div>
 								</div>

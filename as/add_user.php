@@ -1,7 +1,7 @@
 <?php
 session_start();
 error_reporting(0);
-include('includes/config.php');
+include('../includes/config.php');
 	
 	if(strlen($_SESSION['alogin'])==0)
 		{	
@@ -78,13 +78,13 @@ include('includes/config.php');
 		<meta name="theme-color" content="#3e454c">
 		
 		<title>PMS-Add User</title>
-		<link rel="shortcut icon" href="./assets/pic/pmslogo.png" type="image/x-icon">
+		<link rel="shortcut icon" href="../assets/pic/pmslogo.png" type="image/x-icon">
 		<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/typicons/2.1.2/typicons.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css">
 		
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-		<link rel="stylesheet" href="css/style.css">
+		<link rel="stylesheet" href="../css/style.css">
 
 	<style>
 		.errorWrap {
@@ -109,9 +109,9 @@ include('includes/config.php');
 	</head>
 	
 	<body>
-		<?php include('includes/header.php');?>
+		<?php include('../includes/header.php');?>
 		<div class="ts-main-content">
-		<?php include('includes/leftbar.php');?>
+		<?php include('../includes/leftbar.php');?>
 			<div class="content-wrapper">
 				<div class="container-fluid">
 					<div class="row">
@@ -247,16 +247,16 @@ include('includes/config.php');
 		</div>
 	
 		<!-- Loading Scripts -->
-		<script src="js/jquery.min.js"></script>
-		<script src="js/bootstrap-select.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>
-		<script src="js/jquery.dataTables.min.js"></script>
+		<script src="../js/jquery.min.js"></script>
+		<script src="../js/bootstrap-select.min.js"></script>
+		<script src="../js/bootstrap.min.js"></script>
+		<script src="../js/jquery.dataTables.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-		<script src="js/dataTables.bootstrap.min.js"></script>
-		<script src="js/Chart.min.js"></script>
-		<script src="js/fileinput.js"></script>
-		<script src="js/chartData.js"></script>
-		<script src="js/main.js"></script>
+		<script src="../js/dataTables.bootstrap.min.js"></script>
+		<script src="../js/Chart.min.js"></script>
+		<script src="../js/fileinput.js"></script>
+		<script src="../js/chartData.js"></script>
+		<script src="../js/main.js"></script>
 	</body>
 	</html>
 

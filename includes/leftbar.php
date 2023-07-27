@@ -69,86 +69,86 @@ function cssStyle($lastLinkName,$currenFileName) {
 				</li>
 				<li class="<?php echo $value[2]=='invoice' ? "open":'close' ?>"><a href="#"><i class="fas fa-hand-holding-usd mr-2"></i> Invoice</a>
 					<ul>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="msg.php">Add Invoice</a></li>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="pos_invoice.php">POS Invoice</a></li>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="invoicelist.php">Invoice List</a></li>
+						<li <?php echo cssStyle($tesst3, 'msg.php')?>><a href="<?php echo $links."/msg.php";?>">Add Invoice</a></li>
+						<li <?php echo cssStyle($tesst3, 'pos_invoice.php')?>><a href="<?php echo $links."/invoice/pos_invoice.php";?>">POS Invoice</a></li>
+						<li <?php echo cssStyle($tesst3, 'invoicelist.php')?>><a href="<?php echo $links."/invoice/invoicelist.php";?>">Invoice List</a></li>
 					</ul>
 				</li>
 				<li class="<?php echo $value[2]=='return' ? "open":'close' ?>"><a href="#"><i class="fas fa-retweet mr-2"></i> Return</a>
 					<ul>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="msg.php">Add Return</a></li>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="msg.php">Invoice Return List</a></li>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="msg.php">Company Return List</a></li>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="msg.php">Wastage Return List</a></li>
+						<li <?php echo cssStyle($tesst3, 'msg.php')?>><a href="<?php echo $links."/msg.php";?>">Add Return</a></li>
+						<li <?php echo cssStyle($tesst3, 'msg.php')?>><a href="<?php echo $links."/msg.php";?>">Invoice Return List</a></li>
+						<li <?php echo cssStyle($tesst3, 'msg.php')?>><a href="<?php echo $links."/msg.php";?>">Company Return List</a></li>
+						<li <?php echo cssStyle($tesst3, 'msg.php')?>><a href="<?php echo $links."/msg.php";?>">Wastage Return List</a></li>
 					</ul>
 				</li>
 				<li class="<?php echo $value[2]=='stock' ? "open":'close' ?>"><a href="#"><i class="fab fa-linode mr-3"></i> Stock</a>
 					<ul>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="stocklist.php">Stock Report</a></li>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="stockavailable.php">Available Stock</a></li>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="stockout.php">Stock out list</a></li>
+						<li <?php echo cssStyle($tesst3, 'stocklist.php')?>><a href="<?php echo $links."/stock/stocklist.php";?>">Stock Report</a></li>
+						<li <?php echo cssStyle($tesst3, 'stockavailable.php')?>><a href="<?php echo $links."/stock/stockavailable.php";?>">Available Stock</a></li>
+						<li <?php echo cssStyle($tesst3, 'stockout.php')?>><a href="<?php echo $links."/stock/stockout.php";?>">Stock out list</a></li>
 					</ul>
 				</li>
-				<li><a href="#"><i class="fas fa-landmark mr-2"></i> Bank</a>
+				<li class="<?php echo $value[2]=='bank' ? "open":'close' ?>"><a href="#"><i class="fas fa-landmark mr-2"></i> Bank</a>
 					<ul>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="msg.php">Add Bank</a></li>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="msg.php">Bank List</a></li>
+						<li <?php echo cssStyle($tesst3, 'msg.php')?>><a href="<?php echo $links."/msg.php";?>">Add Bank</a></li>
+						<li <?php echo cssStyle($tesst3, 'msg.php')?>><a href="<?php echo $links."/msg.php";?>">Bank List</a></li>
 					</ul>
 				</li>
-				<li><a href="#"><i class="fas fa-money-check-alt mr-2"></i> Accounts</a>
+				<li class="<?php echo $value[2]=='accounts' ? "open":'close' ?>"><a href="#"><i class="fas fa-money-check-alt mr-2"></i> Accounts</a>
 					<ul>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="msg.php">Company Payment</a></li>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="msg.php">Voucher List</a></li>
+						<li <?php echo cssStyle($tesst3, 'msg.php')?>><a href="<?php echo $links."/msg.php";?>">Company Payment</a></li>
+						<li <?php echo cssStyle($tesst3, 'msg.php')?>><a href="<?php echo $links."/msg.php";?>">Voucher List</a></li>
 					</ul>
 				</li>
-				<li><a href="#"><i class="fas fa-book-open mr-2"></i> Report</a>
+				<li class="<?php echo $value[2]=='report' ? "open":'close' ?>"><a href="#"><i class="fas fa-book-open mr-2"></i> Report</a>
 					<ul>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="msg.php">Add Closing</a></li>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="msg.php">Closing List</a></li>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="msg.php">Sales Report</a></li>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="msg.php">Sales Report(User)</a></li>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="msg.php">Sales Report(Product)</a></li>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="msg.php">Sales Report(Category)</a></li>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="msg.php">Purchease Report</a></li>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="msg.php">Purchease Report(Category)</a></li>
+						<li <?php echo cssStyle($tesst3, 'msg.php')?>><a href="<?php echo $links."/msg.php";?>">Add Closing</a></li>
+						<li <?php echo cssStyle($tesst3, 'msg.php')?>><a href="<?php echo $links."/msg.php";?>">Closing List</a></li>
+						<li <?php echo cssStyle($tesst3, 'msg.php')?>><a href="<?php echo $links."/msg.php";?>">Sales Report</a></li>
+						<li <?php echo cssStyle($tesst3, 'msg.php')?>><a href="<?php echo $links."/msg.php";?>">Sales Report(User)</a></li>
+						<li <?php echo cssStyle($tesst3, 'msg.php')?>><a href="<?php echo $links."/msg.php";?>">Sales Report(Product)</a></li>
+						<li <?php echo cssStyle($tesst3, 'msg.php')?>><a href="<?php echo $links."/msg.php";?>">Sales Report(Category)</a></li>
+						<li <?php echo cssStyle($tesst3, 'msg.php')?>><a href="<?php echo $links."/msg.php";?>">Purchease Report</a></li>
+						<li <?php echo cssStyle($tesst3, 'msg.php')?>><a href="<?php echo $links."/msg.php";?>">Purchease Report(Category)</a></li>
 					</ul>
 				</li>
-				<li><a href="#"><i class="far fa-address-card mr-2"></i> Human Ressource</a>
+				<li class="<?php echo $value[2]=='hr' ? "open":'close' ?>"><a href="#"><i class="far fa-address-card mr-2"></i> Human Ressource</a>
 					<ul>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="msg.php">Employee</a></li>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="msg.php">Attendance</a></li>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="msg.php">Payroll</a></li>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="msg.php">Expense</a></li>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="msg.php">Loan</a></li>
+						<li <?php echo cssStyle($tesst3, 'msg.php')?>><a href="<?php echo $links."/msg.php";?>">Employee</a></li>
+						<li <?php echo cssStyle($tesst3, 'msg.php')?>><a href="<?php echo $links."/msg.php";?>">Attendance</a></li>
+						<li <?php echo cssStyle($tesst3, 'msg.php')?>><a href="<?php echo $links."/msg.php";?>">Payroll</a></li>
+						<li <?php echo cssStyle($tesst3, 'msg.php')?>><a href="<?php echo $links."/msg.php";?>">Expense</a></li>
+						<li <?php echo cssStyle($tesst3, 'msg.php')?>><a href="<?php echo $links."/msg.php";?>">Loan</a></li>
 					</ul>
 				</li>
-				<li><a href="#"><i class="fas fa-hryvnia mr-3"></i> Tax</a>
+				<li class="<?php echo $value[2]=='tax' ? "open":'close' ?>"><a href="#"><i class="fas fa-hryvnia mr-3"></i> Tax</a>
 					<ul>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="msg.php">Add Income Tax</a></li>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="msg.php">Income Tax List</a></li>
+						<li <?php echo cssStyle($tesst3, 'msg.php')?>><a href=<?php echo $links."/msg.php";?>>Add Income Tax</a></li>
+						<li <?php echo cssStyle($tesst3, 'msg.php')?>><a href=<?php echo $links."/msg.php";?>>Income Tax List</a></li>
 					</ul>
 				</li>
-				<li><a href="#"><i class="fab fa-servicestack mr-3"></i> Service</a>
+				<li class="<?php echo $value[2]=='service' ? "open":'close' ?>"><a href="#"><i class="fab fa-servicestack mr-3"></i> Service</a>
 					<ul>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="msg.php">Add Service</a></li>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="msg.php">Service List</a></li>
+						<li <?php echo cssStyle($tesst3, 'msg.php')?>><a href=<?php echo $links."/msg.php";?>>Add Service</a></li>
+						<li <?php echo cssStyle($tesst3, 'msg.php')?>><a href=<?php echo $links."/msg.php";?>>Service List</a></li>
 					</ul>
 				</li>
-				<li><a href="#"><i class="fas fa-search mr-3"></i> Search</a>
+				<li class="<?php echo $value[2]=='search' ? "open":'close' ?>"><a href="#"><i class="fas fa-search mr-3"></i> Search</a>
 					<ul>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="msg.php">Medicine Search</a></li>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="msg.php">Invoice Search</a></li>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="msg.php">Purchease Search</a></li>
+						<li <?php echo cssStyle($tesst3, 'msg.php')?>><a href=<?php echo $links."/msg.php";?>>Medicine Search</a></li>
+						<li <?php echo cssStyle($tesst3, 'msg.php')?>><a href=<?php echo $links."/msg.php";?>>Invoice Search</a></li>
+						<li <?php echo cssStyle($tesst3, 'msg.php')?>><a href=<?php echo $links."/msg.php";?>>Purchease Search</a></li>
 					</ul>
 				</li>
-				<li><a href="#"><i class="fas fa-plus mr-2"></i>Application Setting</a>
+				<li class="<?php echo $value[2]=='as' ? "open":'close' ?>"><a href="#"><i class="fas fa-plus mr-2"></i>Application Setting</a>
 					<ul>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="add_user.php">Add User</a></li>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="user_list.php">User List</a></li>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="add_role.php">Add Role</a></li>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>><a href="set-rule.php">Set Rule</a></li>
-						<!-- <li <?php echo cssStyle($tesst3, 'company_add.php')?>"><a href="msg.php">Add User Rule</a></li>
-						<li <?php echo cssStyle($tesst3, 'company_add.php')?>"><a href="msg.php">Rule List</a></li> -->
+						<li <?php echo cssStyle($tesst3, 'add_user.php')?>><a href="<?php echo $links."/as/add_user.php";?>">Add User</a></li>
+						<li <?php echo cssStyle($tesst3, 'user_list.php')?>><a href="<?php echo $links."/as/user_list.php";?>">User List</a></li>
+						<li <?php echo cssStyle($tesst3, 'add_role.php')?>><a href="<?php echo $links."/as/add_role.php";?>">Add Role</a></li>
+						<li <?php echo cssStyle($tesst3, 'set-rule.php')?>><a href="<?php echo $links."/as/set-rule.php";?>">Set Rule</a></li>
+						<!-- <li <?php echo cssStyle($tesst3, 'msg.php')?>"><a href=<?php echo $links."/msg.php";?>>Add User Rule</a></li>
+						<li <?php echo cssStyle($tesst3, 'msg.php')?>"><a href=<?php echo $links."/msg.php";?>>Rule List</a></li> -->
 					</ul>
 				</li>
 
@@ -282,6 +282,7 @@ function cssStyle($lastLinkName,$currenFileName) {
 
 
 
-				<li margin-bottom: 200px;"><a href="logout.php"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a></li>
+				<!-- <li margin-bottom: 200px;"><a href="logout.php"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a></li> -->
+				<li margin-bottom: 200px;"><a href='<?php echo count($value) > 3? "../logout.php": "./logout.php"?>'><i class="fas fa-sign-out-alt mr-2"></i>Logout</a></li>
 		</ul>
 </nav>

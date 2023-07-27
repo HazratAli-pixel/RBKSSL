@@ -46,11 +46,11 @@
 					</span> -->
 				</a>
 				<ul>
-					<li><a href="change-password.php"><i class="fas fa-user me-2"></i> Profile</a></li>
-					<li><a href="change-password.php"><i class="fas fa-user-edit me-2"></i> Edit Profile</a></li>
-					<li><a href="change-password.php"><i class="fas fa-history me-2"></i>Sells History</a></li>
-					<li><a href="change-password.php"><i class="fas fa-users-cog me-2"></i>Change Password</a></li>
-					<li><a href="logout.php"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+					<li><a href='<?php echo count($value) > 3? "../change-password.php": "/change-password.php"?>'><i class="fas fa-user me-2"></i> Profile</a></li>
+					<li><a href='<?php echo count($value) > 3? "../change-password.php": "/change-password.php"?>'><i class="fas fa-user-edit me-2"></i> Edit Profile</a></li>
+					<li><a href='<?php echo count($value) > 3? "../change-password.php": "/change-password.php"?>'><i class="fas fa-history me-2"></i>Sells History</a></li>
+					<li><a href='<?php echo count($value) > 3? "../change-password.php": "/change-password.php"?>'><i class="fas fa-users-cog me-2"></i>Change Password</a></li>
+					<li><a href='<?php echo count($value) > 3? "../logout.php": "/logout.php"?>'><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
 				</ul>
 			</li>
 		</ul>
