@@ -225,10 +225,11 @@ a:hover {
 .text-yellow {
   color: #ffff00;
 }
-.title .line {
+/* .title .line { */
+.line {
   display: inline-block;
   padding-bottom: 10px;
-  border-bottom: 3px solid #222;
+  border-bottom: 3px solid #be2626;
 }
 /****************************
 *       Margins         *

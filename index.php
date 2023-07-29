@@ -1,25 +1,25 @@
 <?php
-session_start();
-error_reporting(0);
-include('includes/config.php');
-	if(strlen($_SESSION['alogin'])!=0){
-		if(strlen($_SESSION['current_link'])==0){
+	session_start();
+	error_reporting(0);
+	include('includes/config.php');
+	if(strlen($_SESSION['alogin'])!=0 ){
 			header('location:dashboard.php');
-		}
-		else{
-			header("location:".$_SESSION['current_link']);
-		}
 	}
+	// if(strlen($_SESSION['alogin'])!=0 && strlen($_SESSION['current_link'])==0){
+	// 		header('location:dashboard.php');
+	// }
+	// elseif(strlen($_SESSION['alogin'])!=0 && strlen($_SESSION['current_link'])!=0){
+	// 		header("location:".$_SESSION['current_link']);
+	// }
 	else {
 			if(isset($_POST['login']))
 			{
-				$userid = $email=$_POST['username'];
+				$userid = $phone1=$_POST['username'];
 				$password=md5($_POST['password']);
 				$position = $_POST['position'];
-				$sql ="SELECT UserName,Password,UserId FROM admin WHERE (UserName=:email and Password=:password and Position=:position) || 
-				(UserId=:userid and Password=:password and Position=:position)";
+				$sql ="SELECT users.ID, users.userType,users.SrPermission as SRP, users.businessType, users.position, users.UserId, users.Name,users.Phone1, users.Email1, users.Photo as userPhoto, users.shopId, users.Status as userStatus, branchs.id as branchId,branchs.branchName, branchs.phone as branchPhone, branchs.status as branchsStatus, shops.name as shopName, shops.address, shops.owner,shops.photo as shopPhoto, shops.startTime as shopStartTime, shops.endTime as shopEndTime, shops.status as shopStatus FROM users JOIN branchs ON branchs.id = users.branchId JOIN shops ON shops.id = users.shopId WHERE (users.Phone1=:phone1 and users.password=:password and users.position=:position) || (users.UserId=:userid and users.password=:password and users.position=:position)";
 				$query= $dbh -> prepare($sql);
-				$query-> bindParam(':email', $email, PDO::PARAM_STR);
+				$query-> bindParam(':phone1', $phone1, PDO::PARAM_STR);
 				$query-> bindParam(':password', $password, PDO::PARAM_STR);
 				$query-> bindParam(':position', $position, PDO::PARAM_STR);
 				$query-> bindParam(':userid', $userid, PDO::PARAM_STR);
@@ -30,23 +30,19 @@ include('includes/config.php');
 				if($query->rowCount() > 0)
 				{
 					$_SESSION[$position]=$position;
+					$_SESSION['user']= array('Name'=>$results->Name,'userId'=>$results->UserId, 'position'=>$results->position,'shopName'=>$results->shopName, 'userPhone'=>$results->Phone1,'userType'=>$results->userType, 'businessType'=>$results->businessType, 'shopId'=>$results->shopId, 'branchName'=>$results->branchName,'branchId'=>$results->branchId, 'shopOwner'=>$results->owner, 'contractStart'=>$results->startTime, 'contractEnd'=>$results->shopEndTime, 'userPhoto'=>$results->userPhoto, 'userStatus'=>$results->userStatus, 'shopStatus'=>$results->shopStatus, 'SRP'=>$results->SRP);
 					$_SESSION['alogin']=$results->UserId;
-					setcookie("Username",$email,time()+60*60*24,'/');
-					$_SESSION['positon'] = $position;
-					if(strlen($_SESSION['current_link'])==0){
-						header('location:dashboard.php');
-					}
-					else{
-						header("location:".$_SESSION['current_link']);
-					}
+					$_SESSION['position'] = $position;
+
+					header('location:dashboard.php');
 				}
 				else {
 					echo "<script> alert ('Invalid Details')</script>";
 				}
 			}
-			else if(isset($_POST['search'])){
+			if(isset($_POST['search'])){
 				$userid =$_POST['userid'];
-				$sql ="SELECT admin.UserName,admin.Position,admin.ActiveStatus as sts, user_info.Phone1,user_info.Email1 FROM admin left JOIN user_info ON user_info.UserId=admin.UserId WHERE  admin.UserId=:userid";
+				$sql ="SELECT admin.UserName,admin.Position,admin.ActiveStatus as sts, user_info.Phone1,user_info.phone11 FROM admin left JOIN user_info ON user_info.UserId=admin.UserId WHERE admin.UserId=:userid";
 				$query= $dbh -> prepare($sql);
 				$query-> bindParam(':userid', $userid, PDO::PARAM_STR);
 				$query-> execute();
@@ -103,7 +99,7 @@ include('includes/config.php');
 							<h4 class="text-center text-bold  text-black ">Digital Shop Limited</h4>
 						</div>	
 						<div class="card-body">
-							<form method="post">
+							<form method="POST">
 								<div class="form-floating mb-3">
 									<input type="text" name="username" class="form-control" id="floatingInput" required>
 									<label for="floatingInput" >User ID / User Email</label>
@@ -119,7 +115,7 @@ include('includes/config.php');
 									<select name="position" class="form-control mb" required>
 										<option selected disabled>Your Positon......</option>
 										<option>Admin</option>
-										<option>Seler</option>
+										<option>Sales</option>
 										<option>Cashier</option>
 									</select>
 								<div class="d-flex justify-content-between align-items-center" >

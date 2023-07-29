@@ -1,19 +1,14 @@
 <?php
-
-	use Dflydev\DotAccessData\Data;
-
-use function PHPUnit\Framework\isEmpty;
-use function Symfony\Component\VarDumper\Dumper\esc;
-
 	session_start();
 	error_reporting(0);
 	include('includes/config.php');
 	if(isset($_GET['userid']))
 		{
-        $username = $userid=($_GET['userid']);
-		$sql ="SELECT UserName, UserId FROM admin WHERE UserName=:username or UserId=:userid";
+        $phone1 = ($_GET['userid']);
+        $userid = ($_GET['userid']);
+		$sql ="SELECT * FROM users WHERE (Phone1=:phone1 or UserId=:userid)";
 		$query= $dbh -> prepare($sql);
-		$query-> bindParam(':username', $username, PDO::PARAM_STR);
+		$query-> bindParam(':phone1', $phone1, PDO::PARAM_STR);
 		$query-> bindParam(':userid', $userid, PDO::PARAM_STR);
 		$query-> execute();
 		$results = $query -> fetchAll(PDO::FETCH_OBJ);
