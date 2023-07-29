@@ -14,9 +14,11 @@
 		if(isset($_REQUEST['del']))
 		{
 			$did=intval($_GET['del']);
-			$sql = "delete from reference WHERE  ID=:did";
+			$sql = "delete from reference WHERE ID=:did AND shopId=:shopId AND branchId=:branchId";
 			$query = $dbh->prepare($sql);
-			$query-> bindParam(':did',$did, PDO::PARAM_STR);
+			$query->bindParam(':did',$did, PDO::PARAM_STR);
+			$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+			$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 			$query -> execute();
 			$msg="Record deleted Successfully";
 			header("refresh:3;ref_list.php");
@@ -30,12 +32,14 @@
 			$status=$_POST['radio_value'];
 
 			$sql="INSERT INTO reference (Name, Phone,Address,Status) 
-			VALUES(:c_name,:c_phone,:c_address,:radio_value)";
+			VALUES(:c_name,:c_phone,:c_address,:radio_value,:shopId,:branchId)";
 			$query = $dbh->prepare($sql);
 			$query->bindParam(':c_name',$c_name,PDO::PARAM_STR);
 			$query->bindParam(':c_phone',$c_phone,PDO::PARAM_STR);
 			$query->bindParam(':c_address',$c_address,PDO::PARAM_STR);
 			$query->bindParam(':radio_value',$status,PDO::PARAM_STR);
+			$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+			$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 
 			$query->execute();
 			$lastInsertId = $dbh->lastInsertId();
@@ -44,20 +48,24 @@
 		if(isset($_GET['close'])){    
 			$cmpid=$_GET['close'];
 			$sts=0;
-			$sql ="update reference set Status=:status where ID=:cusId";
+			$sql ="update reference set Status=:status where ID=:cusId AND shopId=:shopId AND branchId=:branchId";
 			$query = $dbh->prepare($sql);
 			$query-> bindParam(':status',$sts, PDO::PARAM_STR);
 			$query-> bindParam(':cusId',$cmpid, PDO::PARAM_STR);
+			$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+			$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 			$query -> execute();
 			echo "<script>window.location.href='ref_list.php'</script>";
 			}
 		if(isset($_GET['active'])){    
 			$cmpid=$_GET['active'];
 			$sts=1;
-			$sql ="update reference set Status=:status where ID=:cusId";
+			$sql ="update reference set Status=:status where ID=:cusId AND shopId=:shopId AND branchId=:branchId";
 			$query = $dbh->prepare($sql);
 			$query-> bindParam(':status',$sts, PDO::PARAM_STR);
 			$query-> bindParam(':cusId',$cmpid, PDO::PARAM_STR);
+			$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+			$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 			$query -> execute();
 			echo "<script>window.location.href='ref_list.php'</script>";
 			}

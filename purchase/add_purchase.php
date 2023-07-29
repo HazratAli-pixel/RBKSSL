@@ -25,8 +25,8 @@
 			$due_amount = $_POST['due_amount'];
 			$userid = $_SESSION['alogin'];
 			
-			$sql2="INSERT INTO companyinvoice (InvoiceId, CompanyId, Subtotal,Vat,Discount,G_total,Paid,DueAmount,Date,UserId) 
-			VALUES(:invoice_no,:M_ID,:sub_total,:vat,:discount,:grand_total_price,:paid_amount,:due_amount,:date,:userid)";
+			$sql2="INSERT INTO companyinvoice (InvoiceId, CompanyId, Subtotal,Vat,Discount,G_total,Paid,DueAmount,Date,UserId,shopId,branchId) 
+			VALUES(:invoice_no,:M_ID,:sub_total,:vat,:discount,:grand_total_price,:paid_amount,:due_amount,:date,:userid,:shopId,:branchId)";
 			$query = $dbh->prepare($sql2);
 			$query->bindParam(':invoice_no',$invoice_no,PDO::PARAM_STR);
 			$query->bindParam(':M_ID',$M_ID,PDO::PARAM_STR);
@@ -38,6 +38,8 @@
 			$query->bindParam(':due_amount',$due_amount,PDO::PARAM_STR);
 			$query->bindParam(':date',$date,PDO::PARAM_STR);
 			$query->bindParam(':userid',$userid,PDO::PARAM_STR);
+			$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+			$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 			$query->execute();
 			$lastInsertId = $dbh->lastInsertId();
 
@@ -52,7 +54,7 @@
 			$v= $_POST['batch_id'][0];
 			$v= "sdafsadfsdaf";
 
-			foreach($batch_id as $key => $value){
+			foreach($batch_id as $key => $value){  // need to add shop and branch id
 				$sql = "INSERT INTO purchaseslist (InvoiceId,ProductId,BatchId,Qty,Mprice,MRP) VALUES 
 				('".$invoice_no."','".$product_id[$key]."','".$batch_id[$key]."','".$product_quantity[$key]."','".$product_rate[$key]."','".$mrp[$key]."')";
 				$query = mysqli_query($con,$sql);

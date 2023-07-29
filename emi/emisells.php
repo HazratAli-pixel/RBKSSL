@@ -30,7 +30,7 @@ include('../includes/config.php');
 			$status=0;
 
 			$sql="INSERT INTO loan_table (SellerID, InvoiceID, CustomerID, Ref1_id, Ref2_id, loanAmount, EMItype, Day, Duration, InterestRate, Interest, EMI, totalEMI, Status) 
-			VALUES(:userid,:inoviceId,:customerID,:ref_1,:ref_2,:loanamount,:type,:day,:month,:interestrate,:total_interest,:usualEMI,:total_emi,:status)";
+			VALUES(:userid,:inoviceId,:customerID,:ref_1,:ref_2,:loanamount,:type,:day,:month,:interestrate,:total_interest,:usualEMI,:total_emi,:status, ,:shopId,:branchId)";
 			$query = $dbh->prepare($sql);
 			$query->bindParam(':userid',$userid,PDO::PARAM_STR);
 			$query->bindParam(':inoviceId',$inoviceId,PDO::PARAM_STR);
@@ -46,6 +46,8 @@ include('../includes/config.php');
 			$query->bindParam(':usualEMI',$usualEMI,PDO::PARAM_STR);
 			$query->bindParam(':total_emi',$total_emi,PDO::PARAM_STR);
 			$query->bindParam(':status',$status,PDO::PARAM_STR);
+			$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+			$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 			$query->execute();
 			$lastInsertId = $dbh->lastInsertId();
 		if($lastInsertId)
@@ -80,7 +82,7 @@ include('../includes/config.php');
 
 
 				$sql2="INSERT INTO emi_table(loanID, EMI_SL, Date, Day, Balance, EMI,R_balance) 
-				VALUES(:loanID,:EMI_SL,:Date,:Day,:Balance,:EMI,:R_balance)";
+				VALUES(:loanID,:EMI_SL,:Date,:Day,:Balance,:EMI,:R_balance,:shopId,:branchId)";
 
 				for ($i = $for_start; $i <= $for_end; $i = strtotime("+1 $type", $i)) {
 					$datess = date('Y-m-d', $i);
@@ -92,7 +94,9 @@ include('../includes/config.php');
 						':Day'	=>	$dates,
 						':Balance'	=>	$temp,
 						':EMI'	=>	$emi,
-						':R_balance'	=>	$temp2
+						':R_balance'	=>	$temp2,
+						':shopId'	=>  $_SESSION['user']['shopId'],
+						':branchId'	=>  $_SESSION['user']['branchId'],
 						); 
 						$statement = $dbh->prepare($sql2);
 						$statement->execute($data);

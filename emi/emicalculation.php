@@ -22,7 +22,7 @@ include('../includes/config.php');
 			$status=$_POST['radio_value'];
 
 			$sql="INSERT INTO customertable (Name,Fname,Mname,NID,Phone,Address,State,Status) 
-			VALUES(:name,:father,:mother,:nid,:phone,:address,:state,:status)";
+			VALUES(:name,:father,:mother,:nid,:phone,:address,:state,:status,:shopId,:branchId)";
 			$query = $dbh->prepare($sql);
 			$query->bindParam(':name',$name,PDO::PARAM_STR);
 			$query->bindParam(':father',$father,PDO::PARAM_STR);
@@ -32,6 +32,8 @@ include('../includes/config.php');
 			$query->bindParam(':address',$address,PDO::PARAM_STR);
 			$query->bindParam(':state',$state,PDO::PARAM_STR);
 			$query->bindParam(':status',$status,PDO::PARAM_STR);
+			$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+			$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 			$query->execute();
 			$lastInsertId = $dbh->lastInsertId();
 		if($lastInsertId)

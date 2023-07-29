@@ -21,7 +21,7 @@ include('../includes/config.php');
 			$status=1;
 
 			$sql="INSERT INTO reference (Name,Father,Mother,Phone,NID,Address,Status) 
-			VALUES(:name,:father,:mother,:phone,:nid,:address,:status)";
+			VALUES(:name,:father,:mother,:phone,:nid,:address,:status,:shopId,:branchId)";
 			$query = $dbh->prepare($sql);
 			$query->bindParam(':name',$name,PDO::PARAM_STR);
 			$query->bindParam(':father',$father,PDO::PARAM_STR);
@@ -30,6 +30,8 @@ include('../includes/config.php');
 			$query->bindParam(':nid',$nid,PDO::PARAM_STR);
 			$query->bindParam(':address',$address,PDO::PARAM_STR);
 			$query->bindParam(':status',$status,PDO::PARAM_STR);
+			$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+			$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 			$query->execute();
 			$lastInsertId = $dbh->lastInsertId();
 		if($lastInsertId)

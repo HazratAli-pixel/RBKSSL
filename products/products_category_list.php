@@ -25,10 +25,12 @@ else{
 			$status=$_POST['radio_value'];
 
 			$sql="INSERT INTO medicine_category (MedicineCategory, Status) 
-			VALUES(:type,:radio_value)";
+			VALUES(:type,:radio_value, ,:shopId,:branchId)";
 			$query = $dbh->prepare($sql);
 			$query->bindParam(':type',$type,PDO::PARAM_STR);
 			$query->bindParam(':radio_value',$status,PDO::PARAM_STR);
+			$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+			$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 
 			$query->execute();
 			$lastInsertId = $dbh->lastInsertId();
@@ -42,11 +44,13 @@ else{
 			$status=$_POST['radio_value'];
 			$id=$_POST['id'];
 
-			$sql="UPDATE medicine_category SET MedicineCategory=:category, Status=:radio_value WHERE ID=:id";
+			$sql="UPDATE medicine_category SET MedicineCategory=:category, Status=:radio_value WHERE ID=:id AND shopId=:shopId AND branchId=:branchId";
 			$query = $dbh->prepare($sql);
 			$query->bindParam(':category',$category,PDO::PARAM_STR);
 			$query->bindParam(':radio_value',$status,PDO::PARAM_STR);
 			$query->bindParam(':id',$id,PDO::PARAM_STR);
+			$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+			$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 			$result = $query->execute();	
 		}
 }

@@ -16,13 +16,15 @@ include('../includes/config.php');
 			$c_address=$_POST['c_address'];
 			$status=$_POST['radio_value'];
 
-			$sql="INSERT INTO customertable (Name, Phone,Address,Status) 
-			VALUES(:c_name,:c_phone,:c_address,:radio_value)";
+			$sql="INSERT INTO customertable (Name, Phone,Address,Status,shopId,branchId) 
+			VALUES(:c_name,:c_phone,:c_address,:radio_value,:shopId,:branchId)";
 			$query = $dbh->prepare($sql);
 			$query->bindParam(':c_name',$c_name,PDO::PARAM_STR);
 			$query->bindParam(':c_phone',$c_phone,PDO::PARAM_STR);
 			$query->bindParam(':c_address',$c_address,PDO::PARAM_STR);
 			$query->bindParam(':radio_value',$status,PDO::PARAM_STR);
+			$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+			$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 
 			$query->execute();
 			$lastInsertId = $dbh->lastInsertId();

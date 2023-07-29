@@ -26,7 +26,7 @@ else{
 			
 			$status=1;
 
-			$sql = "UPDATE emi_table SET PaidAmount=:paidAmount, DueAmount=:newDue, CollectorID=:userid,CollectedDate=:date, Status=:status WHERE ID=:emiID";
+			$sql = "UPDATE emi_table SET PaidAmount=:paidAmount, DueAmount=:newDue, CollectorID=:userid,CollectedDate=:date, Status=:status WHERE ID=:emiID AND shopId=:shopId AND branchId=:branchId";
 			$query = $dbh -> prepare($sql);
 			$query->bindParam(':paidAmount',$paidAmount,PDO::PARAM_STR);
 			$query->bindParam(':newDue',$newDue,PDO::PARAM_STR);
@@ -34,18 +34,22 @@ else{
 			$query->bindParam(':date',$date,PDO::PARAM_STR);
 			$query->bindParam(':status',$status,PDO::PARAM_STR);
 			$query->bindParam(':emiID',$emiID,PDO::PARAM_STR);
+			$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+			$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 			$query->execute();
 			
 			$cusName=$_POST['cusName2'];
 
 			$sql2="INSERT INTO customerledger (AdminID,CustomerID,PreDue,Credit) 
-			VALUES(:userid,:cusId,:preDue,:paidAmount)";
+			VALUES(:userid,:cusId,:preDue,:paidAmount,:shopId,:branchId)";
 
 			$query2 = $dbh->prepare($sql2);
 			$query2->bindParam(':userid',$userid,PDO::PARAM_STR);
 			$query2->bindParam(':cusId',$cusId,PDO::PARAM_STR);
 			$query2->bindParam(':preDue',$preDue,PDO::PARAM_STR);
 			$query2->bindParam(':paidAmount',$paidAmount,PDO::PARAM_STR);
+			$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+			$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 			$query2->execute();
 		}
 

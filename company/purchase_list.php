@@ -19,9 +19,11 @@ else{
 	if(isset($_REQUEST['del']))
 	{
 		$did=intval($_GET['del']);
-		$sql = "delete from medicine_list WHERE  item_code=:did";
+		$sql = "delete from medicine_list WHERE item_code=:did AND shopId=:shopId AND branchId=:branchId";
 		$query = $dbh->prepare($sql);
 		$query-> bindParam(':did',$did, PDO::PARAM_STR);
+		$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+		$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 		$query -> execute();
 		$msg="Record deleted Successfully";
         header("refresh:3;medicine_list.php");
@@ -35,12 +37,14 @@ else{
 			$status=$_POST['radio_value'];
 			
 			$sql="INSERT INTO customertable (Name, Phone,Address,Status) 
-			VALUES(:c_name,:c_phone,:c_address,:radio_value)";
+			VALUES(:c_name,:c_phone,:c_address,:radio_value,:shopId,:branchId)";
 			$query = $dbh->prepare($sql);
 			$query->bindParam(':c_name',$c_name,PDO::PARAM_STR);
 			$query->bindParam(':c_phone',$c_phone,PDO::PARAM_STR);
 			$query->bindParam(':c_address',$c_address,PDO::PARAM_STR);
 			$query->bindParam(':radio_value',$status,PDO::PARAM_STR);
+			$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+			$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 			$query->execute();
 			$lastInsertId = $dbh->lastInsertId();
 			
@@ -58,7 +62,7 @@ else{
 			$cusPhone2=$_POST['cusPhone2'];
 			$userid = $_SESSION['alogin'];
 			$sql="INSERT INTO customerledger (AdminID,CustomerID,PreDue,Credit,Comments) 
-			VALUES(:userid,:cusId,:preDue,:paidAmount,:comments)";
+			VALUES(:userid,:cusId,:preDue,:paidAmount,:comments,:shopId,:branchId)";
 
 			$query = $dbh->prepare($sql);
 			$query->bindParam(':userid',$userid,PDO::PARAM_STR);
@@ -66,6 +70,8 @@ else{
 			$query->bindParam(':preDue',$preDue,PDO::PARAM_STR);
 			$query->bindParam(':paidAmount',$paidAmount,PDO::PARAM_STR);
 			$query->bindParam(':comments',$comments,PDO::PARAM_STR);
+			$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+			$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 			$query->execute();
 			$lastInsertId = $dbh->lastInsertId();
 			date_default_timezone_set('Asia/Dhaka');

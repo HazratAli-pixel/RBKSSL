@@ -30,7 +30,7 @@ if(strlen($_COOKIE['Username'])==0 || strlen($_SESSION['alogin'])==0)
 			//$status=1;
 		
 			$sql="INSERT INTO medicine_list (medicine_name, unit, box_size,strength, medicine_details, category, menufacturer, item_code, status) 
-			VALUES(:medicinename,:unit,:boxsize,:medicinedetails,:category,:companyID,:barcode,:radio_value)";
+			VALUES(:medicinename,:unit,:boxsize,:medicinedetails,:category,:companyID,:barcode,:radio_value,:shopId,:branchId)";
 			$query = $dbh->prepare($sql);
 			$query->bindParam(':medicinename',$medicinename,PDO::PARAM_STR);
 			$query->bindParam(':unit',$unit,PDO::PARAM_STR);
@@ -42,6 +42,8 @@ if(strlen($_COOKIE['Username'])==0 || strlen($_SESSION['alogin'])==0)
 			$query->bindParam(':companyID',$companyID,PDO::PARAM_STR);
 			$query->bindParam(':barcode',$barcode,PDO::PARAM_STR);
 			$query->bindParam(':radio_value',$status,PDO::PARAM_STR);
+			$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+			$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 			$query->execute();
 			$lastInsertId = $dbh->lastInsertId();
 		if($lastInsertId)
