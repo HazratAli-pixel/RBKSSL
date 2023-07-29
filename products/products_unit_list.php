@@ -2,7 +2,7 @@
 session_start();
 error_reporting(0);
 include('../includes/config.php');
-if(strlen($_COOKIE['Username'])==0 || strlen($_SESSION['alogin'])==0)
+if(strlen($_SESSION['alogin'])==0)
 	{
 	include_once('../includes/address.php');	
 	header('location:index.php');
@@ -22,7 +22,7 @@ else{
 	  		{
 			$type=$_POST['type'];
 			$status=$_POST['radio_value'];
-			$sql="INSERT INTO medicine_unit (MedicineUnit, Status) 
+			$sql="INSERT INTO medicine_unit (MedicineUnit, Status,shopId,branchId) 
 			VALUES(:type,:radio_value,:shopId,:branchId)";
 			$query = $dbh->prepare($sql);
 			$query->bindParam(':type',$type,PDO::PARAM_STR);

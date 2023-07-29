@@ -31,7 +31,7 @@
 			$c_address=$_POST['c_address'];
 			$status=$_POST['radio_value'];
 
-			$sql="INSERT INTO reference (Name, Phone,Address,Status) 
+			$sql="INSERT INTO reference (Name, Phone,Address,Status,shopId,branchId) 
 			VALUES(:c_name,:c_phone,:c_address,:radio_value,:shopId,:branchId)";
 			$query = $dbh->prepare($sql);
 			$query->bindParam(':c_name',$c_name,PDO::PARAM_STR);

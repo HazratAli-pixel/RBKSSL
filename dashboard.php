@@ -85,8 +85,7 @@ else{
 												<h1 class=""><?php echo $query ?></h1>
 												<p class="ms-2">Person</p>
 											</div>
-											
-											<a href="<?php echo $links;?><?php echo $links;?>/customer/customer_list.php" class="btn btn-primary">Full Detail</a>
+											<a href="<?php echo $BaseUrl;?>/customer/customer_list.php" class="btn btn-primary">Full Detail</a>
 										</div>
 									</div>
 								</div>
@@ -107,9 +106,8 @@ else{
 											<div class="d-flex justify-content-center align-items-center">
 												<h1 class=""><?php echo $query ?></h1>
 												<p class="ms-2">items</p>
-											</div>
-											
-											<a href="<?php echo $links;?>/products/products_list.php" class="btn btn-primary">Full Detail</a>
+											</div>											
+											<a href="<?php echo $BaseUrl;?>/products/products_list.php" class="btn btn-primary">Full Detail</a>
 										</div>
 									</div>
 								</div>
@@ -132,7 +130,7 @@ else{
 												<p class="ms-2">items</p>
 											</div>
 											
-											<a href="<?php echo $links;?>/emi/todaysemi.php" class="btn btn-primary">Full Detail</a>
+											<a href="<?php echo $BaseUrl;?>/emi/todaysemi.php" class="btn btn-primary">Full Detail</a>
 										</div>
 									</div>
 								</div>
@@ -160,178 +158,12 @@ else{
 												<p class="ms-2">items</p>
 											</div>
 											
-											<a href="<?php echo $links;?>/emi/emiduelist.php" class="btn btn-primary">Full Detail</a>
+											<a href="<?php echo $BaseUrl;?>/emi/emiduelist.php" class="btn btn-primary">Full Detail</a>
 										</div>
 									</div>
 								</div>
 							</div>
-							<div class="row mt-4">
-								<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 mb-2">
-									<?php
-									$sql = "SELECT customertable.ID FROM customertable INNER JOIN customerledger ON customertable.ID =customerledger.CustomerID where customertable.Status= 1 AND customerledger.shopId=:shopId	
-									GROUP BY customerledger.CustomerID ORDER BY customertable.Name";
-									$query = $dbh -> prepare($sql);
-									$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
-									$query->execute();
-									$results=$query->fetchAll(PDO::FETCH_OBJ);
-									if($query->rowCount() > 0)
-									{
-									$dueamount=0;
-									$duePerson =0;
-									foreach($results as $result)
-									{	
-										$sql2 = "SELECT NewDue from customerledger WHERE CustomerID=:id AND shopId=:shopId ORDER BY ID DESC limit 1"; 
-										$query2 = $dbh -> prepare($sql2);
-										$query2->bindParam(':id',$result->ID,PDO::PARAM_STR);
-										$query2->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
-										$query2->execute();
-										$result2=$query2->fetch(PDO::FETCH_OBJ);
-										if($result2->NewDue>0){
-											$duePerson++;
-										}
-										$dueamount += $result2->NewDue;
-										
-									}}	
-									?>
-												
-									<div class="card text-center">
-										<div class="card-header bg-style2">
-										<h5 class="fw-bold">Total Due Customer</h5>
-										</div>
-										<div class="card-body ">
-											<div class="d-flex justify-content-center align-items-center">
-												<h1 class=""><?php echo $duePerson; ?></h1>
-												<p class="ms-2">Person</p>
-											</div>
-											
-											<a href="<?php echo $links;?>/customer/customer_ledger.php" class="btn btn-primary">Full Detail</a>
-										</div>
-									</div>
-								</div>
-								<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 mb-2">
-									<div class="card text-center">
-										<div class="card-header bg-style2">
-											<h5 class="fw-bold">Total Due Amount</h5>
-										</div>
-										<div class="card-body">
-											<div class="d-flex justify-content-center align-items-center">
-												<h1 class=""><?php echo $dueamount ?></h1>
-												<p class="ms-2">Taka</p>
-											</div>
-											
-											<a href="<?php echo $links;?>/customer/customer_ledger.php" class="btn btn-primary">Full Detail</a>
-										</div>
-									</div>
-								</div>
-								<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 mb-2">
-								<?php 
-									date_default_timezone_set('Asia/Dhaka');
-									$date = date('Y-m-d');
-									$sql ="SELECT SUM(PaidAmount) as PaidAmount FROM emi_table WHERE CollectedDate=:date AND Status=1 AND shopId=:shopId";
-									$query = $dbh -> prepare($sql);;
-									$query->bindParam(':date',$date,PDO::PARAM_STR);
-									$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
-									$query->execute();
-									$result=$query->fetch(PDO::FETCH_OBJ);
-								?>
-									<div class="card text-center">
-										<div class="card-header bg-style2">
-											<h5 class="fw-bold">Todays EMI Collection</h5>
-										</div>
-										<div class="card-body">
-											<div class="d-flex justify-content-center align-items-center">
-											<?php 
-											if($result->PaidAmount > 0){
-
-												?> 
-												<h1 class=""><?php echo round($result->PaidAmount,2); ?></h1>
-												<p class="ms-2">Taka</p>
-												<?php
-
-											}else{ ?> 
-											<h1 class="">No Colletion</h1>
-											<?php } ?>	
-											</div>
-											<a href="<?php echo $links;?>/emi/emisellslist.php" class="btn btn-primary">Full Detail</a>
-										</div>
-									</div>
-								</div>
-								<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 mb-2">
-									<?php 
-										date_default_timezone_set('Asia/Dhaka');
-										$endDate = $date = date('Y-m-d');
-										$date=date_create($date);
-										date_add($date,date_interval_create_from_date_string("-7 days"));
-										$startDate = date_format($date,"Y-m-d");
-										
-										$sql2 ="SELECT SUM(PaidAmount) as PaidAmount8 FROM emi_table WHERE Status=1 AND CollectedDate BETWEEN :startDate AND :endDate AND shopId=:shopId ";
-										$query8 = $dbh -> prepare($sql2);;
-										$query8->bindParam(':startDate',$startDate,PDO::PARAM_STR);
-										$query8->bindParam(':endDate',$endDate,PDO::PARAM_STR);
-										$query8->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
-										$query8->execute();
-										$result8=$query8->fetch(PDO::FETCH_OBJ);
-									?>
-									<div class="card text-center">
-										<div class="card-header bg-style2">
-											<h5 class="fw-bold">7 Days Collection</h5>
-										</div>
-										<div class="card-body">
-											<div class="d-flex justify-content-center align-items-center">
-												<?php 
-												if($result8->PaidAmount8 > 0){
-
-													?> 
-													<h1 class=""><?php echo round($result8->PaidAmount8,2); ?></h1>
-													<p class="ms-2">Taka</p>
-													<?php
-
-												}else{ ?> 
-												<h1 class="text-red">No Colletion</h1>
-												<?php } ?>	
-											</div>
-											
-											<a href="<?php echo $links;?>/emi/emisellslist.php" class="btn btn-primary">Full Detail</a>
-										</div>
-									</div>
-								</div>
-								<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 mb-2">
-									<?php 
-										date_default_timezone_set('Asia/Dhaka');
-										$startDate = $date = date('Y-m-d');
-										$date=date_create($date);
-										date_add($date,date_interval_create_from_date_string("-7 days"));
-										$endDate = date_format($date,"Y-m-d");
-										
-										$sql ="SELECT SUM(EMI) as DueAmount FROM emi_table WHERE Status=0 AND shopId=:shopId";
-										$query = $dbh -> prepare($sql);
-										$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
-										$query->execute();
-										$result=$query->fetch(PDO::FETCH_OBJ);
-									?>
-									<div class="card text-center">
-										<div class="card-header bg-style2">
-											<h5 class="fw-bold">Due EMI Amount</h5>
-										</div>
-										<div class="card-body">
-											<div class="d-flex justify-content-center align-items-center">
-											<?php 
-												if($result->DueAmount > 0){
-
-													?> 
-													<h1 class=""><?php echo round($result->DueAmount,2); ?></h1>
-													<p class="ms-2">Taka</p>
-													<?php
-
-												}else{ ?> 
-												<h1 class="text-red">No Colletion</h1>
-												<?php } ?>
-											</div>
-											<a href="<?php echo $links;?>/emi/emisellslist.php" class="btn btn-primary">Full Detail</a>
-										</div>
-									</div>
-								</div>
-							</div>
+							
 							
 							<div class="row mt-3">
 								<div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6 mb-2">
@@ -423,6 +255,174 @@ else{
 													</table>
 												</div>
 											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="row mt-4">
+								<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 mb-2">
+									<?php
+									$sql = "SELECT customertable.ID FROM customertable INNER JOIN customerledger ON customertable.ID =customerledger.CustomerID where customertable.Status= 1 AND customerledger.shopId=:shopId	
+									GROUP BY customerledger.CustomerID ORDER BY customertable.Name";
+									$query = $dbh -> prepare($sql);
+									$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+									$query->execute();
+									$results=$query->fetchAll(PDO::FETCH_OBJ);
+									if($query->rowCount() > 0)
+									{
+									$dueamount=0;
+									$duePerson =0;
+									foreach($results as $result)
+									{	
+										$sql2 = "SELECT NewDue from customerledger WHERE CustomerID=:id AND shopId=:shopId ORDER BY ID DESC limit 1"; 
+										$query2 = $dbh -> prepare($sql2);
+										$query2->bindParam(':id',$result->ID,PDO::PARAM_STR);
+										$query2->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+										$query2->execute();
+										$result2=$query2->fetch(PDO::FETCH_OBJ);
+										if($result2->NewDue>0){
+											$duePerson++;
+										}
+										$dueamount += $result2->NewDue;
+										
+									}}	
+									?>
+												
+									<div class="card text-center">
+										<div class="card-header bg-style2">
+										<h5 class="fw-bold">Total Due Customer</h5>
+										</div>
+										<div class="card-body ">
+											<div class="d-flex justify-content-center align-items-center">
+												<h1 class=""><?php echo $duePerson; ?></h1>
+												<p class="ms-2">Person</p>
+											</div>
+											
+											<a href="<?php echo $BaseUrl;?>/customer/customer_ledger.php" class="btn btn-primary">Full Detail</a>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 mb-2">
+									<div class="card text-center">
+										<div class="card-header bg-style2">
+											<h5 class="fw-bold">Total Due Amount</h5>
+										</div>
+										<div class="card-body">
+											<div class="d-flex justify-content-center align-items-center">
+												<h1 class=""><?php echo $dueamount ?></h1>
+												<p class="ms-2">Taka</p>
+											</div>
+											
+											<a href="<?php echo $BaseUrl;?>/customer/customer_ledger.php" class="btn btn-primary">Full Detail</a>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 mb-2">
+								<?php 
+									date_default_timezone_set('Asia/Dhaka');
+									$date = date('Y-m-d');
+									$sql ="SELECT SUM(PaidAmount) as PaidAmount FROM emi_table WHERE CollectedDate=:date AND Status=1 AND shopId=:shopId";
+									$query = $dbh -> prepare($sql);;
+									$query->bindParam(':date',$date,PDO::PARAM_STR);
+									$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+									$query->execute();
+									$result=$query->fetch(PDO::FETCH_OBJ);
+								?>
+									<div class="card text-center">
+										<div class="card-header bg-style2">
+											<h5 class="fw-bold">Todays EMI Collection</h5>
+										</div>
+										<div class="card-body">
+											<div class="d-flex justify-content-center align-items-center">
+											<?php 
+											if($result->PaidAmount > 0){
+
+												?> 
+												<h1 class=""><?php echo round($result->PaidAmount,2); ?></h1>
+												<p class="ms-2">Taka</p>
+												<?php
+
+											}else{ ?> 
+											<h1 class="">No Colletion</h1>
+											<?php } ?>	
+											</div>
+											<a href="<?php echo $BaseUrl;?>/emi/emisellslist.php" class="btn btn-primary">Full Detail</a>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 mb-2">
+									<?php 
+										date_default_timezone_set('Asia/Dhaka');
+										$endDate = $date = date('Y-m-d');
+										$date=date_create($date);
+										date_add($date,date_interval_create_from_date_string("-7 days"));
+										$startDate = date_format($date,"Y-m-d");
+										
+										$sql2 ="SELECT SUM(PaidAmount) as PaidAmount8 FROM emi_table WHERE Status=1 AND CollectedDate BETWEEN :startDate AND :endDate AND shopId=:shopId ";
+										$query8 = $dbh -> prepare($sql2);;
+										$query8->bindParam(':startDate',$startDate,PDO::PARAM_STR);
+										$query8->bindParam(':endDate',$endDate,PDO::PARAM_STR);
+										$query8->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+										$query8->execute();
+										$result8=$query8->fetch(PDO::FETCH_OBJ);
+									?>
+									<div class="card text-center">
+										<div class="card-header bg-style2">
+											<h5 class="fw-bold">7 Days Collection</h5>
+										</div>
+										<div class="card-body">
+											<div class="d-flex justify-content-center align-items-center">
+												<?php 
+												if($result8->PaidAmount8 > 0){
+
+													?> 
+													<h1 class=""><?php echo round($result8->PaidAmount8,2); ?></h1>
+													<p class="ms-2">Taka</p>
+													<?php
+
+												}else{ ?> 
+												<h1 class="text-red">No Colletion</h1>
+												<?php } ?>	
+											</div>
+											
+											<a href="<?php echo $BaseUrl;?>/emi/emisellslist.php" class="btn btn-primary">Full Detail</a>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 mb-2">
+									<?php 
+										date_default_timezone_set('Asia/Dhaka');
+										$startDate = $date = date('Y-m-d');
+										$date=date_create($date);
+										date_add($date,date_interval_create_from_date_string("-7 days"));
+										$endDate = date_format($date,"Y-m-d");
+										
+										$sql ="SELECT SUM(EMI) as DueAmount FROM emi_table WHERE Status=0 AND shopId=:shopId";
+										$query = $dbh -> prepare($sql);
+										$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+										$query->execute();
+										$result=$query->fetch(PDO::FETCH_OBJ);
+									?>
+									<div class="card text-center">
+										<div class="card-header bg-style2">
+											<h5 class="fw-bold">Due EMI Amount</h5>
+										</div>
+										<div class="card-body">
+											<div class="d-flex justify-content-center align-items-center">
+											<?php 
+												if($result->DueAmount > 0){
+
+													?> 
+													<h1 class=""><?php echo round($result->DueAmount,2); ?></h1>
+													<p class="ms-2">Taka</p>
+													<?php
+
+												}else{ ?> 
+												<h1 class="text-red">No Colletion</h1>
+												<?php } ?>
+											</div>
+											<a href="<?php echo $BaseUrl;?>/emi/emisellslist.php" class="btn btn-primary">Full Detail</a>
 										</div>
 									</div>
 								</div>

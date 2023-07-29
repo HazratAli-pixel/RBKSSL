@@ -21,7 +21,7 @@ include('../includes/config.php');
 			$zipcode=$_POST['zipcode'];
 			$status=$_POST['radio_value'];
 
-			$sql="INSERT INTO company (name, mobile, email1, address1, fax, city, zip,status) 
+			$sql="INSERT INTO company (name, mobile, email1, address1, fax, city, zip,status,shopId,branchId) 
 			VALUES(:cname,:mobile,:email,:address,:fax,:city,:zipcode,:radio_value,:shopId,:branchId)";
 			$query = $dbh->prepare($sql);
 			$query->bindParam(':cname',$cname,PDO::PARAM_STR);

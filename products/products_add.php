@@ -3,7 +3,7 @@ session_start();
 error_reporting(0);
 include('../includes/config.php');
 	
-if(strlen($_COOKIE['Username'])==0 || strlen($_SESSION['alogin'])==0)
+if(strlen($_SESSION['alogin'])==0)
 		{
 		include_once('../includes/address.php');		
 		header('location:index.php');
@@ -29,7 +29,7 @@ if(strlen($_COOKIE['Username'])==0 || strlen($_SESSION['alogin'])==0)
 			move_uploaded_file($file_tmp_name, $location);
 			//$status=1;
 		
-			$sql="INSERT INTO medicine_list (medicine_name, unit, box_size,strength, medicine_details, category, menufacturer, item_code, status) 
+			$sql="INSERT INTO medicine_list (medicine_name, unit, box_size,strength, medicine_details, category, menufacturer, item_code, status,shopId,branchId) 
 			VALUES(:medicinename,:unit,:boxsize,:medicinedetails,:category,:companyID,:barcode,:radio_value,:shopId,:branchId)";
 			$query = $dbh->prepare($sql);
 			$query->bindParam(':medicinename',$medicinename,PDO::PARAM_STR);

@@ -40,7 +40,7 @@ else{
 			
 			$cusName=$_POST['cusName2'];
 
-			$sql2="INSERT INTO customerledger (AdminID,CustomerID,PreDue,Credit) 
+			$sql2="INSERT INTO customerledger (AdminID,CustomerID,PreDue,Credit,shopId,branchId) 
 			VALUES(:userid,:cusId,:preDue,:paidAmount,:shopId,:branchId)";
 
 			$query2 = $dbh->prepare($sql2);

@@ -20,7 +20,7 @@ include('../includes/config.php');
 			$address=$_POST['address'];
 			$status=1;
 
-			$sql="INSERT INTO reference (Name,Father,Mother,Phone,NID,Address,Status) 
+			$sql="INSERT INTO reference (Name,Father,Mother,Phone,NID,Address,Status,shopId,branchId) 
 			VALUES(:name,:father,:mother,:phone,:nid,:address,:status,:shopId,:branchId)";
 			$query = $dbh->prepare($sql);
 			$query->bindParam(':name',$name,PDO::PARAM_STR);

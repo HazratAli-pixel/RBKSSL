@@ -29,7 +29,7 @@ include('../includes/config.php');
 			$emi=$_POST['monthlyEMI'];
 			$status=0;
 
-			$sql="INSERT INTO loan_table (SellerID, InvoiceID, CustomerID, Ref1_id, Ref2_id, loanAmount, EMItype, Day, Duration, InterestRate, Interest, EMI, totalEMI, Status) 
+			$sql="INSERT INTO loan_table (SellerID, InvoiceID, CustomerID, Ref1_id, Ref2_id, loanAmount, EMItype, Day, Duration, InterestRate, Interest, EMI, totalEMI, Status,shopId,branchId) 
 			VALUES(:userid,:inoviceId,:customerID,:ref_1,:ref_2,:loanamount,:type,:day,:month,:interestrate,:total_interest,:usualEMI,:total_emi,:status, ,:shopId,:branchId)";
 			$query = $dbh->prepare($sql);
 			$query->bindParam(':userid',$userid,PDO::PARAM_STR);
@@ -81,7 +81,7 @@ include('../includes/config.php');
 				$temp2=round($temp-$emi,2);
 
 
-				$sql2="INSERT INTO emi_table(loanID, EMI_SL, Date, Day, Balance, EMI,R_balance) 
+				$sql2="INSERT INTO emi_table(loanID, EMI_SL, Date, Day, Balance, EMI,R_balance,shopId,branchId) 
 				VALUES(:loanID,:EMI_SL,:Date,:Day,:Balance,:EMI,:R_balance,:shopId,:branchId)";
 
 				for ($i = $for_start; $i <= $for_end; $i = strtotime("+1 $type", $i)) {

@@ -30,13 +30,12 @@ else{
 	}
 	if(isset($_POST['submit']))
 	{
-			
 			$c_name=$_POST['c_name'];
 			$c_phone=$_POST['c_phone'];
 			$c_address=$_POST['c_address'];
 			$status=$_POST['radio_value'];
 			
-			$sql="INSERT INTO customertable (Name, Phone,Address,Status) 
+			$sql="INSERT INTO customertable (Name, Phone,Address,Status,shopId,branchId) 
 			VALUES(:c_name,:c_phone,:c_address,:radio_value,:shopId,:branchId)";
 			$query = $dbh->prepare($sql);
 			$query->bindParam(':c_name',$c_name,PDO::PARAM_STR);
@@ -61,7 +60,7 @@ else{
 			$switch=$_POST['switch'];
 			$cusPhone2=$_POST['cusPhone2'];
 			$userid = $_SESSION['alogin'];
-			$sql="INSERT INTO customerledger (AdminID,CustomerID,PreDue,Credit,Comments) 
+			$sql="INSERT INTO customerledger (AdminID,CustomerID,PreDue,Credit,Comments,shopId,branchId) 
 			VALUES(:userid,:cusId,:preDue,:paidAmount,:comments,:shopId,:branchId)";
 
 			$query = $dbh->prepare($sql);

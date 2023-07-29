@@ -21,7 +21,7 @@ include('../includes/config.php');
 			$state=$_POST['state'];
 			$status=$_POST['radio_value'];
 
-			$sql="INSERT INTO customertable (Name,Fname,Mname,NID,Phone,Address,State,Status) 
+			$sql="INSERT INTO customertable (Name,Fname,Mname,NID,Phone,Address,State,Status,shopId,branchId) 
 			VALUES(:name,:father,:mother,:nid,:phone,:address,:state,:status,:shopId,:branchId)";
 			$query = $dbh->prepare($sql);
 			$query->bindParam(':name',$name,PDO::PARAM_STR);

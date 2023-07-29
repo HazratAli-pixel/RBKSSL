@@ -2,7 +2,7 @@
 session_start();
 error_reporting(0);
 include('../includes/config.php');
-if(strlen($_COOKIE['Username'])==0 || strlen($_SESSION['alogin'])==0)
+if(strlen($_SESSION['alogin'])==0)
 	{
 	include_once('../includes/address.php');	
 	header('location:index.php');
@@ -24,8 +24,8 @@ else{
 			$type=$_POST['type'];
 			$status=$_POST['radio_value'];
 
-			$sql="INSERT INTO medicine_category (MedicineCategory, Status) 
-			VALUES(:type,:radio_value, ,:shopId,:branchId)";
+			$sql="INSERT INTO medicine_category (MedicineCategory, Status ,shopId,branchId) 
+			VALUES(:type,:radio_value, :shopId,:branchId)";
 			$query = $dbh->prepare($sql);
 			$query->bindParam(':type',$type,PDO::PARAM_STR);
 			$query->bindParam(':radio_value',$status,PDO::PARAM_STR);
@@ -145,7 +145,7 @@ else{
 											<td class="text-center">
 											 <p class="px-2 btn btn-info" type="button"  onClick="edit_unit(this.id)" id="category-<?php echo htmlentities($result->ID);?>"><i class="fas fa-edit" aria-hidden="true"></i></p> 
                                             <a  class="px-2" href="#" > <i class="fas fa-eye" aria-hidden="true"></i></a> 
-											<a  class="px-2" href="medicine_category_list.php?del=<?php echo htmlentities($result->ID);?>" onclick="return confirm('Do you really want to delete this record')"> <i style="color: red;" class="far fa-trash-alt" aria-hidden="true"></i></a>
+											<a  class="px-2" href="products_category_list.php?del=<?php echo htmlentities($result->ID);?>" onclick="return confirm('Do you really want to delete this record')"> <i style="color: red;" class="far fa-trash-alt" aria-hidden="true"></i></a>
 											</td>
 										</tr>
 										<?php $cnt=$cnt+1; }} ?>
