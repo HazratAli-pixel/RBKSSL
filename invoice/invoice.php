@@ -109,7 +109,7 @@ $GrandTotal='';
 if($query2->rowCount() > 0){
 	foreach($ProductList as $product){
 		$SL.="$cnt"."<br/>";
-		$ProductLists.="$product->medicine_name"."<br/>";
+		$ProductLists.=$product->medicine_name.' ('.$product->strength.')'."<br/>";
 		$Quentity.=$product->Qty."<br/>";
 		$UnitPrice.=$product->NetPrice."<br/>";
 		$TotalPrice.=$product->Price."<br/>";
@@ -261,7 +261,7 @@ $Signature='
 
 
 $FooterPart = '
-<span color="red" align="center">The Warranty is not applicable on any Physically damaged items</span> <br />
+<span color="red" align="center">Warranty is not applicable on any Physically damaged items</span> <br />
 <span color="green" align="center">Thank You for choosing Us</span> <br />
 <span color="green" align="center">Digital shop software - 01306440448 or <a href="www.hazratinfo.com">hazratinfo</a></span>';
 
@@ -280,7 +280,10 @@ $pdf->writeHTMLCell(0, 0, '0', '255', $FooterPart, '0', 0, 0, false, 'C', false)
 // reset pointer to the last page
 $pdf->lastPage();
 
+if($_GET['ptype']=='D'){
+	$pdf->Output($results->Name.'_'.$results->Phone.'_'.$results->ID.".pdf", 'D');
+}
+else $pdf->Output($results->Name.'_'.$results->Phone.'_'.$results->ID.".pdf", 'I');
 
 
-$pdf->Output($results->Name.'_'.$results->Phone.'_'.$results->ID.".pdf", 'I');
 

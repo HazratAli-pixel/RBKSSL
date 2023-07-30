@@ -423,7 +423,14 @@
 				$cnt++;
 			}
 		}
-		echo $Data;
+		echo $Data."
+		<tr>
+			<td class='text-center' colspan='6'>
+				<button onclick='InvoicePrint(event)' name='P' type='button' id='${invoId}' class='btn btn-warning'><i class='fas fa-print mr-2' style='margin-right: 10px;'></i> Print</button>
+				<button onclick='InvoicePrint(event)' name='D' type='button' id='${invoId}' class='btn btn-info'><i class='fas fa-download mr-2' style='margin-right: 10px;'></i> Download</button>
+			</td>
+		</tr>
+		";
 	}
 	
 	if(isset($_GET['medicineName'])){

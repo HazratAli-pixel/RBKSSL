@@ -317,7 +317,7 @@ else{
 						// $('#exampleModal3').modal('show');
 				}
 			};
-			xmlhttp.open('GET', `query2.php?invodetails=${clicked_id}`, true);
+			xmlhttp.open('GET', `../query2.php?invodetails=${clicked_id}`, true);
 			xmlhttp.send();
 		}
 		
