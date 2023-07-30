@@ -17,7 +17,7 @@
 				$userid = $phone1=$_POST['username'];
 				$password=md5($_POST['password']);
 				$position = $_POST['position'];
-				$sql ="SELECT users.ID, users.userType,users.SrPermission as SRP, users.businessType, users.position, users.UserId, users.Name,users.Phone1, users.Email1, users.Photo as userPhoto, users.shopId, users.Status as userStatus, branchs.id as branchId,branchs.branchName, branchs.phone as branchPhone, branchs.status as branchsStatus, shops.name as shopName, shops.address, shops.owner,shops.photo as shopPhoto, shops.startTime as shopStartTime, shops.endTime as shopEndTime, shops.status as shopStatus FROM users JOIN branchs ON branchs.id = users.branchId JOIN shops ON shops.id = users.shopId WHERE (users.Phone1=:phone1 and users.password=:password and users.position=:position) || (users.UserId=:userid and users.password=:password and users.position=:position)";
+				$sql ="SELECT users.ID, users.userType,users.SrPermission as SRP, users.businessType, users.position, users.UserId, users.Name,users.Phone1, users.Email1, users.Photo as userPhoto, users.shopId, users.Status as userStatus, branchs.id as branchId,branchs.branchName, branchs.phone as branchPhone, branchs.status as branchsStatus, branchs.phone as branchsPhone,  branchs.address as branchsAddress, shops.name as shopName, shops.address, shops.owner,shops.photo as shopPhoto, shops.startTime as shopStartTime, shops.endTime as shopEndTime, shops.status as shopStatus FROM users JOIN branchs ON branchs.id = users.branchId JOIN shops ON shops.id = users.shopId WHERE (users.Phone1=:phone1 and users.password=:password and users.position=:position) || (users.UserId=:userid and users.password=:password and users.position=:position)";
 				$query= $dbh -> prepare($sql);
 				$query-> bindParam(':phone1', $phone1, PDO::PARAM_STR);
 				$query-> bindParam(':password', $password, PDO::PARAM_STR);
@@ -30,7 +30,7 @@
 				if($query->rowCount() > 0)
 				{
 					$_SESSION[$position]=$position;
-					$_SESSION['user']= array('Name'=>$results->Name,'userId'=>$results->UserId, 'position'=>$results->position,'shopName'=>$results->shopName, 'userPhone'=>$results->Phone1,'userType'=>$results->userType, 'businessType'=>$results->businessType, 'shopId'=>$results->shopId, 'branchName'=>$results->branchName,'branchId'=>$results->branchId, 'shopOwner'=>$results->owner, 'contractStart'=>$results->startTime, 'contractEnd'=>$results->shopEndTime, 'userPhoto'=>$results->userPhoto, 'userStatus'=>$results->userStatus, 'shopStatus'=>$results->shopStatus, 'SRP'=>$results->SRP);
+					$_SESSION['user']= array('Name'=>$results->Name,'userId'=>$results->UserId, 'position'=>$results->position,'shopName'=>$results->shopName, 'userPhone'=>$results->Phone1,'userType'=>$results->userType, 'businessType'=>$results->businessType, 'shopId'=>$results->shopId, 'branchName'=>$results->branchName,'branchId'=>$results->branchId, 'shopOwner'=>$results->owner, 'contractStart'=>$results->startTime, 'contractEnd'=>$results->shopEndTime, 'userPhoto'=>$results->userPhoto, 'userStatus'=>$results->userStatus, 'shopStatus'=>$results->shopStatus, 'SRP'=>$results->SRP,'branchsPhone'=>$results->branchsPhone,'branchsAddress'=>$results->branchsAddress);
 					$_SESSION['alogin']=$results->UserId;
 					$_SESSION['position'] = $position;
 
