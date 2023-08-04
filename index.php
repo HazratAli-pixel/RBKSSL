@@ -30,7 +30,7 @@
 				if($query->rowCount() > 0)
 				{
 					$_SESSION[$position]=$position;
-					$_SESSION['user']= array('Name'=>$results->Name,'userId'=>$results->UserId, 'position'=>$results->position,'shopName'=>$results->shopName, 'userPhone'=>$results->Phone1,'userType'=>$results->userType, 'businessType'=>$results->businessType, 'shopId'=>$results->shopId, 'branchName'=>$results->branchName,'branchId'=>$results->branchId, 'shopOwner'=>$results->owner, 'contractStart'=>$results->startTime, 'contractEnd'=>$results->shopEndTime, 'userPhoto'=>$results->userPhoto, 'userStatus'=>$results->userStatus, 'shopStatus'=>$results->shopStatus, 'SRP'=>$results->SRP,'branchsPhone'=>$results->branchsPhone,'branchsAddress'=>$results->branchsAddress);
+					$_SESSION['user']= array('Name'=>$results->Name,'userId'=>$results->UserId, 'position'=>$results->position,'shopName'=>$results->shopName, 'userPhone'=>$results->Phone1,'userType'=>$results->userType, 'businessType'=>$results->businessType, 'shopId'=>$results->shopId, 'branchName'=>$results->branchName,'branchId'=>$results->branchId, 'shopOwner'=>$results->owner, 'contractStart'=>$results->startTime, 'contractEnd'=>$results->shopEndTime, 'userPhoto'=>$results->userPhoto, 'userStatus'=>$results->userStatus, 'shopStatus'=>$results->shopStatus, 'SRP'=>$results->SRP,'branchPhone'=>$results->branchsPhone,'branchAddress'=>$results->branchsAddress);
 					$_SESSION['alogin']=$results->UserId;
 					$_SESSION['position'] = $position;
 

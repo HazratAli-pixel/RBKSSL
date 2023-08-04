@@ -185,11 +185,11 @@ function OrderConfirm() {
 						text: 'Want to print this',
 						icon: 'success',
 						buttons: true,
-	
 						})
 					.then((willDelete) => {
 						if (willDelete) {
-							document.location = 'pos_invoice.php';
+							// document.location = `invoice.php?invoiceid=${this.responseText}`;
+							window.open(`invoice.php?invoiceid=${this.responseText}`, "_blank")
 						  } 
 						  else {
 							document.location = 'pos_invoice.php';
@@ -225,7 +225,8 @@ function OrderConfirm() {
 									})
 								.then((willDelete) => {
 									if (willDelete) {
-										document.location = 'pos_invoice.php';
+										// document.location = `invoice.php?invoiceid=${this.responseText}`;
+										window.open(`invoice.php?invoiceid=${this.responseText}`, "_blank")
 									}
 									else {
 										document.location = 'pos_invoice.php';

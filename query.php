@@ -2,8 +2,7 @@
 	session_start();
 	error_reporting(0);
 	include('includes/config.php');
-	if(isset($_GET['userid']))
-		{
+	if(isset($_GET['userid'])){
         $phone1 = ($_GET['userid']);
         $userid = ($_GET['userid']);
 		$sql ="SELECT * FROM users WHERE (Phone1=:phone1 or UserId=:userid)";
@@ -23,9 +22,8 @@
 	if(isset($_GET['ItemId'])){
 		$ItemId=$_GET['ItemId'];
 
-		$sql = "SELECT medicine_list.medicine_name, medicine_list.status, stocktable.BatchNumber, stocktable.InQty, stocktable.OutQty, stocktable.PurPrice, 
-		stocktable.SellPrice, stocktable.SellBoxPrice,stocktable.Date, stocktable.Status  FROM medicine_list Right JOIN stocktable ON
-		medicine_list.item_code = stocktable.Item_code WHERE stocktable.Item_code=:ItemId && stocktable.Status!=0 && stocktable.RestQty!=0";
+		$sql = "SELECT medicine_list.medicine_name, medicine_list.status, stocktable.BatchNumber, stocktable.InQty, stocktable.OutQty, stocktable.PurPrice, stocktable.SellPrice, stocktable.SellBoxPrice,stocktable.Date, stocktable.Status  FROM medicine_list Right JOIN stocktable ON
+		medicine_list.item_code = stocktable.Item_code WHERE stocktable.Item_code=:ItemId AND stocktable.Status!=0 AND stocktable.RestQty!=0";
 		$query= $dbh -> prepare($sql);
 		$query-> bindParam(':ItemId', $ItemId, PDO::PARAM_STR);
 		$query-> execute();
@@ -106,8 +104,7 @@
 	}
 	if(isset($_GET['showinfo'])){
 		$value = $_GET['showinfo'];
-		$sql = "SELECT medicine_list.medicine_name, medicine_list.status, stocktable.BatchNumber, stocktable.InQty, stocktable.OutQty, stocktable.PurPrice, 
-		stocktable.SellPrice, stocktable.SellBoxPrice,stocktable.Date, stocktable.RestQty  FROM medicine_list Right JOIN stocktable ON
+		$sql = "SELECT medicine_list.medicine_name, medicine_list.status, stocktable.BatchNumber, stocktable.InQty, stocktable.OutQty, stocktable.PurPrice, stocktable.SellPrice, stocktable.SellBoxPrice,stocktable.Date, stocktable.RestQty  FROM medicine_list Right JOIN stocktable ON
 		medicine_list.item_code = stocktable.Item_code WHERE stocktable.Item_code=:ItemId AND stocktable.Status=1 AND stocktable.RestQty !=0 ORDER BY stocktable.ID DESC";
 		$query = $dbh -> prepare($sql);
 		$query-> bindParam(':ItemId', $value, PDO::PARAM_STR);
@@ -117,9 +114,7 @@
 		$cnt=1;
 			$Data2="
 			<p> <span class='fw-bold'>Name : </span> $results->medicine_name</p>
-			<p> <span class='fw-bold'>Product Buy : </span> $results->InQty</p>
-			<p> <span class='fw-bold'>Product Sale : </span> $results->OutQty</p>
-			<p> <span class='fw-bold'>In Stock : </span> $results->RestQty</p>
+			<p> <span class='fw-bold fw-2xl'>In Stock : </span> $results->RestQty</p>
 			<p> <span class='fw-bold'>Pursing Price : </span> $results->PurPrice</p>";
 			echo $Data2;
 
@@ -178,8 +173,8 @@
 
 			$vat = $_GET['vat'];
 
-			$sql="INSERT INTO invoice (CustomerID, SellerID, NetPayment, PreDue, discount, Tax, PaidAmount, DueAmount) 
-			VALUES(:customerid,:userid,:grandtotal,:predue,:totaldiscount,:vat,:paidamount,:due)";
+			$sql="INSERT INTO invoice (CustomerID, SellerID, NetPayment, PreDue, discount, Tax, PaidAmount, DueAmount,shopId, branchId) 
+			VALUES(:customerid,:userid,:grandtotal,:predue,:totaldiscount,:vat,:paidamount,:due,:shopId, :branchId)";
 			$query = $dbh->prepare($sql);
 			$query->bindParam(':customerid',$customerid,PDO::PARAM_STR);
 			$query->bindParam(':userid',$userid,PDO::PARAM_STR);
@@ -189,14 +184,17 @@
 			$query->bindParam(':vat',$vat,PDO::PARAM_STR);
 			$query->bindParam(':paidamount',$paidamount,PDO::PARAM_STR);			
 			$query->bindParam(':due',$due,PDO::PARAM_STR);
+			$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+			$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 			$query->execute();
 			$lastInsertId = $dbh->lastInsertId();
 			
 			$i= count($_SESSION['items']);
 			$sql2="INSERT INTO sellingproduct(InvoiceId, ProductId, BatchId, Qty, Price, NetPrice,SellerId) 
 			VALUES(:lastInsertId,:ItemId,:Batch,:SellQty,:Price,:PursingPrice,:userid)";
+
+			$sql3="Update stocktable set SellQty=:SellQty where BatchNumber=:BatchNumber AND Item_code=:productID AND shopId=:shopId AND branchId=:branchId";
 			
-			// $sql3="Update stocktable set SellQty=:SellQty where BatchNumber=:Batch";
 			for($count = 0; $count<$i; $count++)
 			{
 				$T_price = $_SESSION['items'][$count]['SellQty']*$_SESSION['items'][$count]['Price'];
@@ -209,8 +207,16 @@
 				':PursingPrice'	=>	$_SESSION['items'][$count]['Price'],
 				':userid'	=>	$_SESSION['alogin']			
 				); 
-				$statement = $dbh->prepare($sql2);
-				$statement->execute($data);
+				$InsertSellItem= $dbh->prepare($sql2);
+				$InsertSellItem->execute($data);
+				
+				$stockUpTableQuery = $dbh->prepare($sql3);
+				$stockUpTableQuery->bindParam(':SellQty',$_SESSION['items'][$count]['SellQty'],PDO::PARAM_STR);
+				$stockUpTableQuery->bindParam(':BatchNumber',$_SESSION['items'][$count]['Batch'],PDO::PARAM_STR);			
+				$stockUpTableQuery->bindParam(':productID',$_SESSION['items'][$count]['ItemId'],PDO::PARAM_STR);
+				$stockUpTableQuery->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+				$stockUpTableQuery->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
+				$stockUpTableQuery->execute();
 				
 			}
 			date_default_timezone_set('Asia/Dhaka');
@@ -239,10 +245,8 @@
 			}
 			unset ($_SESSION['items']);
 			unset ($_SESSION['C_ID']);
+			echo $lastInsertId;
 		}
-		else {
-				
-			}
 	}
 	if(isset($_GET['edit_unit'])){
 		$str = $_GET['edit_unit'];

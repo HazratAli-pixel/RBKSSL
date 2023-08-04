@@ -197,16 +197,13 @@ else{
 	<script>
 		const StatusCng = (event)=>{
 			let clickedId = event.target.id
-			// event.target.classList.add('bg-success');
-			// event.target.setAttribute('disabled', true);
-			// event.target.innerText="Added";
-			let ProductId2 = document.getElementById("productID-"+clickedId).innerHTML;
+			let ProductId2 = document.getElementById("productID-"+clickedId).innerText;
 			let Pdate = document.getElementById("date-"+clickedId).innerHTML
 			let PQty = document.getElementById("Qty-"+clickedId).innerHTML
 			let PMprice = document.getElementById("Mprice-"+clickedId).innerHTML
 			let PMRP = document.getElementById("MRP-"+clickedId).innerHTML
+			// alert(PQty);
 			const xmlhttp = new XMLHttpRequest();
-			// alert(ProductId);
 			xmlhttp.onreadystatechange = function () {
 				if (this.readyState == 4 && this.status == 200) {
 					event.target.classList.add('bg-success');
@@ -220,7 +217,7 @@ else{
 					});
 				}
 			};
-			xmlhttp.open('GET', `query2.php?StockManagment=${clickedId}&date=${Pdate}&Qty=${PQty}&Mprice=${PMprice}&MRP=${PMRP}&productid=${ProductId2}`, true);
+			xmlhttp.open('GET', `../query2.php?StockManagment=${clickedId}&date=${Pdate}&Qty=${PQty}&Mprice=${PMprice}&MRP=${PMRP}&productid=${ProductId2}`, true);
 			xmlhttp.send();
 
 		}

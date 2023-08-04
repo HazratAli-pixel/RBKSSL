@@ -29,7 +29,7 @@ require_once('../TCPDF/tcpdf.php');
     echo "Connection Fail".mysqli_connect_error();
     }
 	$invoieId = $_GET['invoiceid'];
-	// $invoieId = 187;
+	// $invoieId = 232;
 
 	// $sql = "SELECT * from  customertable";
 	$sql = "SELECT customertable.Name, customertable.Address, customertable.Phone, invoice.ID, invoice.SellerID, invoice.NetPayment, invoice.PreDue, invoice.discount,invoice.discount,invoice.Tax,invoice.Total_with_due,invoice.DueAmount, users.Name as UName, invoice.date, invoice.PaidAmount FROM `invoice` JOIN customertable ON invoice.CustomerID = customertable.ID JOIN users ON users.UserId = invoice.SellerID WHERE invoice.ID=:invoieId AND invoice.shopId=:shopId";
@@ -124,7 +124,7 @@ $invoiceDetails='
 <table style="padding-top: 10px" border="none" >
 	<tr>
 		<td style="font-weight: bold;" colspan="2" >Sales Order</td>
-		<td style="font-weight: bold;" colspan="10">:</td>
+		<td style="font-weight: bold;" colspan="10">: '."$results->SellerID$results->date$results->ID".'</td>
 	</tr>
 	<tr>
 		<td style="font-weight: bold;" colspan="2"  >Name</td>

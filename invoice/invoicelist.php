@@ -3,7 +3,7 @@
 session_start();
 error_reporting(0);
 include('../includes/config.php');
-if(strlen($_COOKIE['Username'])==0 || strlen($_SESSION['alogin'])==0)
+if(strlen($_SESSION['alogin'])==0)
 	{
 	include_once('../includes/address.php');	
 	header('location:index.php');
