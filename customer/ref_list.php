@@ -133,8 +133,10 @@
 									
 									<tbody>
 
-                                        <?php $sql = "SELECT * from  reference";
+                                        <?php $sql = "SELECT * from  reference WHERE shopId=:shopId AND branchId=:branchId";
                                         $query = $dbh -> prepare($sql);
+										$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+										$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
                                         $query->execute();
                                         $results=$query->fetchAll(PDO::FETCH_OBJ);
                                         $cnt=1;

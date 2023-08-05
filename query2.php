@@ -7,7 +7,7 @@ if(isset($_GET['invodetails'])){
 	$invoId = $_GET['invodetails'];
 	$sql = "SELECT purchaseslist.BatchId,purchaseslist.Qty,purchaseslist.Mprice,purchaseslist.MRP,purchaseslist.date,
 	medicine_list.medicine_name from purchaseslist LEFT JOIN medicine_list ON purchaseslist.ProductId = medicine_list.item_code 
-	WHERE purchaseslist.InvoiceId =:id AND shopId=:shopId AND branchId=:branchId";
+	WHERE purchaseslist.InvoiceId =:id AND purchaseslist.shopId=:shopId AND purchaseslist.branchId=:branchId";
 	$query = $dbh -> prepare($sql);
 	$query->bindParam(':id',$invoId,PDO::PARAM_STR);
 	$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);

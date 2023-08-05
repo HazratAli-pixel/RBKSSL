@@ -1,10 +1,6 @@
 <?php
 
-use Dflydev\DotAccessData\Data;
 
-use function PHPSTORM_META\type;
-use function PHPUnit\Framework\isEmpty;
-use function Symfony\Component\VarDumper\Dumper\esc;
 
 session_start();
 error_reporting(0);

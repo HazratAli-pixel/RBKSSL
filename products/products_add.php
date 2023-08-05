@@ -25,22 +25,19 @@ if(strlen($_SESSION['alogin'])==0)
 
 			$file_name = $_FILES['medicnephoto']['name'];
 			$file_tmp_name = $_FILES['medicinephoto']['tmp_name'];
-			$location = "Medicinephoto/".$file_name;
+			$location = "../Medicinephoto/".$file_name;
 			move_uploaded_file($file_tmp_name, $location);
 			//$status=1;
 		
-			$sql="INSERT INTO medicine_list (medicine_name, unit, box_size,strength, medicine_details, category, menufacturer, item_code, status,shopId,branchId) 
-			VALUES(:medicinename,:unit,:boxsize,:medicinedetails,:category,:companyID,:barcode,:radio_value,:shopId,:branchId)";
+			$sql="INSERT INTO medicine_list (medicine_name, unit, box_size,strength, medicine_details, category, menufacturer, status,shopId,branchId) VALUES(:medicinename,:unit,:boxsize,:strength,:medicinedetails,:category,:companyID,:radio_value,:shopId,:branchId)";
 			$query = $dbh->prepare($sql);
 			$query->bindParam(':medicinename',$medicinename,PDO::PARAM_STR);
 			$query->bindParam(':unit',$unit,PDO::PARAM_STR);
 			$query->bindParam(':boxsize',$boxsize,PDO::PARAM_STR);
 			$query->bindParam(':strength',$strength,PDO::PARAM_STR);
-			$query->bindParam(':shelf',$shelf,PDO::PARAM_STR);
 			$query->bindParam(':medicinedetails',$medicinedetails,PDO::PARAM_STR);
 			$query->bindParam(':category',$category,PDO::PARAM_STR);
 			$query->bindParam(':companyID',$companyID,PDO::PARAM_STR);
-			$query->bindParam(':barcode',$barcode,PDO::PARAM_STR);
 			$query->bindParam(':radio_value',$status,PDO::PARAM_STR);
 			$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
 			$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
@@ -133,9 +130,10 @@ if(strlen($_SESSION['alogin'])==0)
 													</div>
 												</div>
 												<?php 
-													$companyname ="SELECT * from company";
+													$companyname ="SELECT * from company WHERE shopId=:shopId";
 													$cquery = $dbh -> prepare($companyname);
-                                                    $cquery->bindParam(':barcode',$id,PDO::PARAM_STR);
+                                                    // $cquery->bindParam(':barcode',$id,PDO::PARAM_STR);
+													$cquery->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
 													$cquery->execute();
 													$results=$cquery->fetchAll(PDO::FETCH_OBJ);							   
 												?>
@@ -185,8 +183,9 @@ if(strlen($_SESSION['alogin'])==0)
 													</div>
 												</div>
 												<?php 
-													$medcinetype ="SELECT * from medicine_unit";
+													$medcinetype ="SELECT * from medicine_unit WHERE shopId=:shopId";
 													$cquery = $dbh -> prepare($medcinetype);
+													$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
 													$cquery->execute();
 													$results=$cquery->fetchAll(PDO::FETCH_OBJ);							   
 												?>
@@ -212,8 +211,9 @@ if(strlen($_SESSION['alogin'])==0)
 												</div>
 													
 												<?php 
-													$medcinetype ="SELECT * from medicine_category";
+													$medcinetype ="SELECT * from medicine_category WHERE shopId=:shopId";
 													$cquery = $dbh -> prepare($medcinetype);
+													$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
 													$cquery->execute();
 													$results=$cquery->fetchAll(PDO::FETCH_OBJ);							   
 												?>

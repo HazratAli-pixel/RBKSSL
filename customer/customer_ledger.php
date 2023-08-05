@@ -183,9 +183,10 @@ input[type=number] {
 												// SUM(customerledger.NewDue) AS total_due FROM customertable INNER JOIN customerledger ON customertable.ID =customerledger.CustomerID where customertable.Status= 1	
 												// GROUP BY customerledger.CustomerID";
 												$sql = "SELECT customertable.ID, customertable.Name, customertable.Phone, customertable.Address, SUM(customerledger.Total) AS total, SUM(customerledger.Debit) AS total_debit, 
-												SUM(customerledger.NewDue) AS total_due FROM customertable INNER JOIN customerledger ON customertable.ID =customerledger.CustomerID where customertable.Status= 1	
-												GROUP BY customerledger.CustomerID ORDER BY customertable.Name";
+												SUM(customerledger.NewDue) AS total_due FROM customertable INNER JOIN customerledger ON customertable.ID =customerledger.CustomerID where customertable.Status= 1 AND customertable.shopId=:shopId AND customertable.branchId=:branchId GROUP BY customerledger.CustomerID ORDER BY customertable.Name";
 												$query = $dbh -> prepare($sql);
+												$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+												$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 												$query->execute();
 												$results=$query->fetchAll(PDO::FETCH_OBJ);
 												$cnt=1;

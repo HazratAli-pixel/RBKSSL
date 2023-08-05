@@ -93,10 +93,8 @@ else{
 											<?php 
 												date_default_timezone_set('Asia/Dhaka');
 												$date = date('Y-m-d');
-												$sql = "SELECT emi_table.ID, emi_table.loanID, emi_table.EMI_SL, emi_table.Date, emi_table.Status as emitablestatus, emi_table.Day, 
-												emi_table.Balance,emi_table.EMI, emi_table.R_balance, loan_table.ID as loantableid, loan_table.EMItype, loan_table.CustomerID,loan_table.loanAmount, customertable.Name,
-												customertable.Phone,customertable.Address FROM emi_table RIGHT JOIN loan_table ON loan_table.ID = emi_table.loanID JOIN customertable ON 
-												loan_table.CustomerID = customertable.ID WHERE emi_table.Status = 0 AND emi_table.Date<:date";
+												$sql = "SELECT emi_table.ID, emi_table.loanID, emi_table.EMI_SL, emi_table.Date, emi_table.Status as emitablestatus, emi_table.Day, emi_table.Balance,emi_table.EMI, emi_table.R_balance, loan_table.ID as loantableid, loan_table.EMItype, loan_table.CustomerID,loan_table.loanAmount, customertable.Name,
+												customertable.Phone,customertable.Address FROM emi_table RIGHT JOIN loan_table ON loan_table.ID = emi_table.loanID JOIN customertable ON loan_table.CustomerID = customertable.ID WHERE emi_table.Status = 0 AND emi_table.shopId=:shopId AND emi_table.branchId=:branchId AND emi_table.Date<:date";
 												$query = $dbh -> prepare($sql);
 												$query->bindParam(':date',$date,PDO::PARAM_STR);
 												$query->execute();
@@ -232,7 +230,7 @@ else{
 					});
 				}
 			};
-			xmlhttp.open('GET', `query2.php?StockManagment=${clickedId}&date=${Pdate}&Qty=${PQty}&Mprice=${PMprice}&MRP=${PMRP}&productid=${ProductId2}`, true);
+			xmlhttp.open('GET', `../query2.php?StockManagment=${clickedId}&date=${Pdate}&Qty=${PQty}&Mprice=${PMprice}&MRP=${PMRP}&productid=${ProductId2}`, true);
 			xmlhttp.send();
 
 		}

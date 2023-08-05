@@ -11,9 +11,11 @@ else{
 	if(isset($_REQUEST['del']))
 	{
 		$did=intval($_GET['del']);
-		$sql = "delete from medicine_unit WHERE  ID=:did";
+		$sql = "delete from medicine_unit WHERE  ID=:did AND shopId=:shopId AND branchId=:branchId";
 		$query = $dbh->prepare($sql);
 		$query-> bindParam(':did',$did, PDO::PARAM_STR);
+		$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+		$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 		$query -> execute();
 		// $msg="Record deleted Successfully";
         // header("refresh:3;Products_unit_list.php");
@@ -115,8 +117,9 @@ else{
 									
 									<tbody>
 
-                                        <?php $sql = "SELECT * from  medicine_unit ";
+                                        <?php $sql = "SELECT * from  medicine_unit WHERE shopId=:shopId";
                                         $query = $dbh -> prepare($sql);
+										$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
                                         $query->execute();
                                         $results=$query->fetchAll(PDO::FETCH_OBJ);
                                         $cnt=1;

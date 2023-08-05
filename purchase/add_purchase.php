@@ -1,3 +1,17 @@
+<?php 
+function uniqidReal($lenght = 7) {
+	// uniqid gives 13 chars, but you could adjust it to your needs.
+	if (function_exists("random_bytes")) {
+		$bytes = random_bytes(ceil($lenght / 2));
+	} elseif (function_exists("openssl_random_pseudo_bytes")) {
+		$bytes = openssl_random_pseudo_bytes(ceil($lenght / 2));
+	} else {
+		throw new Exception("no cryptographically secure random function available");
+	}
+	return substr(bin2hex($bytes), 0, $lenght);
+}
+
+?>
 
 <?php
 	session_start();
@@ -14,7 +28,8 @@
 		if(isset($_POST['submit']))
 	  		{
 			$M_ID = $_POST['manufacturer_id'];
-			$invoice_no = $_POST['invoice_no'];
+			$invoice_uniqe_id = $_POST['invoice_no'];
+			$invoice_no = uniqidReal().'-'.$invoice_uniqe_id;
 			$payment_type = $_POST['payment_type'];
 			$date = $_POST['date'];
 			$sub_total = $_POST['sub_total'];
@@ -53,13 +68,23 @@
 			$i= count($_POST['batch_id']);
 			$v= $_POST['batch_id'][0];
 			$v= "sdafsadfsdaf";
+			$shopId= $_SESSION['user']['shopId'];
+			$branchId = $_SESSION['user']['branchId'];
 
 			foreach($batch_id as $key => $value){  // need to add shop and branch id
-				$sql = "INSERT INTO purchaseslist (InvoiceId,ProductId,BatchId,Qty,Mprice,MRP) VALUES 
-				('".$invoice_no."','".$product_id[$key]."','".$batch_id[$key]."','".$product_quantity[$key]."','".$product_rate[$key]."','".$mrp[$key]."')";
+				$sql = "INSERT INTO purchaseslist (InvoiceId, ProductId, BatchId, Qty, Mprice, MRP, shopId, branchId) VALUES 
+				('".$invoice_no."','".$product_id[$key]."','".$batch_id[$key]."','".$product_quantity[$key]."','".$product_rate[$key]."','".$mrp[$key]."','".$shopId."','".$branchId."')";
 				$query = mysqli_query($con,$sql);
 			}
-			header("refresh:1;add_purchase.php");
+			if($lastInsertId)
+			{
+				$msg=" Your info submitted successfully";
+			}
+			else{
+				$error=" Something went wrong. Please try again";
+				header("refresh:2;add_purchase.php"); 
+			}
+			// header("refresh:1;add_purchase.php");
 		}
 	?>
 <!doctype html>
@@ -95,7 +120,10 @@
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-md-12">
-						
+					<div class="col-12 p-2">
+						<?php if($error){?><div class="errorWrap"><strong>ERROR </strong>: <?php echo htmlentities($error); ?> </div><?php } 
+				else if($msg){?><div class="succWrap"><strong>SUCCESS </strong>:<?php echo htmlentities($msg); ?> </div><?php }?>
+						</div>
 						<!-- Zero Configuration Table -->
 						<div class="card">
 							<div  class="card-header">
@@ -116,13 +144,13 @@
 										<div class="col-md-4">
 										<?php 
 														$cname="SELECT ID, name, Status from company";
-														$cquery = $dbh -> prepare($cname);
-														$cquery->bindParam(':barcode',$id,PDO::PARAM_STR);
+														$cquery = $dbh -> prepare($cname);			
+														$cquery->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
 														$cquery->execute();
 														$results=$cquery->fetchAll(PDO::FETCH_OBJ);							   
 														?>
 											<div class="">
-												<select name="manufacturer_id" class="form-control select2" id="manufacturer_id" tabindex="" >
+												<select name="manufacturer_id" class="form-control select2" id="manufacturer_id" tabindex="" required>
 														<option value="" selected="selected">Select Manufacturer</option>
 														<?php
 														foreach($results as $result)
@@ -143,7 +171,7 @@
 												$date = date('Y-m-d');
 												?>
                         						<div class="">
-													<input type="text" name="date" class="form-control p-2 datepicker" id="purdate" placeholder="" value="<?php echo $date?>" tabindex="2" >
+													<input type="date" name="date" class="form-control p-2 datepicker" id="purdate" placeholder="" value="<?php echo $date?>" tabindex="2" >
 												</div>
                        
                     						</div>
@@ -152,7 +180,7 @@
 											<label for="invoice_no" class="col-md-2 text-end col-form-label">Invoice No<i class="text-danger"> * </i>:</label>
 											<div class="col-md-4">
 												<div class=""> 
-													<input type="text" class="form-control p-2 valid_number" name="invoice_no" id="invoice_no" placeholder="Invoice No" value="" tabindex="3">
+													<input type="text" class="form-control p-2 valid_number" name="invoice_no" id="invoice_no" placeholder="Invoice No" value="" tabindex="3" required>
 												</div>
 											</div>
 											<label for="details" class="col-md-2 text-end col-form-label">Details:</label>
@@ -169,18 +197,19 @@
 													<select name="payment_type" id="payment_type" onchange="bank_payment(this.value)" class="form-control p-2 select2" tabindex="5" >
 														<option value="1" selected="selected">Cash Payment</option>
 														<option value="2">Bank Payment</option>
+														<option value="3">Mobile Banking</option>
 													</select>
 												</div>
 											</div>
-											<label for="bank" class="col-md-2 text-end bank_div col-form-label">Bank:</label>
-											<div class="col-md-4 bank_div" id="bank_div">
+											<label for="bank" class="col-md-2 text-end bank_div d-none col-form-label">Payment Method:</label>
+											<div class="col-md-4 bank_div d-none" id="bank_div">
 												<div class="">
 												<?php 
-														$cname="SELECT ID, name, Status from company";
-														$cquery = $dbh -> prepare($cname);
-														$cquery->bindParam(':barcode',$id,PDO::PARAM_STR);
-														$cquery->execute();
-														$results=$cquery->fetchAll(PDO::FETCH_OBJ);							   
+														// $cname="SELECT ID, name, Status from company";
+														// $cquery = $dbh -> prepare($cname);
+														// $cquery->bindParam(':barcode',$id,PDO::PARAM_STR);
+														// $cquery->execute();
+														// $results=$cquery->fetchAll(PDO::FETCH_OBJ);							   
 														?>
 													<select name="bank_id" class="form-control p-2 select2" id="bank_id">
 														<option value="" selected="selected">Select Bank</option>
@@ -204,6 +233,36 @@
 													</select>
 												</div>
 											</div>
+											<label for="bank" class="col-md-2 text-end d-none mobile_banking_div col-form-label">Payment Method:</label>
+											<div class="col-md-4 mobile_banking_div d-none" id="mobile_banking_div">
+												<div class="">
+												<?php 
+														// $cname="SELECT ID, name, Status from company";
+														// $cquery = $dbh -> prepare($cname);
+														// $cquery->bindParam(':barcode',$id,PDO::PARAM_STR);
+														// $cquery->execute();
+														// $results=$cquery->fetchAll(PDO::FETCH_OBJ);							   
+														?>
+													<select name="mobile_banking_id" class="form-control p-2 select2" id="mobile_banking_id">
+														<option value="" selected="selected">Select Mobile Banking</option>
+														<?php 
+																foreach($results as $result)
+																{
+																	if($result->Status==1)
+																	{?>	
+																		<!-- <option id="" value="<?php echo htmlentities($result->ID);?>"><?php echo htmlentities($result->name);?></option> -->
+																		<?php 
+																	} 
+																}?>
+														<option value="Bkash">Bkash</option>
+														<option value="Nagad">Nagad </option>
+														<option value="Rocket">Rocket</option>
+														<option value="Mcash">Mcash</option>
+														<option value="Ucash">Ucash</option>
+														<option value="Trust">Trust</option>
+													</select>
+												</div>
+											</div>
 										</div>
                  						<div class="table-responsive pt-2">
                             				<table class="table table-bordered border-muted table-hover" id="purchaseTable">
@@ -211,6 +270,7 @@
 													<tr class="">
 														<th class="text-center"><nobr>Product name<i class="text-danger">*</i></nobr></th> 
 														<th class="text-center"><nobr>Product Id<i class="text-danger"></i></nobr></th>
+														<th class="text-center"><nobr>Batch no<i class="text-danger"></i></nobr></th>
 														<th class="text-center"><nobr>Quantity <i class="text-danger">*</i></nobr></th>
 														<th class="text-center"><nobr>Manufacturer Price<i class="text-danger">*</i></nobr></th>
 														<th class="text-center"><nobr>MRP <i class="text-danger">*</i></nobr></th>
@@ -224,23 +284,26 @@
 															<!-- <input type="text" name="product_name" required class="form-control product_name productSelection" onkeypress="product_list_purchase(1);" placeholder="Medicine Name" id="product_name_1" tabindex="6" >
 															<input type="hidden" class="autocomplete_hidden_value product_id_1" name="product_id[]" id="SchoolHiddenId"/>
 															<input type="hidden" class="sl" value="1"> -->
-															<input name="companyname" value="" class="form-control" onblur="product_list_purchase2(1)" onkeyup="product_list_purchase(1);" list="datalistOptionss_1" id="exampleDataListf_1" >
-															<input type="hidden" class="autocomplete_hidden_value product_id_1" name="product_id[]" id="SchoolHiddenId" value="">
+															<input name="companyname" value="" class="form-control text-center" onblur="product_list_purchase2(1)" onkeyup="product_list_purchase(1);" list="datalistOptionss_1" id="exampleDataListf_1" placeholder="Product search" required>
+															<input type="hidden" class="autocomplete_hidden_value product_id_1" name="product_id[]" id="SchoolHiddenId" value="" >
 															<datalist id="datalistOptionss_1" required></datalist>
 														</td>
 														<td>
-															<input type="text" name="batch_id[]" id="batch_id_1" class="batch_class form-control text-end"  tabindex="7" placeholder="Product Id">
+															<input type="text" name="product_id2[]" id="product_id2_1" class="product_class form-control text-center"  tabindex="7" placeholder="Product Id" readonly="readonly">
+														</td>
+														<td>
+															<input type="text" name="batch_id[]" id="batch_id_1" class="batch_class text-center form-control text-end"  tabindex="7" placeholder="Batch no" required>
 														</td>
 													
 														<td class="text-end">
-															<input type="text" name="product_quantity[]" id="quantity_1" class="form-control text-end store_cal_1" onkeyup="purchase_calculation(1),checkqty(1);" onchange="purchase_calculation(1);" placeholder="0.00" value="" min="0" required="required">
-															<input type="hidden" name="unit_qty[]" id="unit_qty_1">
+															<input type="number" name="product_quantity[]" id="quantity_1" class="form-control text-end store_cal_1" onkeyup="purchase_calculation(1),checkqty(1);" onchange="purchase_calculation(1);" placeholder="0.00" value="" min="0" required>
+															<input type="hidden" name="unit_qty[]" id="unit_qty_1" >
 														</td>
 														<td class="test">
-															<input type="text" name="product_rate[]" onkeyup="purchase_calculation(1),checkqty(1);" onchange="purchase_calculation(1);" id="product_rate_1" class="form-control product_rate_1 text-end valid_number" placeholder="0.00" value="" min="0" tabindex="11" required="required">
+															<input type="number" name="product_rate[]" onkeyup="purchase_calculation(1),checkqty(1);" onchange="purchase_calculation(1);" id="product_rate_1" class="form-control product_rate_1 text-end valid_number" placeholder="0.00" value="" min="0" tabindex="11" required>
 														</td>
 														<td>
-															<input type="text" class="form-control valid_number" name="mrp[]" id="mrp_1" required tabindex="12" >
+															<input type="number" class="form-control valid_number" name="mrp[]" id="mrp_1" required tabindex="12" >
 														</td>
 
 														<td class="text-end">
@@ -253,7 +316,7 @@
 												</tbody>
 												<tfoot>
 													<tr>
-														<td class="text-end" colspan="5"><b>Sub Total:</b></td>
+														<td class="text-end" colspan="6"><b>Sub Total:</b></td>
 														<td class="text-end">
 															<input type="text" id="sub_total"  class="text-end form-control" name="sub_total" placeholder="0.00" readonly="" />
 														</td>
@@ -262,18 +325,18 @@
 														</td>
 													</tr>
 													<tr>
-														<td class="text-end" colspan="5"><b>Vat:</b></td>
+														<td class="text-end" colspan="6"><b>Vat:</b></td>
 														<td class="text-end">
-															<input type="text" id="vat" onkeyup="purchase_vatcalculation()" class="text-end form-control valid_number" name="vat" placeholder="%" tabindex="15" />
+															<input type="number" id="vat" onkeyup="purchase_vatcalculation()" class="text-end form-control valid_number" name="vat" placeholder="%" tabindex="15" />
 														</td>
 														<td>
 
 														</td>
 													</tr>
 													<tr>
-														<td class="text-end" colspan="5"><b>Discount:</b></td>
+														<td class="text-end" colspan="6"><b>Discount:</b></td>
 														<td class="text-end">
-															<input type="text" id="discount" onkeyup="disoucnt_calculation()" class="text-end form-control valid_number" name="discount" placeholder="0.00" tabindex="16" />
+															<input type="number" id="discount" onkeyup="disoucnt_calculation()" class="text-end form-control valid_number" name="discount" placeholder="0.00" tabindex="16" />
 														</td>
 														<td>
 															
@@ -281,7 +344,7 @@
 													</tr>
 													<tr>
 														
-														<td class="text-end" colspan="5"><b>Grand Total:</b></td>
+														<td class="text-end" colspan="6"><b>Grand Total:</b></td>
 														<td class="text-end">
 															<input type="text" id="grandTotal" class="text-end form-control" name="grand_total_price" value="0.00" readonly="readonly" />
 														</td>
@@ -290,16 +353,16 @@
 														</td>
 													</tr>
 													<tr>
-														<td class="text-end" colspan="5"><b>Paid Amount:</b></td>
+														<td class="text-end" colspan="6"><b>Paid Amount:</b></td>
 														<td class="text-end">
-															<input type="text" id="paid_amount" class="text-end form-control valid_number" name="paid_amount" onkeyup="paid_calculation()" placeholder="0.00" tabindex="18" />
+															<input type="number" id="paid_amount" class="text-end form-control valid_number" name="paid_amount" onkeyup="paid_calculation()" placeholder="0.00" tabindex="18" />
 														</td>
 														<td>
 													
 														</td>
 													</tr>
 													<tr>
-														<td class="text-end" colspan="5"><b>Due Amount:</b></td>
+														<td class="text-end" colspan="6"><b>Due Amount:</b></td>
 														<td class="text-end">
 															<input type="text" id="due_amount" class="text-end form-control" name="due_amount" placeholder="0.00" readonly="readonly" />
 														</td>
@@ -335,6 +398,7 @@
 <script>
 window.onload = function() {
 	bank_payment(1);
+
 };
 // $(function() {
 // $( "#purdate").datepicker({
@@ -353,19 +417,20 @@ function add_purchaseRow(click){
 				count = count + 1;
 				output = '<tr id="row_'+count+'">';
 				output += '<td class="span3 manufacturer">';
-				output+='<input name="companyname" value="" class="form-control" onblur="product_list_purchase2('+count+');" onkeyup="product_list_purchase('+count+');" list="datalistOptionss_'+count+'" id="exampleDataListf_'+count+'">';
+				output+='<input name="companyname" value="" class="form-control text-center" onblur="product_list_purchase2('+count+');" onkeyup="product_list_purchase('+count+');" list="datalistOptionss_'+count+'" id="exampleDataListf_'+count+'" placeholder="Product search" required>';
 				output+='<input type="hidden" class="product_id_'+count+'" name="product_id[]" id="SchoolHiddenId" value="">';
 				output+='<datalist id="datalistOptionss_'+count+'" required>';
 				output+='</datalist>';
 				output+='</td>';
-				output+='<td> <input type="text" name="batch_id[]" id="batch_id_'+count+'" class="form-control batch_class text-end"  tabindex="7" placeholder="Product Id" /></td>';
+				output+='<td> <input type="text" name="product_id2[]" id="product_id2_'+count+'" class="form-control batch_class text-center"  tabindex="7" placeholder="Product ID" readonly="readonly"/></td>';
+				output+='<td> <input type="text" name="batch_id[]" id="batch_id_'+count+'" class="form-control batch_class text-center"  tabindex="7" placeholder="Batch no" /></td>';
 				
 				
 				
-				output += '<td class="text-end">   <input type="text" name="product_quantity[]" id="quantity_'+count+'" class="form-control text-end store_cal_'+count+'" onkeyup="purchase_calculation('+count+'),checkqty('+count+');" onchange="purchase_calculation('+count+');" placeholder="0.00" value="" min="0" required="required">';
+				output += '<td class="text-end">   <input type="number" name="product_quantity[]" id="quantity_'+count+'" class="form-control text-end store_cal_'+count+'" onkeyup="purchase_calculation('+count+'),checkqty('+count+');" onchange="purchase_calculation('+count+');" placeholder="0.00" value="" min="0" required>';
 				output+='<input type="hidden" name="unit_qty[]" id="unit_qty_'+count+'"></td>';
-				output += '<td class="test">    <input type="text" name="product_rate[]" onkeyup="purchase_calculation('+count+'),checkqty('+count+');" onchange="purchase_calculation('+count+');" id="product_rate_'+count+'" class="form-control product_rate_'+count+' text-end valid_number" placeholder="0.00" value="" min="0" tabindex="11" required="required" ></td>';
-				output += '<td>    <input type="text" class="form-control valid_number" name="mrp[]" id="mrp_'+count+'" required tabindex="12" ></td>';
+				output += '<td class="test">    <input type="number" name="product_rate[]" onkeyup="purchase_calculation('+count+'),checkqty('+count+');" onchange="purchase_calculation('+count+');" id="product_rate_'+count+'" class="form-control product_rate_'+count+' text-end valid_number" placeholder="0.00" value="" min="0" tabindex="11" required ></td>';
+				output += '<td>    <input type="number" class="form-control valid_number" name="mrp[]" id="mrp_'+count+'" tabindex="12" required></td>';
 				output += '<td class="text-end">    <input class="form-control total_price text-end" type="text" name="total_price[]" id="total_price_'+count+'" value="0.00" readonly="readonly" ></td>';
 				output += '<td>    <button type="button" class="btn btn-danger" tabindex="13" id="'+count+'" onclick="deleteRow(this.id)"><i class="far fa-trash-alt"></i></button></td>';
 				output += '</tr>';
@@ -385,7 +450,7 @@ function product_list_purchase(clicked_id){
 		}
 	};
 
-	xmlhttp.open('GET', `query.php?medicineName=${inputValue}&manufacturer_id=${manufacturer_id}`, true);
+	xmlhttp.open('GET', `../query.php?medicineName=${inputValue}&manufacturer_id=${manufacturer_id}`, true);
 	xmlhttp.send();
 }
 
@@ -399,10 +464,11 @@ function product_list_purchase2(clicked_id){
 				var newString = this.responseText.replace(/\s+/g,' ').trim();
 				$('.product_id_'+clicked_id).val(newString);
 				$('#batch_id_'+clicked_id).val(newString);
+				$('#product_id2_'+clicked_id).val(newString);
 		}
 	};
 
-	xmlhttp.open('GET', `query.php?medicineName2=${inputValue}&manufacturer_id2=${manufacturer_id}`, true);
+	xmlhttp.open('GET', `../query.php?medicineName2=${inputValue}&manufacturer_id2=${manufacturer_id}`, true);
 	xmlhttp.send();
 }
 
@@ -462,11 +528,16 @@ function deleteRow(click_id){
 }
 function bank_payment(value){
 	if(value==2){
-		$('.bank_div').show();
+		$('.bank_div').removeClass('d-none');
+		$('.mobile_banking_div').addClass('d-none');
 	}
-	else{
-
-		$('.bank_div').hide();
+	if(value==3){
+		$('.mobile_banking_div').removeClass('d-none');
+		$('.bank_div').addClass('d-none');
+	}
+	if(value == 1){
+		$('.bank_div').addClass('d-none');
+		$('.mobile_banking_div').addClass('d-none');
 	}
 }
 

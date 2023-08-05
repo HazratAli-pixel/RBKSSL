@@ -151,8 +151,9 @@ include('../includes/config.php');
 															</tr>
 														</thead>
 														<tbody id="myTable">
-															<?php $sql = "SELECT * from  medicine_list ORDER BY medicine_name ASC ";
+															<?php $sql = "SELECT * from  medicine_list WHERE shopId=:shopId ORDER BY medicine_name ASC ";
 															$query = $dbh -> prepare($sql);
+															$query-> bindParam(':shopId', $_SESSION['user']['shopId'], PDO::PARAM_STR);
 															$query->execute();
 															$results=$query->fetchAll(PDO::FETCH_OBJ);
 															$cnt=1;

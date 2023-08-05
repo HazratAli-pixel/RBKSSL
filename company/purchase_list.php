@@ -77,7 +77,7 @@ else{
 			$date = date('d/m/Y H:i');
 			
 			// $mssg = "Money recived. Amount tk:".urlencode($paidAmount)." TrxID: ".urlencode($lastInsertId)." Due amount : ".urlencode($newDue)."tk ".date('y/m/d')."-".date("h:i:s A").". Raha Phamacy";
-			$mssg = "Money recived. Amount tk:".$paidAmount." TrxID: ".$lastInsertId." Due amount : ".$newDue."tk ".$date.". Raha Phamacy";
+			$mssg = "Money recived. Amount tk:".$paidAmount." TrxID: ".$lastInsertId." Due amount : ".$newDue."tk ".$date.".".$_SESSION['user']['shopName'];
 
 			if($switch==1){
 				// $mssg = $_POST["message"];
@@ -180,10 +180,11 @@ else{
 											<tbody>
 
 												<?php 
-												$sql = "SELECT company.name as cname, companyinvoice.ID, companyinvoice.InvoiceId , companyinvoice.Subtotal, companyinvoice.Vat, companyinvoice.Discount, companyinvoice.G_total,companyinvoice.Paid,companyinvoice.DueAmount,
-												companyinvoice.Date,companyinvoice.Status FROM companyinvoice left JOIN company 
-												ON company.ID = companyinvoice.CompanyId ORDER BY companyinvoice.ID DESC";
+												$sql = "SELECT company.name as cname, companyinvoice.ID, companyinvoice.InvoiceId , companyinvoice.Subtotal, companyinvoice.Vat, companyinvoice.Discount, companyinvoice.G_total,companyinvoice.Paid,companyinvoice.DueAmount, companyinvoice.Date,companyinvoice.Status FROM companyinvoice left JOIN company ON company.ID = companyinvoice.CompanyId WHERE companyinvoice.shopId=:shopId AND companyinvoice.branchId=:branchId ORDER BY companyinvoice.ID DESC";
+												// $sql = "SELECT company.name as cname, companyinvoice.ID, companyinvoice.InvoiceId, companyinvoice.Subtotal, companyinvoice.Vat, companyinvoice.Discount, companyinvoice.G_total,companyinvoice.Paid,companyinvoice.DueAmount, companyinvoice.Date,companyinvoice.Status, purchaseslist.Qty, purchaseslist.BatchId FROM companyinvoice JOIN company ON company.ID = companyinvoice.CompanyId JOIN purchaseslist ON purchaseslist.InvoiceId = companyinvoice.InvoiceId WHERE companyinvoice.shopId=:shopId AND companyinvoice.branchId=:branchId ORDER BY companyinvoice.ID DESC";
 												$query = $dbh -> prepare($sql);
+												$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+												$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 												$query->execute();
 												$results=$query->fetchAll(PDO::FETCH_OBJ);
 												$cnt=1;

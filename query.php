@@ -23,9 +23,10 @@
 		$ItemId=$_GET['ItemId'];
 
 		$sql = "SELECT medicine_list.medicine_name, medicine_list.status, stocktable.BatchNumber, stocktable.InQty, stocktable.OutQty, stocktable.PurPrice, stocktable.SellPrice, stocktable.SellBoxPrice,stocktable.Date, stocktable.Status  FROM medicine_list Right JOIN stocktable ON
-		medicine_list.item_code = stocktable.Item_code WHERE stocktable.Item_code=:ItemId AND stocktable.Status!=0 AND stocktable.RestQty!=0";
+		medicine_list.item_code = stocktable.Item_code WHERE stocktable.Item_code=:ItemId AND stocktable.Status!=0 AND stocktable.RestQty!=0 AND stocktable.shopId=:shopId";
 		$query= $dbh -> prepare($sql);
 		$query-> bindParam(':ItemId', $ItemId, PDO::PARAM_STR);
+		$query-> bindParam(':shopId', $_SESSION['user']['shopId'], PDO::PARAM_STR);
 		$query-> execute();
 		$result = $query -> fetch(PDO::FETCH_OBJ);
 	
@@ -480,9 +481,9 @@
 		$pattern2 = '%'.$strength.'%';
 		$manufacturer_id = '%'.$manufacturer_id.'%';
 
-		$sql = "SELECT item_code from  medicine_list WHERE medicine_name like :pattern and strength like :pattern2  and menufacturer like  :manufacturer_id";
+		$sql = "SELECT item_code from  medicine_list WHERE medicine_name like :pattern and strength like :pattern2  and menufacturer like  :manufacturer_id AND shopid=:shopId";
 		$query = $dbh -> prepare($sql);
-		$query->execute([':pattern' => $pattern, ':pattern2' => $pattern2,':manufacturer_id' => $manufacturer_id]);
+		$query->execute([':pattern' => $pattern, ':pattern2' => $pattern2,':manufacturer_id' => $manufacturer_id, ':shopId'=>$_SESSION['user']['shopId']]);
 		// $results=$query->fetchAll(PDO::FETCH_OBJ);
 		$result=$query->fetch(PDO::FETCH_OBJ);
 		$item_code= $result->item_code;

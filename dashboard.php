@@ -113,6 +113,8 @@ else{
 								</div>
 								<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 mb-2">
 												<?php
+												date_default_timezone_set('Asia/Dhaka');
+												$date = date('Y-m-d');
 													$sql ="SELECT emi_table.ID, emi_table.loanID, emi_table.EMI_SL, emi_table.Date, emi_table.Status as emitablestatus, emi_table.Day, emi_table.Balance,emi_table.EMI, emi_table.R_balance, loan_table.ID as loantableid, loan_table.EMItype, customertable.Name,customertable.Phone, customertable.Address FROM emi_table RIGHT JOIN loan_table ON loan_table.ID = emi_table.loanID JOIN customertable ON loan_table.CustomerID = customertable.ID WHERE emi_table.Status = 0 AND emi_table.Date=:date AND  emi_table.shopId=:shopId";
 													$query = $dbh -> prepare($sql);;
 													$query->bindParam(':date',$date,PDO::PARAM_STR);
@@ -171,9 +173,17 @@ else{
 										<div class="panel-body bk-white text-black">
 											<div class="stat-panel text-center" style="padding-left: 15px;">
 											<?php 
-												$sql6 ="SELECT medicine_list.medicine_name, sum(sellingproduct.Qty) AS Qty FROM (sellingproduct RIGHT JOIN medicine_list ON sellingproduct.ProductId = medicine_list.item_code) where sellingproduct.shopId=:shopId GROUP BY ProductId ORDER BY COUNT(ProductId) DESC limit 10";
+												date_default_timezone_set('Asia/Dhaka');
+												$date = date('Y-m-d');
+												$sellEndDate=date_create($date);
+												$StartDate = date_add($sellEndDate,date_interval_create_from_date_string("-30 days"));
+												$StartDate = date_format($StartDate,"Y-m-d");
+												$sql6 ="SELECT medicine_list.medicine_name, sum(sellingproduct.Qty) AS Qty FROM sellingproduct LEFT JOIN medicine_list ON sellingproduct.ProductId = medicine_list.item_code where medicine_list.shopId=:shopId AND sellingproduct.Date BETWEEN :StartDate  AND :sellEndDate AND medicine_list.branchId=:branchId GROUP BY sellingproduct.ProductId ORDER BY COUNT(ProductId) DESC limit 10";
 												$query6 = $dbh -> prepare($sql6);
 												$query6->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+												$query6->bindParam(':StartDate',$StartDate,PDO::PARAM_STR);
+												$query6->bindParam(':sellEndDate',$date,PDO::PARAM_STR);
+												$query6->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 												$query6->execute();
 												$results6=$query6->fetchAll(PDO::FETCH_OBJ);
 												
@@ -479,7 +489,7 @@ else{
 	]);
 
 	var options = {
-	title:'Income Expense Statement',
+	title:'Expense Statement (Not Final)',
 	is3D:true
 	};
 

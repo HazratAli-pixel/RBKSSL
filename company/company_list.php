@@ -96,8 +96,9 @@ else{
 										
 										<tbody>
 
-											<?php $sql = "SELECT * from  company";
+											<?php $sql = "SELECT * from  company where shopId=:shopId";
 											$query = $dbh -> prepare($sql);
+											$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
 											$query->execute();
 											$results=$query->fetchAll(PDO::FETCH_OBJ);
 											$cnt=1;

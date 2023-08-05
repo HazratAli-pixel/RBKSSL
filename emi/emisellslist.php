@@ -91,8 +91,10 @@ else{
 												// medicine_list.medicine_name from purchaseslist LEFT JOIN medicine_list ON purchaseslist.ProductId = medicine_list.item_code 
 												// ORDER BY purchaseslist.Status ASC";
 												$sql = "SELECT loan_table.ID,loan_table.CustomerID,loan_table.InvoiceID, loan_table.Ref1_id,loan_table.Ref2_id, loan_table.loanAmount,loan_table.EMItype,loan_table.Day,loan_table.Duration,loan_table.EMI,
-												loan_table.totalEMI,loan_table.inputDate,loan_table.Status,loan_table.Interest, customertable.Name,customertable.Phone from loan_table LEFT JOIN customertable ON customertable.ID = loan_table.CustomerID ORDER By loan_table.Status DESC";
+												loan_table.totalEMI,loan_table.inputDate,loan_table.Status,loan_table.Interest, customertable.Name,customertable.Phone from loan_table LEFT JOIN customertable ON customertable.ID = loan_table.CustomerID WHERE loan_table.shopId=:shopId AND loan_table.branchId=:branchId ORDER By loan_table.Status DESC";
 												$query = $dbh -> prepare($sql);
+												$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+												$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 												$query->execute();
 												$results=$query->fetchAll(PDO::FETCH_OBJ);
 												$cnt=1;

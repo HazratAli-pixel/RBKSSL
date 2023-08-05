@@ -113,9 +113,11 @@ else{
 
 								<?php
 								$id = $_GET['customerID'];
-								$sql = "SELECT customertable.Name,customertable.Address, customertable.Phone, customerledger.NewDue FROM customertable LEFT JOIN customerledger ON customerledger.CustomerID =customertable.ID WHERE customerledger.CustomerID=:id ORDER BY customerledger.ID DESC limit 1"; 
+								$sql = "SELECT customertable.Name,customertable.Address, customertable.Phone, customerledger.NewDue FROM customertable LEFT JOIN customerledger ON customerledger.CustomerID =customertable.ID WHERE customerledger.CustomerID=:id AND customertable.shopId=:shopId AND customertable.branchId=:branchId ORDER BY customerledger.ID DESC limit 1"; 
 								$query = $dbh -> prepare($sql);
 								$query->bindParam(':id',$id,PDO::PARAM_STR);
+								$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+								$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 								$query->execute();
 								$result2=$query->fetch(PDO::FETCH_OBJ);
 								
@@ -427,7 +429,7 @@ else{
 					});
 				}
 			};
-			xmlhttp.open('GET', `query2.php?StockManagment=${clickedId}&date=${Pdate}&Qty=${PQty}&Mprice=${PMprice}&MRP=${PMRP}&productid=${ProductId2}`, true);
+			xmlhttp.open('GET', `../query2.php?StockManagment=${clickedId}&date=${Pdate}&Qty=${PQty}&Mprice=${PMprice}&MRP=${PMRP}&productid=${ProductId2}`, true);
 			xmlhttp.send();
 
 		}

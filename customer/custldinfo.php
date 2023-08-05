@@ -60,12 +60,12 @@ else{
 						
 						<!-- Zero Configuration Table -->
 						<?php
-						$id = $_GET['custId'];
-						$sql = "SELECT Name,Address, Phone FROM customertable WHERE ID=:id"; 
-						$query = $dbh -> prepare($sql);
-						$query->bindParam(':id',$id,PDO::PARAM_STR);
-						$query->execute();
-						$result2=$query->fetch(PDO::FETCH_OBJ);
+						// $id = $_GET['custId'];
+						// $sql = "SELECT Name,Address, Phone FROM customertable WHERE ID=:id"; 
+						// $query = $dbh -> prepare($sql);
+						// $query->bindParam(':id',$id,PDO::PARAM_STR);
+						// $query->execute();
+						// $result2=$query->fetch(PDO::FETCH_OBJ);
 						
 						?>
 						<div class="card">
@@ -85,9 +85,11 @@ else{
 								<table id="" class="display table table-striped table-bordered table-hover" cellspacing="0">
 								<?php
 									$id = $_GET['custId'];
-									$sql = "SELECT Name,Address, Phone FROM customertable WHERE ID=:id"; 
+									$sql = "SELECT Name,Address, Phone FROM customertable WHERE ID=:id AND shopId=:shopId AND branchId=:branchId"; 
 									$query = $dbh -> prepare($sql);
 									$query->bindParam(':id',$id,PDO::PARAM_STR);
+									$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+									$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 									$query->execute();
 									$result2=$query->fetch(PDO::FETCH_OBJ);
 									
@@ -223,15 +225,10 @@ else{
 		function invodetails(clicked_id) {
 			var tbody = document.getElementById('invoice_details');
 			var invoiceids = document.getElementById('invoiceids');
-			// var invoicePrint = document.getElementById('print');
-			// var invoiceDownload = document.getElementById('download');
-			// console.log(invoiceDownload)
 			const xmlhttp = new XMLHttpRequest();
 			xmlhttp.onreadystatechange = function () {
 				if (this.readyState == 4 && this.status == 200) {
 						invoiceids.innerHTML="Invoice No : "+clicked_id;
-						// invoicePrint.id=`{"id":"${clicked_id}","printType":"I"}`;
-						// invoiceDownload.id=`{"id":"${clicked_id}","printType":"D"}`;
 						tbody.innerHTML = this.responseText;
 						$('#exampleModal8').modal('show');
 				}
@@ -242,8 +239,7 @@ else{
 		const InvoicePrint =(event) =>{
 			const name =event.target.name
 			const id =event.target.id
-					
-			document.location.assign(`http://localhost:8080/rbkssl/invoice/invoice.php?invoiceid=${id}&ptype=${name}`);
+			window.open(`http://localhost:8080/rbkssl/invoice/invoice.php?invoiceid=${id}&ptype=${name}`, "_blank")
 		}
 	</script>
 	<!-- Loading Scripts -->

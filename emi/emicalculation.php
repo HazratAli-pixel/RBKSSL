@@ -270,13 +270,21 @@ include('../includes/config.php');
 			let emi = document.getElementById('emi');
 
 			function calculation() {
-				let monthlyinterest = Number(rate.value)/12/100;
+				
+				let monthlyinterest = Number(rate.value)/100;
 				let number1= Number(amount.value)* monthlyinterest;
-				let number2= Math.pow((1+monthlyinterest), Number(month.value));
-				let number3= Math.pow((1+monthlyinterest), Number(month.value))-1;
-				let emi_amount = number1 * (number2/number3)
-				total_interest.value = (emi_amount*Number(month.value) - Number(amount.value)).toFixed(2)
+				let number3=number1+Number(amount.value);
+				let emi_amount = number3 /Number(month.value);
+				total_interest.value =number1 ;
 				emi.value= emi_amount.toFixed(2);
+				// alert(number1);
+				// let monthlyinterest = Number(rate.value)/12/100;
+				// let number1= Number(amount.value)* monthlyinterest;
+				// let number2= Math.pow((1+monthlyinterest), Number(month.value));
+				// let number3= Math.pow((1+monthlyinterest), Number(month.value))-1;
+				// let emi_amount = number1 * (number2/number3)
+				// total_interest.value = (emi_amount*Number(month.value) - Number(amount.value)).toFixed(2)
+				// emi.value= emi_amount.toFixed(2);
 				
 			}
 			function emicalculation (){
@@ -294,7 +302,7 @@ include('../includes/config.php');
 						totalemi.value = data[1];
 					}
 				};
-				xmlhttp.open('GET', `query3.php?day=${day5}&type=${type2}&starttime=${start_time2}&month=${month2}&emi=${emi2}&loanamount=${loanamount}`, true);
+				xmlhttp.open('GET', `../query3.php?day=${day5}&type=${type2}&starttime=${start_time2}&month=${month2}&emi=${emi2}&loanamount=${loanamount}`, true);
 				xmlhttp.send();
 }
 

@@ -30,7 +30,7 @@ include('../includes/config.php');
 			$status=0;
 
 			$sql="INSERT INTO loan_table (SellerID, InvoiceID, CustomerID, Ref1_id, Ref2_id, loanAmount, EMItype, Day, Duration, InterestRate, Interest, EMI, totalEMI, Status,shopId,branchId) 
-			VALUES(:userid,:inoviceId,:customerID,:ref_1,:ref_2,:loanamount,:type,:day,:month,:interestrate,:total_interest,:usualEMI,:total_emi,:status, ,:shopId,:branchId)";
+			VALUES(:userid,:inoviceId,:customerID,:ref_1,:ref_2,:loanamount,:type,:day,:month,:interestrate,:total_interest,:usualEMI,:total_emi,:status,:shopId,:branchId)";
 			$query = $dbh->prepare($sql);
 			$query->bindParam(':userid',$userid,PDO::PARAM_STR);
 			$query->bindParam(':inoviceId',$inoviceId,PDO::PARAM_STR);
@@ -197,8 +197,10 @@ include('../includes/config.php');
                                                 <div class="d-flex flex-column flex-md-row justify-content-between">
 													<div class="col-12 col-md-6 col-lg-6">
 														<?php 
-															$sql ="SELECT * from customertable ";
+															$sql ="SELECT * from customertable WHERE shopId=:shopId AND branchId=:branchId";
 															$query = $dbh -> prepare($sql);;
+															$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+															$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 															$query->execute();
 															$results=$query->fetchAll(PDO::FETCH_OBJ);
 														?>
@@ -214,8 +216,10 @@ include('../includes/config.php');
 															</div>
 														</div>
 														<?php 
-															$sql ="SELECT * from reference ";
+															$sql ="SELECT * from reference WHERE shopId=:shopId AND branchId=:branchId ";
 															$query = $dbh -> prepare($sql);;
+															$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+															$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 															$query->execute();
 															$results=$query->fetchAll(PDO::FETCH_OBJ);
 														?>
@@ -244,8 +248,10 @@ include('../includes/config.php');
 															</div>
 														</div>
 														<?php 
-															$sql ="SELECT * from invoice ORDER BY ID DESC limit 15 ";
-															$query = $dbh -> prepare($sql);;
+															$sql ="SELECT * from invoice WHERE shopId=:shopId AND branchId=:branchId ORDER BY ID DESC limit 25 ";
+															$query = $dbh -> prepare($sql);
+															$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+															$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 															$query->execute();
 															$results=$query->fetchAll(PDO::FETCH_OBJ);
 															$query=$query->rowCount();
@@ -288,8 +294,8 @@ include('../includes/config.php');
 															<div class="col-sm-8 ">															
 																<select id="type" onchange="emicalculation()" name="type" class="form-control form-select form-select-md" required>
 																	<option Value="day">Everyday</option>
-																	<option Value="week">Weekly</option>
-																	<option Value="month" selected>Monthly</option>
+																	<option Value="week" selected>Weekly</option>
+																	<option Value="month" >Monthly</option>
 																</select>
 															</div>
 														</div>
@@ -406,14 +412,19 @@ include('../includes/config.php');
 			let usual_emi = document.getElementById('usual_emi');
 
 			function calculation() {
-				let monthlyinterest = Number(rate.value)/12/100;
+				// let monthlyinterest = Number(rate.value)/12/100;
+				// let number1= Number(amount.value)* monthlyinterest;
+				// let number2= Math.pow((1+monthlyinterest), Number(month.value));
+				// let number3= Math.pow((1+monthlyinterest), Number(month.value))-1;
+				// let emi_amount = number1 * (number2/number3)
+				// total_interest.value = (emi_amount*Number(month.value) - Number(amount.value)).toFixed(2)
+				// emi.value= emi_amount.toFixed(2);
+				let monthlyinterest = Number(rate.value)/100;
 				let number1= Number(amount.value)* monthlyinterest;
-				let number2= Math.pow((1+monthlyinterest), Number(month.value));
-				let number3= Math.pow((1+monthlyinterest), Number(month.value))-1;
-				let emi_amount = number1 * (number2/number3)
-				total_interest.value = (emi_amount*Number(month.value) - Number(amount.value)).toFixed(2)
+				let number3=number1+Number(amount.value);
+				let emi_amount = number3 /Number(month.value);
+				total_interest.value =number1 ;
 				emi.value= emi_amount.toFixed(2);
-				
 			}
 			function emicalculation (){
 				// alert('fsdaf')
@@ -442,7 +453,7 @@ include('../includes/config.php');
 						usual_emi.value= data[2]
 					}
 				};
-				xmlhttp.open('GET', `query3.php?day=${day5}&type=${type2}&starttime=${start_time2}&month=${month2}&emi=${emi2}&loanamount=${loanamount}`, true);
+				xmlhttp.open('GET', `../query3.php?day=${day5}&type=${type2}&starttime=${start_time2}&month=${month2}&emi=${emi2}&loanamount=${loanamount}`, true);
 				xmlhttp.send();
 			}
 

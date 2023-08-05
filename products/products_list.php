@@ -99,6 +99,7 @@ else{
 										<tr>
 										    <th class="text-center">#</th>
 											<th>Product Name</th>
+											<th>P Code</th>
 											<th class="text-center">Category</th>
 											<th class="text-center">Strength</th>										
                                             <th class="text-center">Company</th>
@@ -109,10 +110,10 @@ else{
 									
 									<tbody>
 
-                                        <?php $sql = "SELECT medicine_list.medicine_name,medicine_list.item_code, medicine_list.category, medicine_list.strength, medicine_list.unit, medicine_list.status, 
-										medicine_list.medicine_type, medicine_list.menufacturer, medicine_list.medicine_details, company.name as companyName, company.ID as companyId 
-										FROM `medicine_list` LEFT JOIN company ON medicine_list.menufacturer = company.ID WHERE medicine_list.status = 1";
+                                        <?php $sql = "SELECT medicine_list.medicine_name,medicine_list.item_code, medicine_list.category, medicine_list.strength, medicine_list.unit, medicine_list.status, medicine_list.medicine_type, medicine_list.menufacturer, medicine_list.medicine_details, company.name as companyName, company.ID as companyId FROM medicine_list LEFT JOIN company ON medicine_list.menufacturer = company.ID WHERE medicine_list.status = 1 AND medicine_list.shopId=:shopId AND medicine_list.branchId=:branchId";
                                         $query = $dbh -> prepare($sql);
+										$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+										$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
                                         $query->execute();
                                         $results=$query->fetchAll(PDO::FETCH_OBJ);
                                         $cnt=1;
@@ -123,6 +124,7 @@ else{
 										<tr>
 											<td class="text-center"><?php echo htmlentities($cnt);?></td>
 											<td ><?php echo htmlentities($result->medicine_name);?></td>
+											<td ><?php echo htmlentities($result->item_code);?></td>
                                             <td class="text-center"><?php echo htmlentities($result->category);?></td>
 											<td class="text-center"><?php echo htmlentities($result->strength)." ".($result->unit);?></td>  
 											<td class="text-center"><?php echo htmlentities($result->companyName);?></td>	
