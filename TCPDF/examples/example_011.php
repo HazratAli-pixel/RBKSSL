@@ -50,7 +50,7 @@ class MYPDF extends TCPDF {
 		$this->setLineWidth(0.3);
 		$this->setFont('', 'B');
 		// Header
-		$w = array(40, 35, 40, 45);
+		$w = array(35, 35, 35, 25, 20);
 		$num_headers = count($header);
 		for($i = 0; $i < $num_headers; ++$i) {
 			$this->Cell($w[$i], 7, $header[$i], 1, 0, 'C', 1);
@@ -67,10 +67,12 @@ class MYPDF extends TCPDF {
 			$this->Cell($w[1], 6, $row[1], 'LR', 0, 'L', $fill);
 			$this->Cell($w[2], 6, number_format($row[2]), 'LR', 0, 'R', $fill);
 			$this->Cell($w[3], 6, number_format($row[3]), 'LR', 0, 'R', $fill);
+			$this->Cell($w[4], 6, number_format($row[3]), 'LR', 0, 'R', $fill);
 			$this->Ln();
 			$fill=!$fill;
 		}
 		$this->Cell(array_sum($w), 0, '', 'T');
+		$this->Cell(40, 6, 'Nameaaaa: ', 1, 1, 'L', 0, '', 1);
 	}
 }
 
@@ -120,7 +122,7 @@ $pdf->setFont('helvetica', '', 12);
 $pdf->AddPage();
 
 // column titles
-$header = array('Country', 'Capital', 'Area (sq km)', 'Pop. (thousands)');
+$header = array('Country', 'Capital', 'Area (sq km)', 'Pop. (thousands)', 'Test');
 
 // data loading
 $data = $pdf->LoadData('data/table_data_demo.txt');

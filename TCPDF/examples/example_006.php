@@ -142,7 +142,7 @@ $pdf->writeHTML($html, true, false, true, false, '');
 // reset pointer to the last page
 $pdf->lastPage();
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 2nd page
 // Print a table
 
 // add a page
@@ -152,11 +152,11 @@ $pdf->AddPage();
 $subtable = '<table border="1" cellspacing="6" cellpadding="4"><tr><td>a</td><td>b</td></tr><tr><td>c</td><td>d</td></tr></table>';
 
 $html = '<h2>HTML TABLE:</h2>
-<table border="1" cellspacing="3" cellpadding="4">
+<table border="1" cellspacing="none" cellpadding="4">
 	<tr>
 		<th>#</th>
-		<th align="right">RIGHT align</th>
-		<th align="left">LEFT align</th>
+		<th border="none" align="right">RIGHT align</th>
+		<th border="none" align="left">LEFT align</th>
 		<th>4A</th>
 	</tr>
 	<tr>
@@ -192,7 +192,14 @@ $pdf->writeHTML($html, true, false, true, false, '');
 
 // Print some HTML Cells
 
-$html = '<span color="red">red</span> <span color="green">green</span> <span color="blue">blue</span><br /><span color="red">red</span> <span color="green">green</span> <span color="blue">blue</span>';
+$html = '
+<span color="red">red</span> 
+<span color="green">green</span> 
+<span color="blue">blue</span>
+<br />
+<span color="red">red</span> 
+<span color="green">green</span> 
+<span color="blue">blue</span>';
 
 $pdf->setFillColor(255,255,0);
 

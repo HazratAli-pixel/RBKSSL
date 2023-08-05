@@ -26,7 +26,7 @@ function reply_click(clicked_id) {
 			}
 		}
 	};
-	xmlhttp.open('GET', `query.php?ItemId=${clicked_id}`, true);
+	xmlhttp.open('GET', `../query.php?ItemId=${clicked_id}`, true);
 	xmlhttp.send();
 	// xmlhttp.send("ItemId="+clicked_id+"@ItemIds");
 }
@@ -44,7 +44,7 @@ function DisplayItem() {
 			}
 		}
 	};
-	xmlhttp.open('GET', 'query.php?DataShow', true);
+	xmlhttp.open('GET', '../query.php?DataShow', true);
 	xmlhttp.send();
 }
 function show_item(clicked_id) {
@@ -58,7 +58,7 @@ function show_item(clicked_id) {
 		}
 	};
 
-	xmlhttp.open('GET', `query.php?showinfo=${clicked_id}`, true);
+	xmlhttp.open('GET', `../query.php?showinfo=${clicked_id}`, true);
 	xmlhttp.send();
 }
 
@@ -71,7 +71,7 @@ function remove_item(clicked_id) {
 				DisplayItem();
 				}
 			};
-				xmlhttp.open('GET', `query.php?RemoveItem=${clicked_id}`, true);
+				xmlhttp.open('GET', `../query.php?RemoveItem=${clicked_id}`, true);
 				xmlhttp.send();
 	//}
 					// xmlhttp.send("ItemId="+clicked_id+"@ItemIds");
@@ -89,7 +89,7 @@ function changeQty(clicked_id, itemvalue) {
 				}
 				
 			};
-				xmlhttp.open('GET', `query.php?UpItem=${clicked_id}&itemvalue=${itemvalue}`, true);
+				xmlhttp.open('GET', `../query.php?UpItem=${clicked_id}&itemvalue=${itemvalue}`, true);
 				xmlhttp.send();
 
 					// xmlhttp.send("ItemId="+clicked_id+"@ItemIds");
@@ -111,7 +111,7 @@ function Clearfunction() {
 			xhr.onload = function () {
 			document.location = 'pos_invoice.php';
 			};
-			xhr.open('GET', 'query.php?ClearCard', true);
+			xhr.open('GET', '../query.php?ClearCard', true);
 			xhr.send();
   		}
 	});
@@ -185,11 +185,11 @@ function OrderConfirm() {
 						text: 'Want to print this',
 						icon: 'success',
 						buttons: true,
-	
 						})
 					.then((willDelete) => {
 						if (willDelete) {
-							document.location = 'pos_invoice.php';
+							// document.location = `invoice.php?invoiceid=${this.responseText}`;
+							window.open(`invoice.php?invoiceid=${this.responseText}`, "_blank")
 						  } 
 						  else {
 							document.location = 'pos_invoice.php';
@@ -197,7 +197,7 @@ function OrderConfirm() {
 					});
 				}
 			};
-			xmlhttp.open('GET', `query.php?customerid=${customerid}&totaldiscount=${totaldiscount}&grandtotal=${grandtotal}
+			xmlhttp.open('GET', `../query.php?customerid=${customerid}&totaldiscount=${totaldiscount}&grandtotal=${grandtotal}
 			&due=${due}&vat=${vat}&paidamount=${paidamount}&predue=${previousDue}&msgstatus=${msgstatus}&ordersubmit`, true);
 			xmlhttp.send();
 		}
@@ -225,7 +225,8 @@ function OrderConfirm() {
 									})
 								.then((willDelete) => {
 									if (willDelete) {
-										document.location = 'pos_invoice.php';
+										// document.location = `invoice.php?invoiceid=${this.responseText}`;
+										window.open(`invoice.php?invoiceid=${this.responseText}`, "_blank")
 									}
 									else {
 										document.location = 'pos_invoice.php';
@@ -233,7 +234,7 @@ function OrderConfirm() {
 								});
 							}
 						};
-						xmlhttp.open('GET', `query.php?customerid=${customerid}&totaldiscount=${totaldiscount}&grandtotal=${grandtotal}
+						xmlhttp.open('GET', `../query.php?customerid=${customerid}&totaldiscount=${totaldiscount}&grandtotal=${grandtotal}
 						&due=${due}&vat=${vat}&paidamount=${paidamount}&predue=${previousDue}&msgstatus=${msgstatus}&ordersubmit`, true);
 						xmlhttp.send();
 					  } 
@@ -261,7 +262,7 @@ function edit_unit(clicked_id) {
 		}
 	};
 
-	xmlhttp.open('GET', `query.php?edit_unit=${clicked_id}`, true);
+	xmlhttp.open('GET', `../query.php?edit_unit=${clicked_id}`, true);
 	xmlhttp.send();
 }
 
@@ -276,7 +277,7 @@ function DuePerson(clicked_id) {
 		}
 	};
 
-	xmlhttp.open('GET', `query.php?DueAmount=${clicked_id}`, true);
+	xmlhttp.open('GET', `../query.php?DueAmount=${clicked_id}`, true);
 	xmlhttp.send();
 }
 

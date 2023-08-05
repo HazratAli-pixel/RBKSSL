@@ -1,22 +1,17 @@
 <?php
-
-use Dflydev\DotAccessData\Data;
-
-use function PHPUnit\Framework\isEmpty;
-use function Symfony\Component\VarDumper\Dumper\esc;
-
 	session_start();
 	error_reporting(0);
-
 	include('includes/config.php');
 
 if(isset($_GET['invodetails'])){
 	$invoId = $_GET['invodetails'];
 	$sql = "SELECT purchaseslist.BatchId,purchaseslist.Qty,purchaseslist.Mprice,purchaseslist.MRP,purchaseslist.date,
 	medicine_list.medicine_name from purchaseslist LEFT JOIN medicine_list ON purchaseslist.ProductId = medicine_list.item_code 
-	WHERE purchaseslist.InvoiceId =:id";
+	WHERE purchaseslist.InvoiceId =:id AND shopId=:shopId AND branchId=:branchId";
 	$query = $dbh -> prepare($sql);
 	$query->bindParam(':id',$invoId,PDO::PARAM_STR);
+	$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+	$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 	$query->execute();
 	$results=$query->fetchAll(PDO::FETCH_OBJ);
 	if($query->rowCount() > 0)
@@ -39,10 +34,12 @@ if(isset($_GET['invodetails'])){
 if(isset($_GET['StatusCng'])){
 	$batchNumber = $_GET['StatusCng'];
 	$status = $_GET['Status'];
-		$sql = "UPDATE stocktable set Status=:status WHERE BatchNumber=:batchNumber";
+		$sql = "UPDATE stocktable set Status=:status WHERE BatchNumber=:batchNumber AND shopId=:shopId AND branchId=:branchId";
 		$query = $dbh -> prepare($sql);
 		$query->bindParam(':status',$status,PDO::PARAM_STR);
 		$query->bindParam(':batchNumber',$batchNumber,PDO::PARAM_STR);
+		$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+		$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 		$query->execute();
 		echo "Update Successful";
 }
@@ -58,10 +55,12 @@ if(isset($_GET['DeleteBatch'])){
 if(isset($_GET['updatePrice'])){
 	$batchNumber = $_GET['updatePrice'];
 	$price = $_GET['price'];
-	$sql = "update stocktable SET SellPrice=:price WHERE BatchNumber=:batchNumber";
+	$sql = "update stocktable SET SellPrice=:price WHERE BatchNumber=:batchNumber AND shopId=:shopId AND branchId=:branchId";
 	$query = $dbh -> prepare($sql);
 	$query->bindParam(':price',$price,PDO::PARAM_STR);
 	$query->bindParam(':batchNumber',$batchNumber,PDO::PARAM_STR);
+	$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+	$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 	$query->execute();
 	echo "Record update Successful";
 }
@@ -83,22 +82,26 @@ if(isset($_GET['StockManagment'])){
 	if($query->rowCount() > 0)
 	{
 		$sts = 1;
-		$sql = "update stocktable SET InQty=:PQty WHERE BatchNumber=:batchNumber";
+		$sql = "update stocktable SET InQty=:PQty WHERE BatchNumber=:batchNumber AND shopId=:shopId AND branchId=:branchId";
 		$query = $dbh -> prepare($sql);
 		$query->bindParam(':PQty',$PQty,PDO::PARAM_STR);
 		$query->bindParam(':batchNumber',$batchNumber,PDO::PARAM_STR);
+		$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+		$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 		$query->execute();
-		$sql = "update purchaseslist SET Status=:sts WHERE BatchId=:batchNumber";
+		$sql = "update purchaseslist SET Status=:sts WHERE BatchId=:batchNumber AND shopId=:shopId AND branchId=:branchId";
 		$query = $dbh -> prepare($sql);
 		$query->bindParam(':sts',$sts,PDO::PARAM_STR);
 		$query->bindParam(':batchNumber',$batchNumber,PDO::PARAM_STR);
+		$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+		$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 		$query->execute();
 		echo "Product updated";
 	}
 	else{
 		$sts = 1;
-		$sql = "INSERT INTO stocktable (Item_code, BatchNumber,InQty,PurPrice,SellPrice,Date,Status) 
-		VALUES(:productid,:batchNumber,:PQty,:Mprice,:MRP,:date,:sts)";
+		$sql = "INSERT INTO stocktable (Item_code, BatchNumber,InQty,PurPrice,SellPrice,Date,Status, shopId, branchId) 
+		VALUES(:productid,:batchNumber,:PQty,:Mprice,:MRP,:date,:sts, :shopId, :branchId)";
 		$query = $dbh -> prepare($sql);
 		$query->bindParam(':productid',$productid,PDO::PARAM_STR);
 		$query->bindParam(':batchNumber',$batchNumber,PDO::PARAM_STR);
@@ -107,11 +110,15 @@ if(isset($_GET['StockManagment'])){
 		$query->bindParam(':MRP',$MRP,PDO::PARAM_STR);
 		$query->bindParam(':date',$date,PDO::PARAM_STR);
 		$query->bindParam(':sts',$sts,PDO::PARAM_STR);
+		$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+		$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 		$query->execute();
-		$sql = "UPDATE purchaseslist SET Status=:sts WHERE BatchId=:batchNumber";
+		$sql = "UPDATE purchaseslist SET Status=:sts WHERE BatchId=:batchNumber AND shopId=:shopId AND branchId=:branchId";
 		$query = $dbh -> prepare($sql);
 		$query->bindParam(':sts',$sts,PDO::PARAM_STR);
 		$query->bindParam(':batchNumber',$batchNumber,PDO::PARAM_STR);
+		$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+		$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 		$query->execute();
 		echo "Product Newly Inserted";
 	}
@@ -139,11 +146,13 @@ if(isset($_GET['otpsend'])){
 	$response = curl_exec($ch);
 	curl_close($ch);
 	$milliseconds = floor(microtime(true) * 1000+300000);
-	$sql = "INSERT INTO otptable (UserId,Code,time) VALUES(:userid,:code,:milliseconds) ";
+	$sql = "INSERT INTO otptable (UserId,Code,time) VALUES(:userid,:code,:milliseconds, :shopId, :branchId) ";
 	$query = $dbh -> prepare($sql);
 	$query->bindParam(':userid',$userid,PDO::PARAM_STR);
 	$query->bindParam(':code',$code,PDO::PARAM_STR);
 	$query->bindParam(':milliseconds',$milliseconds,PDO::PARAM_STR);
+	$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+	$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 	$query->execute();
 	$_SESSION['lastInsertId'] = $dbh->lastInsertId();
 }
