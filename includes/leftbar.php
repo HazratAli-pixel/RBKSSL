@@ -181,7 +181,6 @@ function cssStyle($lastLinkName,$currenFileName) {
 		<?php }?>
 
 
-		
 		<li margin-bottom: 200px;"><a href='<?php echo count($Urls) > 3? "../logout.php": "./logout.php"?>'><i class="fas fa-sign-out-alt mr-2"></i>Logout</a></li>
 	</ul>
 </nav>

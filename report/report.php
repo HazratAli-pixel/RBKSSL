@@ -210,7 +210,6 @@ else{
 			const endDate =document.getElementById('endDate').value;
 			const PID = document.getElementById('product_id').value;
 			const SID = document.getElementById('seller_id').value;
-			console.log(startDate,endDate, PID, SID)
 			const customReportDiv = document.getElementById('customReportDiv');
 			const xmlhttp = new XMLHttpRequest();
 			xmlhttp.onreadystatechange = function () {					
@@ -220,7 +219,15 @@ else{
 			};
 			xmlhttp.open('GET', `./reportquerysales.php?customReport&startDate=${startDate}&endDate=${endDate}&SID=${SID}&PID=${PID}`, true);
 			xmlhttp.send();
-
+		}
+		const InvoicePrint = (event)=>{
+			const startDate =document.getElementById('startDate').value;
+			const endDate =document.getElementById('endDate').value;
+			const PID = document.getElementById('product_id').value;
+			const SID = document.getElementById('seller_id').value;
+			const name =event.target.name
+			const id =event.target.id
+			window.open(`http://localhost:8080/rbkssl/report/reportprint.php?customReport&startDate=${startDate}&endDate=${endDate}&SID=${SID}&PID=${PID}&ptype=${name}`, "_blank")
 		}
 	</script>
 

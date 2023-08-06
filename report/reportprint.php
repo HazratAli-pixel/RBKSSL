@@ -3,20 +3,15 @@ session_start();
 error_reporting(0);
 // Include the main TCPDF library (search for installation path).
 require_once('../TCPDF/tcpdf.php');
+require_once('../constant.php');
 // require_once('./includes/config.php');
 
 
 
 // DB credentials.
-    define('DB_HOST','localhost');
-    define('DB_USER','root');
-    define('DB_PASS','');
-    // define('DB_NAME','dshop');
-    define('DB_NAME','pharmacy_management_system');
-    // Establish database connection.
     try
     {
-    $dbh = new PDO("mysql:host=".DB_HOST.";dbname=".DB_NAME,DB_USER, DB_PASS,array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
+    $dbh = new PDO("mysql:host=".DB_HOST.";dbname=".DB_NAME,DB_USER, DB_PASSWORD,array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
     }
     catch (PDOException $e)
     {
@@ -24,28 +19,41 @@ require_once('../TCPDF/tcpdf.php');
     }
 
     $domain = "localhost/url/";
-    $con=mysqli_connect("localhost", "root", "", "pharmacy_management_system");
+    $con=mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
     if(mysqli_connect_errno()){
     echo "Connection Fail".mysqli_connect_error();
     }
-	$invoieId = $_GET['invoiceid'];
-	// $invoieId = 232;
+	
+	$customReport = $_GET['customReport'];
+    $startDate = $_GET['startDate'];
+    $endDate = $_GET['endDate'];
+    $SID = $_GET['SID'];
+    $PID = $_GET['PID'];
+    if(strlen($SID) ==0 && strlen($PID) != 0 ){
+        $sql = "SELECT sellingproduct.InvoiceId, sellingproduct.ProductId as PID, sellingproduct.BatchId as BID, sellingproduct.Qty,sellingproduct.NetPrice as Price, sellingproduct.Price as totalPrice, sellingproduct.Date, sellingproduct.shopId, sellingproduct.branchId, medicine_list.medicine_name as Pname, users.UserId as UID, users.Name as Uname FROM sellingproduct JOIN medicine_list ON sellingproduct.ProductId = medicine_list.item_code JOIN users ON users.UserId = sellingproduct.SellerId WHERE sellingproduct.shopId =:shopId  AND sellingproduct.Date BETWEEN :sellStartDate  AND :sellEndDate AND sellingproduct.ProductId Like :PID";
+        $query = $dbh -> prepare($sql);
+        $query->execute([':shopId' => $_SESSION['user']['shopId'],':sellStartDate' => $startDate, ':sellEndDate' => $endDate, ':PID' => $PID]);
+    }
+    if(strlen($SID) !=0 && strlen($PID) == 0 ){
+        $sql = "SELECT sellingproduct.InvoiceId, sellingproduct.ProductId as PID, sellingproduct.BatchId as BID, sellingproduct.Qty,sellingproduct.NetPrice as Price, sellingproduct.Price as totalPrice, sellingproduct.Date, sellingproduct.shopId, sellingproduct.branchId, medicine_list.medicine_name as Pname, users.UserId as UID, users.Name as Uname FROM sellingproduct JOIN medicine_list ON sellingproduct.ProductId = medicine_list.item_code JOIN users ON users.UserId = sellingproduct.SellerId WHERE sellingproduct.shopId =:shopId  AND sellingproduct.Date BETWEEN :sellStartDate  AND :sellEndDate AND sellingproduct.SellerId Like :SID";
+        $query = $dbh -> prepare($sql);
+        $query->execute([':shopId' => $_SESSION['user']['shopId'],':sellStartDate' => $startDate, ':sellEndDate' => $endDate, ':SID' => $SID]);
+    }
+    if(strlen($SID) !=0 && strlen($PID) != 0 ){
+        $sql = "SELECT sellingproduct.InvoiceId, sellingproduct.ProductId as PID, sellingproduct.BatchId as BID, sellingproduct.Qty,sellingproduct.NetPrice as Price, sellingproduct.Price as totalPrice, sellingproduct.Date, sellingproduct.shopId, sellingproduct.branchId, medicine_list.medicine_name as Pname, users.UserId as UID, users.Name as Uname FROM sellingproduct JOIN medicine_list ON sellingproduct.ProductId = medicine_list.item_code JOIN users ON users.UserId = sellingproduct.SellerId WHERE sellingproduct.shopId =:shopId  AND sellingproduct.Date BETWEEN :sellStartDate  AND :sellEndDate AND sellingproduct.ProductId Like :PID AND sellingproduct.SellerId Like :SID";
+        $query = $dbh -> prepare($sql);
+        $query->execute([':shopId' => $_SESSION['user']['shopId'],':sellStartDate' => $startDate, ':sellEndDate' => $endDate, ':PID' => $PID, ':SID' => $SID]);
+    }
+    if(strlen($SID) ==0 && strlen($PID) == 0 ){
+        $sql = "SELECT sellingproduct.InvoiceId, sellingproduct.ProductId as PID, sellingproduct.BatchId as BID, sellingproduct.Qty,sellingproduct.NetPrice as Price, sellingproduct.Price as totalPrice, sellingproduct.Date, sellingproduct.shopId, sellingproduct.branchId, medicine_list.medicine_name as Pname, users.UserId as UID, users.Name as Uname FROM sellingproduct JOIN medicine_list ON sellingproduct.ProductId = medicine_list.item_code JOIN users ON users.UserId = sellingproduct.SellerId WHERE sellingproduct.shopId =:shopId  AND sellingproduct.Date BETWEEN :sellStartDate  AND :sellEndDate";
+        $query = $dbh -> prepare($sql);
+        $query->execute([':shopId' => $_SESSION['user']['shopId'],':sellStartDate' => $startDate, ':sellEndDate' => $endDate]);
+    }
+	$results=$query->fetchAll(PDO::FETCH_OBJ);
+	$cnt=1;
 
-	// $sql = "SELECT * from  customertable";
-	$sql = "SELECT customertable.Name, customertable.Address, customertable.Phone, invoice.ID, invoice.SellerID, invoice.NetPayment, invoice.PreDue, invoice.discount,invoice.discount,invoice.Tax,invoice.Total_with_due,invoice.DueAmount, users.Name as UName, invoice.date, invoice.PaidAmount FROM `invoice` JOIN customertable ON invoice.CustomerID = customertable.ID JOIN users ON users.UserId = invoice.SellerID WHERE invoice.ID=:invoieId AND invoice.shopId=:shopId";
-    $query = $dbh -> prepare($sql);
-	$query->bindParam(':invoieId',$invoieId,PDO::PARAM_STR);
-	$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
-    $query->execute();
-	$results=$query->fetch(PDO::FETCH_OBJ);
 
-	$sql2 = "SELECT invoice.ID, invoice.shopId, invoice.branchId, invoice.CustomerID, sellingproduct.ProductId, sellingproduct.NetPrice, sellingproduct.Qty,sellingproduct.Price, medicine_list.medicine_name, medicine_list.strength, medicine_list.menufacturer FROM invoice JOIN sellingproduct ON invoice.ID= sellingproduct.InvoiceId JOIN medicine_list ON medicine_list.item_code = sellingproduct.ProductId WHERE invoice.ID=:invoieId AND invoice.shopId=:shopId";
-    $query2 = $dbh -> prepare($sql2);
-	$query2->bindParam(':invoieId',$invoieId,PDO::PARAM_STR);
-	// $query->bindParam(':shopId',$invoieId,PDO::PARAM_STR);
-	$query2->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
-    $query2->execute();
-    $ProductList=$query2->fetchAll(PDO::FETCH_OBJ);
+	
 
 
 // create new PDF document
@@ -59,7 +67,7 @@ $pdf->SetSubject('TCPDF Tutorial');
 $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 
 // set default header data
-$pdf->SetHeaderData("dshop.jpeg", 20, $_SESSION['user']['shopName'], $_SESSION['user']['branchName'].", ".$_SESSION['user']['branchsAddress']."\n"."Phone: ".$_SESSION['user']['branchsPhone']);
+$pdf->SetHeaderData("dshop.jpeg", 20, $_SESSION['user']['shopName'], $_SESSION['user']['branchName'].", ".$_SESSION['user']['branchsAddress']."\n"."Phone: ".$_SESSION['user']['branchPhone']);
 
 // set header and footer fonts
 $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', 12));
@@ -94,7 +102,7 @@ $pdf->SetFont('times', '', 11);
 $pdf->AddPage();
 
 //Cell($w, $h=0, $txt='', $border=0, $ln=0, $align='', $fill=0, $link='', $stretch=0, $ignore_min_height=false, $calign='T', $valign='M')
-
+// SELECT sellingproduct.InvoiceId, sellingproduct.ProductId as PID, sellingproduct.BatchId as BID, sellingproduct.Qty,sellingproduct.NetPrice as Price, sellingproduct.Price as totalPrice, sellingproduct.Date, sellingproduct.shopId, sellingproduct.branchId, medicine_list.medicine_name as Pname, users.UserId as UID, users.Name as Uname 
 
 date_default_timezone_set('Asia/Dhaka');
 // $DateTime = date('Y-m-d h:i:s');
@@ -102,167 +110,52 @@ $DateTime = date('H:i:s');
 $SL='';
 $cnt=1;
 $ProductLists='';
-$Quentity='';
-$UnitPrice='';
+$ProductID='';
+$batchNo='';
+$InvoiceNo='';
+$ProductQty='';
+$ProductPrice='';
 $TotalPrice='';
-$GrandTotal='';
-if($query2->rowCount() > 0){
-	foreach($ProductList as $product){
-		$SL.="$cnt"."<br/>";
-		$ProductLists.=$product->medicine_name.' ('.$product->strength.')'."<br/>";
-		$Quentity.=$product->Qty."<br/>";
-		$UnitPrice.=$product->NetPrice."<br/>";
-		$TotalPrice.=$product->Price."<br/>";
+$Date='';
+$SellerName='';
+if($query->rowCount() > 0){
+	foreach($results as $result){
+		$Data.='
+		<tr>
+			<td colspan="1" align="center">'."$cnt".'</td>
+			<td colspan="2">'."$result->Pname".'</td>
+			<td colspan="2" align="center">'."$result->PID".'</td>
+			<td colspan="1" align="right">'."$result->BID".'</td>
+			<td colspan="1" align="right">'."$result->Qty".'</td>
+			<td colspan="1" align="right">'."$result->Price".'</td>
+			<td colspan="2" align="right">'."$result->Date".'</td>
+			<td colspan="2" align="right">'."$result->Uname".'</td>
+		</tr>';
 		$cnt=$cnt+1;
-		$GrandTotal=$GrandTotal+$product->Price;
 	}
 }
-
-
-
-$invoiceDetails='
-<table style="padding-top: 10px" border="none" >
-	<tr>
-		<td style="font-weight: bold;" colspan="2" >Sales Order</td>
-		<td style="font-weight: bold;" colspan="10">: '."$results->SellerID$results->date$results->ID".'</td>
-	</tr>
-	<tr>
-		<td style="font-weight: bold;" colspan="2"  >Name</td>
-		<td colspan="4"  >: '."$results->Name".'</td>
-		<td style="font-weight: bold;" colspan="2"  >Date</td>
-		<td colspan="4"  >: '."$results->date".'</td>
-	</tr>
-	<tr>
-		<td style="font-weight: bold;" colspan="2"  >Phone</td>
-		<td colspan="4"  >: '."$results->Phone".'</td>
-		<td style="font-weight: bold;" colspan="2"  >Time</td>
-		<td colspan="4"  >: '."$DateTime".'</td>
-	</tr>
-	<tr>
-		<td style="font-weight: bold;" colspan="2"  >Bill No</td>
-		<td colspan="4"  >: '."$results->ID".'</td>
-		<td style="font-weight: bold;" colspan="2"  >Sold By</td>
-		<td colspan="4"  >: '."$results->UName ".'</td>
-	</tr>
-    <tr>
-		<td style="font-weight: bold;" colspan="2" >Address</td>
-		<td colspan="10" >: '."$results->Address".'</td>
-	</tr>
-</table>';
-
 
 
 $html = '
 <table border="1" cellspacing="none" cellpadding="4">
 	<tr>
 		<th bgcolor="#cccccc" style="font-weight: bold;" colspan="1" align="center" >SL No</th>
-		<th bgcolor="#cccccc" style="font-weight: bold;" colspan="5" >Product Description</th>
-		<th bgcolor="#cccccc" style="font-weight: bold;" colspan="2" align="center">Quantity</th>
-		<th bgcolor="#cccccc" style="font-weight: bold;" colspan="2" align="right">Unit Price</th>
-		<th bgcolor="#cccccc" style="font-weight: bold;" colspan="2" align="right">Total Price</th>
-	</tr>
-	<tr>
-		<td colspan="1" align="center">'."$SL".'</td>
-		<td colspan="5">'."$ProductLists".'</td>
-		<td colspan="2" align="center">'."$Quentity".'</td>
-		<td colspan="2" align="right">'."$UnitPrice".'</td>
-		<td colspan="2" align="right">'."$TotalPrice".'</td>
-	</tr>
-	<tr>
-		<td colspan="6" ></td>
-		<td colspan="4" >Total Amount</td>
-		<td bgcolor="#cccccc" style="font-weight: bold;" colspan="2" align="right">'.number_format($GrandTotal).'</td>
-	</tr>
-
-</table>';
-
-
-$calculation='
-<table border="none" style="padding-top: 10px"  >
-	<tr>
-		<td colspan="6" ></td>
-		<td colspan="3" >Discount</td>
-		<td align="center" >:</td>
-		<td colspan="2" align="right">'.number_format("$results->discount").'</td>
-	</tr>
-	<tr>
-        <td colspan="6" ></td>
-		<td colspan="3" >Vat</td>
-        <td align="center" >:</td>
-		<td colspan="2" align="right">'.number_format("$results->Tax").'</td>
-	</tr>
-	<tr>
-		<td colspan="6" ></td>
-		<td colspan="3" >Total</td>
-		<td align="center" >:</td>
-		<td colspan="2" align="right">'.number_format("$results->NetPayment").'</td>
-	</tr>
-	<tr>
-		<td colspan="6" ></td>
-		<td colspan="3" >Priviou Dues</td>
-		<td align="center" >:</td>
-		<td colspan="2" align="right">'.number_format("$results->PreDue").'</td>
-	</tr>
-	<tr>
-        <td colspan="6" ></td>
-		<td colspan="3" >Total</td>
-        <td align="center" >:</td>
-		<td colspan="2" align="right">'.number_format("$results->Total_with_due").'</td>
-	</tr>
-	<tr>
-        <td colspan="6" ></td>
-		<td colspan="3" >Cash received</td>
-        <td align="center" >:</td>
-		<td colspan="2" align="right">'.number_format("$results->PaidAmount").'</td>
-	</tr>
-	<tr>
-        <td colspan="6" ></td>
-		<td colspan="3" >Due Amount</td>
-        <td align="center" >:</td>
-		<td colspan="2" color="red" style="font-weight: bold;"  align="right">'.number_format("$results->DueAmount").'</td>
-	</tr>
-</table>';
-
-$Signature='
-<table border="none" style="padding-top: 10px"  >
-	<tr>
-		<td colspan="5" ></td>
-		<td colspan="2" ></td>
-		<td colspan="5" ></td>
-	</tr>
-	<tr>
-		<td colspan="5" ></td>
-		<td colspan="2" ></td>
-		<td colspan="5" ></td>
-	</tr>
-	<tr>
-		<td colspan="5" ></td>
-		<td colspan="2" ></td>
-		<td colspan="5" ></td>
-	</tr>
-	<tr>
-		<td colspan="5" ></td>
-		<td colspan="2" ></td>
-		<td colspan="5" ></td>
-	</tr>
-	<tr>
-        <td colspan="5" ><hr/></td>
-        <td colspan="2" ></td>
-		<td colspan="5" ><hr/></td>
-	</tr>
-	<tr>
-        <td colspan="5" align="center">Received With Good Condition by</td>
-        <td colspan="2" ></td>
-		<td colspan="5" align="center" >Authorised Signature and Company Stamp</td>
-	</tr>
-
+		<th bgcolor="#cccccc" style="font-weight: bold;" colspan="2" >Name</th>
+		<th bgcolor="#cccccc" style="font-weight: bold;" colspan="2" align="center">P.ID</th>
+		<th bgcolor="#cccccc" style="font-weight: bold;" colspan="1" align="right">B. NO</th>
+		<th bgcolor="#cccccc" style="font-weight: bold;" colspan="1" align="right">Qty</th>
+		<th bgcolor="#cccccc" style="font-weight: bold;" colspan="1" align="right">T.Price</th>
+		<th bgcolor="#cccccc" style="font-weight: bold;" colspan="2" align="right">Date</th>
+		<th bgcolor="#cccccc" style="font-weight: bold;" colspan="2" align="right">Seller</th>
+	</tr>'.$Data.'
 </table>';
 
 
 
 
-$pdf->writeHTML($invoiceDetails, true, false, true, false, '');
-$pdf->writeHTML($html.$calculation, true, false, true, false, '');
+
+// $pdf->writeHTML($invoiceDetails, true, false, true, false, '');
+$pdf->writeHTML($html, true, false, true, false, '');
 
 $pdf->writeHTMLCell(0, 0, '0', '255', $FooterPart, '0', 0, 0, false, 'C', false);
 
@@ -271,9 +164,7 @@ $pdf->writeHTMLCell(0, 0, '0', '255', $FooterPart, '0', 0, 0, false, 'C', false)
 $pdf->lastPage();
 
 if($_GET['ptype']=='D'){
-	$pdf->Output($results->Name.'_'.$results->Phone.'_'.$results->ID.".pdf", 'D');
+	$pdf->Output("Sales Report".".pdf", 'D');
 }
-else $pdf->Output($results->Name.'_'.$results->Phone.'_'.$results->ID.".pdf", 'I');
-
-
+else $pdf->Output("Sales Report_".".pdf", 'I');
 

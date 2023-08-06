@@ -289,6 +289,8 @@ include('../includes/config.php');
 												</table>
 											</div>
 											<div class="row">
+												<div class="col-6">
+												</div>
 												<div class="col-4">
 													<div class="col-12 d-flex flex-column justify-content-end">
 														<div class="row mb-2">
@@ -328,6 +330,8 @@ include('../includes/config.php');
 															</div>
 														</div>
 													</div>
+												</div>
+												<div class="col-2">
 												</div>
 											</div>
 										</div>
@@ -556,7 +560,6 @@ include('../includes/config.php');
 			// FullPayment();
 			subTotal();
 
-
 			function CustomerNameSearch(inputValue){
 				const xmlhttp = new XMLHttpRequest();
 				xmlhttp.onreadystatechange = function () {
@@ -568,9 +571,7 @@ include('../includes/config.php');
 
 				xmlhttp.open('GET', `../query4.php?CustomberName=${inputValue}`, true);
 				xmlhttp.send();
-			}		
-	
-
+			}
 		</script>
 		
 		<!-- Loading Scripts -->

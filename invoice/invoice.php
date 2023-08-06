@@ -93,8 +93,6 @@ $pdf->SetFont('times', '', 11);
 // add a page
 $pdf->AddPage();
 
-//Cell($w, $h=0, $txt='', $border=0, $ln=0, $align='', $fill=0, $link='', $stretch=0, $ignore_min_height=false, $calign='T', $valign='M')
-
 
 date_default_timezone_set('Asia/Dhaka');
 // $DateTime = date('Y-m-d h:i:s');

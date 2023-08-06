@@ -13,7 +13,7 @@ else{
 			
 			$userid = $_SESSION['alogin'];
 			$cusId = $_GET['customerID'];
-			// $cusId=$_POST['c_id'];
+			// $cusId= $_POST['c_id'];
 			$preDue=$_POST['c_p_total_due'];
 			$paidAmount=$_POST['c_paid'];
 
@@ -26,7 +26,7 @@ else{
 			
 			$status=1;
 
-			$sql = "UPDATE emi_table SET PaidAmount=:paidAmount, DueAmount=:newDue, CollectorID=:userid,CollectedDate=:date, Status=:status WHERE ID=:emiID AND shopId=:shopId AND branchId=:branchId";
+			$sql = "UPDATE emi_table SET PaidAmount=:paidAmount, DueAmount=:newDue, CollectorID=:userid,CollectedDate=:date, Status=:status WHERE ID=:emiID AND shopId=:shopId";
 			$query = $dbh -> prepare($sql);
 			$query->bindParam(':paidAmount',$paidAmount,PDO::PARAM_STR);
 			$query->bindParam(':newDue',$newDue,PDO::PARAM_STR);
@@ -35,22 +35,22 @@ else{
 			$query->bindParam(':status',$status,PDO::PARAM_STR);
 			$query->bindParam(':emiID',$emiID,PDO::PARAM_STR);
 			$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
-			$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 			$query->execute();
 			
 			$cusName=$_POST['cusName2'];
 
 			$sql2="INSERT INTO customerledger (AdminID,CustomerID,PreDue,Credit,shopId,branchId) 
-			VALUES(:userid,:cusId,:preDue,:paidAmount,:shopId,:branchId)";
+			VALUES(:userid,:cusId,:PreDue,:paidAmount,:shopId,:branchId)";
 
 			$query2 = $dbh->prepare($sql2);
 			$query2->bindParam(':userid',$userid,PDO::PARAM_STR);
 			$query2->bindParam(':cusId',$cusId,PDO::PARAM_STR);
-			$query2->bindParam(':preDue',$preDue,PDO::PARAM_STR);
+			$query2->bindParam(':PreDue',$preDue,PDO::PARAM_STR);
 			$query2->bindParam(':paidAmount',$paidAmount,PDO::PARAM_STR);
-			$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
-			$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
+			$query2->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+			$query2->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 			$query2->execute();
+			
 		}
 
 	
@@ -179,9 +179,10 @@ else{
 												date_default_timezone_set('Asia/Dhaka');
 												$date = date('Y-m-d');
 												$loanid = $_GET['loanid'];
-												$sql = "SELECT * from emi_table WHERE loanID=:loanid ORDER By Status ASC";
+												$sql = "SELECT * from emi_table WHERE loanID=:loanid and shopId=:shopId ORDER By Status ASC";
 												$query = $dbh -> prepare($sql);
 												$query->bindParam(':loanid',$loanid,PDO::PARAM_STR);
+												$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
 												$query->execute();
 												$results=$query->fetchAll(PDO::FETCH_OBJ);
 												$cnt=1;
@@ -317,8 +318,8 @@ else{
 							<div class="row mb-3">
 								<label for="" class="col-sm-3 col-form-label text-start text-sm-end">Previous Due : </label>
 								<div class="col-sm-9">
-									<input id="c_p_due" name="c_p_due" type="text" class="form-control"  readonly>
-									<input id="c_p_total_due" name="c_p_total_due" type="text" class="form-control" hidden>
+									<input id="c_p_due" name="c_p_due" type="text" class="form-control" value=""  readonly>
+									<input id="c_p_total_due" name="c_p_total_due" type="text" class="form-control" value="" hidden>
 								</div>
 							</div>
 							<div class="row mb-3">
@@ -347,7 +348,7 @@ else{
 						<div class="col-md-12">
 							<div class="d-grid gap-2 d-md-flex d-sm-flex justify-content-md-end justify-content-sm-end justify-content-lg-end">
 								<button id="fullPaid" onclick="fullemipay()" style="min-width: 150px;" class="btn btn-info me-md-2" type="button">Full Paid</button>
-								<button style="min-width: 150px;" class="btn btn-success" onclick="customer_add()" name="submit" >Submit</button>
+								<button style="min-width: 150px;" class="btn btn-success" name="submit" >Submit</button>
 							</div>
 						</div>					
 						</form>	
@@ -377,32 +378,35 @@ else{
 			let c_emi = document.getElementById('c_emi');
 			let emiID = document.getElementById('emiID');
 			let c_p_total_due = document.getElementById('c_p_total_due');
+			let c_p_due = document.getElementById('c_p_due');
+			
 
 			emiID.value = id;
+			c_p_due.value =predue; 
 			c_p_total_due.value = predue;
 			c_name.value = name;
 			c_phone.value = phone;
 			c_date.value = date;
 			c_emi_no.value = emiNo;
 			c_emi.value = emi;
+			emipay();
 		}
 		const emipay = (event) =>{
 			// let val = event.target.value;
 			let emi= document.getElementById('c_emi').value;
 			let c_paid= document.getElementById('c_paid').value;
 			let c_new_due= document.getElementById('c_new_due');
-			c_new_due.value = (emi-c_paid).toFixed(2);
+			let c_p_total_due = document.getElementById('c_p_total_due').value;
+			c_new_due.value = (c_p_total_due-c_paid).toFixed(2);
 
 		}
 		const fullemipay = (event) =>{
+			let c_p_total_due = document.getElementById('c_p_total_due').value;
 			let emi= document.getElementById('c_emi').value;
 			let c_paid= document.getElementById('c_paid');
 			let c_new_due= document.getElementById('c_new_due');
 			c_paid.value = emi;
-			c_new_due.value = (emi-(c_paid.value)).toFixed(2);
-
-
-
+			c_new_due.value = (Number(c_p_total_due)-emi).toFixed(2);
 		}
 		const StatusCng = (event)=>{
 			let clickedId = event.target.id
