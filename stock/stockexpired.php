@@ -22,7 +22,7 @@ else{
 	<meta name="author" content="">
 	<meta name="theme-color" content="#3e454c">
 	
-	<title>Dshop-Available Stock List </title>
+	<title>D-shop </title>
 	<link rel="shortcut icon" href="../assets/pic/pmslogo.png" type="image/x-icon">
 	<!-- Font awesome -->
 	<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
@@ -39,7 +39,7 @@ else{
 		
 
 </head>
-<body>
+<body onload="stockout()">
 	<?php include('../includes/header.php');?>
 	<div class="ts-main-content">
 		<?php include('../includes/leftbar.php');?>
@@ -53,18 +53,18 @@ else{
 							<div  class="card-header">
                                 <div class="d-flex justify-content-between align-items-center h-100px">
 		  							<div style="font-size: 20px; " class="bg-primary;">
-									  Available Stock List
+										Experied Product Information
 									</div>
 									<div >
-										<a href="<?php echo $value[2]=='stock' ? $links."/purchase/add_purchase.php": $links.'./add_purchase.php' ?>"  class="btn btn-info"> <i class="fas fa-plus mr-2"></i> Add Purchase</a>
-										<a href="stocklist.php" class="btn btn-info"> <i class="fa fa-credit-card" aria-hidden="true"></i> Stock List</a>
+										<a href="stocklist.php" class="btn btn-info"> <i class="fas fa-align-justify mr-2"></i> Stock List</a>
+										<a href="stockout.php" class="btn btn-info"> <i class="fa fa-credit-card" aria-hidden="true"></i> out of Stock</a>
                                         <!-- <button type="button" class="btn btn-info mr-3" data-toggle="modal" data-target="#exampleModal2"><i class="fa fa-credit-card" aria-hidden="true"></i> Pay Due</button> -->
                                         
 									</div>
 								</div>
                             </div>
 							<div class="card-body">
-                                <!-- <a href="download-records.php" style="color:red; font-size:16px;">Download Available Stock Medicine list</a> -->
+                                <a href="download-records.php" style="color:red; font-size:16px;">Download Experied Product list</a>
 								<div class="row ">
 									<div class="col-12 col-md-12 col-lg-12 col-xl-12 d-flex row flex-sm-column table-responsive">
 								
@@ -79,6 +79,7 @@ else{
 													<th class="text-center">RestQty</th>
 													<th class="text-center">Mprice</th>
 													<th class="text-center">MRP</th>
+													<th class="text-center">ExDate</th>
 													<th class="text-center">Dates</th>
 													<th class="text-center">Status</th>
 													<th class="text-center">Action</th>
@@ -88,10 +89,11 @@ else{
 
 												<?php 
 												date_default_timezone_set('Asia/Dhaka');
-												$date = date('Y-m-d');	
-												$sql = "SELECT stocktable.BatchNumber, stocktable.Date, stocktable.InQty,stocktable.OutQty, stocktable.RestQty,stocktable.PurPrice,stocktable.SellPrice,
-												stocktable.Date,stocktable.Status, medicine_list.medicine_name from stocktable LEFT JOIN medicine_list ON stocktable.Item_code = medicine_list.item_code WHERE stocktable.RestQty!=0 and stocktable.shopId=:shopId ORDER BY stocktable.ID DESC";
+												$date = date('Y-m-d');											
+												$sql = "SELECT stocktable.BatchNumber, stocktable.InQty,stocktable.OutQty, stocktable.RestQty,stocktable.PurPrice,stocktable.SellPrice, stocktable.Status, stocktable.Date, medicine_list.medicine_name from stocktable LEFT JOIN medicine_list ON stocktable.Item_code = 
+												medicine_list.item_code WHERE stocktable.Date <:date AND stocktable.shopId=:shopId ORDER BY medicine_list.medicine_name ASC";
 												$query = $dbh -> prepare($sql);
+												$query-> bindParam(':date', $date, PDO::PARAM_STR);
 												$query-> bindParam(':shopId', $_SESSION['user']['shopId'], PDO::PARAM_STR);
 												$query->execute();
 												$results=$query->fetchAll(PDO::FETCH_OBJ);
@@ -112,11 +114,9 @@ else{
 													<td class="text-end"><p id="RestQty-<?php echo htmlentities($result->BatchNumber);?>" class="form-control"><?php echo $result->RestQty;?></p></td>
 													<td class="text-end"><p id="Mprice-<?php echo htmlentities($result->BatchNumber);?>" class="form-control"><?php echo $result->PurPrice;?></p></td>
 													<td class="text-end" ><p id="MRP-<?php echo htmlentities($result->BatchNumber);?>" class="form-control"><?php echo $result->SellPrice;?></p></td>
-													<td class="text-center" ><p id="MRP-<?php echo htmlentities($result->BatchNumber);?>" class="form-control"><?php 
-													$date2=date_create($result->Date);
-													$date1=date_create($date);
-													$diff=date_diff($date1,$date2);
-													echo $diff->format("%R%a days");
+													<td class="text-center"><p id="Date-<?php echo htmlentities($result->BatchNumber);?>" class="form-control"><?php echo $result->Date;?></p></td>
+													<td class="text-center"><p id="Dates-<?php echo htmlentities($result->BatchNumber);?>" class="form-control"><?php 
+													 
 													?></p></td>
 													<td class="text-center">
 													<?php 
@@ -151,16 +151,82 @@ else{
 		</div>		
 	</div>
 	<!-- Modal -->
-	<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">																				
+	<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">																			
 		<!-- <div class="modal-dialog modal-dialog-centered modal-xl"> -->
-		<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title" id="exampleModalLabel">Update Information</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-bs-label="Close"></button>
 				</div>
 				<div class="modal-body" id="mbody2">
-			
+				<table id="zctb" class="display table bg-light table-bordered table-hover" >
+					<thead class="bg-style">
+						<tr>
+							<th>#</th>
+							<th>Name</th>
+							<th class="text-center">Batch</th>
+							<th class="text-center">InQty</th>
+							<th class="text-center">OutQty</th>
+							<th class="text-center">RestQty</th>
+							<th class="text-center">Mprice</th>
+							<th class="text-center">MRP</th>
+							<th class="text-center">ExDate</th>
+							<th class="text-center">Status</th>
+							<th class="text-center">Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php 
+						date_default_timezone_set('Asia/Dhaka');
+						$date = date('Y-m-d');											
+						$sql = "SELECT stocktable.BatchNumber, stocktable.InQty,stocktable.OutQty, stocktable.RestQty,stocktable.PurPrice,stocktable.SellPrice, stocktable.Status, stocktable.Date, medicine_list.medicine_name from stocktable LEFT JOIN medicine_list ON stocktable.Item_code = medicine_list.item_code WHERE stocktable.Date <:date and stocktable.shopId=:shopId ORDER BY medicine_list.medicine_name ASC";
+						$query = $dbh -> prepare($sql);
+						$query-> bindParam(':date', $date, PDO::PARAM_STR);
+						$query-> bindParam(':shopId', $_SESSION['user']['shopId'], PDO::PARAM_STR);
+						$query->execute();
+						$results=$query->fetchAll(PDO::FETCH_OBJ);
+						
+						$cnt=1;
+						if($query->rowCount() > 0)
+						{
+						foreach($results as $result)
+						{				?>	
+						<tr id="row-<?php echo $cnt;?>">
+							<td><?php echo htmlentities($cnt);?></td>
+							<td ><p id="name-<?php echo htmlentities($result->BatchNumber);?>" class="form-control"><?php echo htmlentities($result->medicine_name);?></p>
+								<p hidden><?php echo htmlentities($result->BatchNumber);?></p>
+							</td>
+							<td class="text-end"><p id="Batch-<?php echo htmlentities($result->BatchNumber);?>" class="form-control"><?php echo $result->BatchNumber;?></p></td>
+							<td class="text-end"><p id="InQty-<?php echo htmlentities($result->BatchNumber);?>" class="form-control"><?php echo $result->InQty;?></p></td>
+							<td class="text-end"><p id="OutQty-<?php echo htmlentities($result->BatchNumber);?>" class="form-control"><?php echo $result->OutQty;?></p></td>
+							<td class="text-end"><p id="RestQty-<?php echo htmlentities($result->BatchNumber);?>" class="form-control"><?php echo $result->RestQty;?></p></td>
+							<td class="text-end"><p id="Mprice-<?php echo htmlentities($result->BatchNumber);?>" class="form-control"><?php echo $result->PurPrice;?></p></td>
+							<td class="text-end" ><p id="MRP-<?php echo htmlentities($result->BatchNumber);?>" class="form-control"><?php echo $result->SellPrice;?></p></td>
+							<td class="text-center"><p id="Date-<?php echo htmlentities($result->BatchNumber);?>" class="form-control"><?php echo $result->Date;?></p></td>
+							<td class="text-center">
+							<?php 
+								if($result->Status==0){
+									?>
+									<button id="<?php echo htmlentities($result->BatchNumber);?>" onclick="StatusCng(event, '1')" type="button" class="btn btn-warning btn-sm">Deactive</button>
+									<?php
+								}
+								else { ?>
+									<button id="<?php echo htmlentities($result->BatchNumber);?>" type="button" onclick="StatusCng(event, '0')" class="btn btn-success btn-sm">Active</button>
+									<?php
+								}
+								
+								?>
+							</td>
+								<td class="text-center">
+									<p id="<?php echo htmlentities($result->BatchNumber);?>" type="button" onclick="editPrice(event)" class="btn btn-warning btn-sm">edit</p>
+									<button id="<?php echo htmlentities($result->BatchNumber);?>" type="button" onclick="DeleteBatch(event)" class="btn btn-dark btn-sm">Del
+								</button>
+								</td>
+							</tr>
+						<?php $cnt=$cnt+1; }} ?>
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</div>
@@ -223,6 +289,7 @@ else{
 			let Mprice = document.getElementById("Mprice-"+clickedId).innerHTML;
 			let MRP = document.getElementById("MRP-"+clickedId).innerHTML;
 			let name = document.getElementById("name-"+clickedId).innerHTML;
+			let Date = document.getElementById("Date-"+clickedId).innerHTML;
 			let RestQty = document.getElementById("RestQty-"+clickedId).innerHTML;
 			$('#mbody2').html(`
 			<div class="card-body">
@@ -275,6 +342,24 @@ else{
 			};
 			xmlhttp.open('GET', `../query2.php?updatePrice=${batch}&price=${updateRate}`, true);
 			xmlhttp.send();
+		}
+		const stockout =() =>{
+			// $('#exampleModal2').modal('show');
+			// let updateRate = document.getElementById('MRP').value;
+			// const xmlhttp = new XMLHttpRequest()
+			// xmlhttp.onreadystatechange = function () {
+			// 	if (this.readyState == 4 && this.status == 200) {
+			// 		document.getElementById('MRP-'+batch).innerHTML=updateRate;
+			// 		swal({
+			// 			title: 'Update Price',
+			// 			text: this.responseText,
+			// 			icon: 'success',
+			// 			dangerMode: true,
+			// 		});
+			// 	}
+			// };
+			// xmlhttp.open('GET', `query2.php?updatePrice=${batch}&price=${updateRate}`, true);
+			// xmlhttp.send();
 		}
 	</script>
 

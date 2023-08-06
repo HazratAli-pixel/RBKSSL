@@ -53,7 +53,7 @@ else{
 							<div  class="card-header">
                                 <div class="d-flex justify-content-between align-items-center h-100px">
 		  							<div style="font-size: 20px; " class="bg-primary;">
-									  Monthly Sales Report
+									  Monthly Purchase Report
 									</div>
 									<div >
 									<a href="<?php echo $value[2]=='stock' ? $links."/purchase/add_purchase.php": $links.'./add_purchase.php' ?>"  class="btn btn-info"> <i class="fas fa-plus mr-2"></i> Add Purchase</a>
@@ -213,15 +213,103 @@ else{
 			console.log(startDate,endDate, PID, SID)
 			const customReportDiv = document.getElementById('customReportDiv');
 			const xmlhttp = new XMLHttpRequest();
-			xmlhttp.onreadystatechange = function () {					
+			xmlhttp.onreadystatechange = function () {
 				if (this.readyState == 4 && this.status == 200) {
 					customReportDiv.innerHTML=this.responseText;
+					// swal({
+					// 	title: 'Stock Medicine',
+					// 	text: this.responseText,
+					// 	icon: 'success',
+					// 	dangerMode: true,
+					// });
 				}
 			};
 			xmlhttp.open('GET', `./reportquerysales.php?customReport&startDate=${startDate}&endDate=${endDate}&SID=${SID}&PID=${PID}`, true);
 			xmlhttp.send();
 
 		}
+		// const DeleteBatch = (event) =>{
+		// 	let clickedId = event.target.id;
+		// 	const xmlhttp = new XMLHttpRequest();
+		// 	if(clickedId.length>=2){
+		// 		let text = "Want to delete?\nEither OK or Cancel.";
+		// 		if (confirm(text) == true) {
+		// 			xmlhttp.onreadystatechange = function () {
+		// 				if (this.readyState == 4 && this.status == 200) {
+		// 					event.target.parentNode.parentNode.remove(event.target.parentNode.parentNode)
+		// 					swal({
+		// 					title: 'Stock Delete',
+		// 					text: this.responseText,
+		// 					icon: 'success',
+		// 					dangerMode: true,
+		// 				});
+		// 			}
+		// 		};
+		// 		xmlhttp.open('GET', `../query2.php?DeleteBatch=${clickedId}`, true);
+		// 		xmlhttp.send();
+		// 		} else {
+		// 			return;
+		// 		}
+		// 	}
+		// }
+		// const editPrice = (event) =>{
+		// 	let clickedId = event.target.id;
+		// 	let Mprice = document.getElementById("Mprice-"+clickedId).innerHTML;
+		// 	let MRP = document.getElementById("MRP-"+clickedId).innerHTML;
+		// 	let name = document.getElementById("name-"+clickedId).innerHTML;
+		// 	let RestQty = document.getElementById("RestQty-"+clickedId).innerHTML;
+		// 	$('#mbody2').html(`
+		// 	<div class="card-body">
+		// 				<div class="">
+		// 					<div class="row mb-3">
+		// 						<label for="" class="col-sm-3 col-form-label text-start text-sm-end">Name : </label>
+		// 						<div class="col-sm-9">
+		// 							<input id="medicineName" type="text" value="${name}" readonly class="form-control">
+		// 						</div>
+		// 					</div>
+		// 					<div class="row mb-3">
+		// 						<label for="" class="col-sm-3 col-form-label text-start text-sm-end">Batch : </label>
+		// 						<div class="col-sm-9">
+		// 							<input id="Batch" type="text" value="${clickedId}" readonly class="form-control">
+		// 						</div>
+		// 					</div>
+		// 					<div class="row mb-3">
+		// 						<label for="" class="col-sm-3 col-form-label text-start text-sm-end">Rate : </label>
+		// 						<div class="col-sm-9">
+		// 							<input id="MRP" type="text" value="${MRP}"  class="form-control">
+		// 						</div>
+		// 					</div>
+							
+		// 				</div>
+		// 				<div class="hr-dashed"></div>
+		// 				<div class="col-md-12">
+		// 					<div class="update d-grid gap-2 d-md-flex d-sm-flex justify-content-md-end justify-content-sm-end justify-content-lg-end">
+		// 						<button style="min-width: 150px;" class="btn btn-danger me-md-2" type="reset">Reset</button>
+		// 						<button style="min-width: 150px;" id="${clickedId}" class="btn btn-success" onclick="updatePrice(this.id)" name="submit" >Submit</button>
+		// 					</div>
+		// 				</div>	
+		// 			</div>`)
+		// 	$('#exampleModal2').modal('show');
+			
+		// }
+		// const updatePrice =(batch) =>{
+		// 	let updateRate = document.getElementById('MRP').value;
+		// 	const xmlhttp = new XMLHttpRequest()
+		// 	xmlhttp.onreadystatechange = function () {
+		// 		if (this.readyState == 4 && this.status == 200) {
+		// 			$('#exampleModal2').modal('hide');
+		// 			document.getElementById('MRP-'+batch).innerHTML=updateRate;
+		// 			swal({
+		// 				title: 'Update Price',
+		// 				text: this.responseText,
+		// 				icon: 'success',
+		// 				dangerMode: true,
+		// 			});
+		// 		}
+		// 	};
+		// 	xmlhttp.open('GET', `../query2.php?updatePrice=${batch}&price=${updateRate}`, true);
+		// 	xmlhttp.send();
+		// }
 	</script>
 
 

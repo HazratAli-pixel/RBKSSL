@@ -85,6 +85,7 @@ function cssStyle($lastLinkName,$currenFileName) {
 				<li <?php echo cssStyle($FileName, 'stocklist.php')?>><a href="<?php echo $BaseUrl."/stock/stocklist.php";?>">Stock Report</a></li>
 				<li <?php echo cssStyle($FileName, 'stockavailable.php')?>><a href="<?php echo $BaseUrl."/stock/stockavailable.php";?>">Available Stock</a></li>
 				<li <?php echo cssStyle($FileName, 'stockout.php')?>><a href="<?php echo $BaseUrl."/stock/stockout.php";?>">Stock out list</a></li>
+				<li <?php echo cssStyle($FileName, 'stockexpired.php')?>><a href="<?php echo $BaseUrl."/stock/stockexpired.php";?>">Stock Expired</a></li>
 			</ul>
 		</li>
 		<!-- <li class="<?php echo $FolderName=='bank' ? "open":'close' ?>"><a href="#"><i class="fas fa-landmark mr-2"></i> Bank</a>
@@ -101,14 +102,8 @@ function cssStyle($lastLinkName,$currenFileName) {
 		</li> -->
 		<li class="<?php echo $FolderName=='report' ? "open":'close' ?>"><a href="#"><i class="fas fa-book-open mr-2"></i> Report</a>
 			<ul>
-				<li <?php echo cssStyle($FileName, 'report.php')?>><a href="<?php echo $BaseUrl."/report/report.php";?>">Report</a></li>
-				<li <?php echo cssStyle($FileName, 'msg.php')?>><a href="<?php echo $BaseUrl."/msg.php";?>">Add Closing</a></li>
-				<li <?php echo cssStyle($FileName, 'msg.php')?>><a href="<?php echo $BaseUrl."/msg.php";?>">Closing List</a></li>
-				<li <?php echo cssStyle($FileName, 'msg.php')?>><a href="<?php echo $BaseUrl."/msg.php";?>">Sales Report</a></li>
-				<li <?php echo cssStyle($FileName, 'msg.php')?>><a href="<?php echo $BaseUrl."/msg.php";?>">Sales Report(User)</a></li>
-				<li <?php echo cssStyle($FileName, 'msg.php')?>><a href="<?php echo $BaseUrl."/msg.php";?>">Sales Report(Product)</a></li>
-				<li <?php echo cssStyle($FileName, 'msg.php')?>><a href="<?php echo $BaseUrl."/msg.php";?>">Sales Report(Category)</a></li>
-				<li <?php echo cssStyle($FileName, 'msg.php')?>><a href="<?php echo $BaseUrl."/msg.php";?>">Purchease Report</a></li>
+				<li <?php echo cssStyle($FileName, 'report.php')?>><a href="<?php echo $BaseUrl."/report/report.php";?>">Sales Report</a></li>				
+				<li <?php echo cssStyle($FileName, 'reportpurchase.php')?>><a href="<?php echo $BaseUrl."/report/reportpurchase.php";?>">Purchease Report</a></li>
 				<li <?php echo cssStyle($FileName, 'msg.php')?>><a href="<?php echo $BaseUrl."/msg.php";?>">Purchease Report(Category)</a></li>
 			</ul>
 		</li>
@@ -172,7 +167,7 @@ function cssStyle($lastLinkName,$currenFileName) {
 		} ?>
 
 		<?php
-			if($_SESSION['user']['position']=='SuperAdmin') { 
+			if($_SESSION['user']['position']=='SAP') { 
 		?>
 		<li class="<?php echo $FolderName=='sap1c4e1d9ce3l4dqx1c1c' ? "open":'close' ?>"><a href="#"><i class="fas fa-plus mr-2"></i>Super Admin Panel</a>
 			<ul>

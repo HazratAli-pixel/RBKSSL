@@ -85,10 +85,10 @@ else{
 											<tbody>
 
 												<?php 
-												$sql = "SELECT stocktable.BatchNumber, stocktable.InQty,stocktable.OutQty, stocktable.RestQty,stocktable.PurPrice,stocktable.SellPrice,
-												stocktable.Date,stocktable.Status, medicine_list.medicine_name from stocktable LEFT JOIN medicine_list ON stocktable.Item_code = 
-												medicine_list.item_code WHERE stocktable.RestQty = 0 ORDER BY stocktable.ID DESC";
+												$sql = "SELECT stocktable.BatchNumber, stocktable.InQty,stocktable.OutQty, stocktable.RestQty,stocktable.PurPrice,stocktable.SellPrice,stocktable.Date,stocktable.Status, medicine_list.medicine_name from stocktable LEFT JOIN medicine_list ON stocktable.Item_code = 
+												medicine_list.item_code WHERE stocktable.RestQty = 0  and stocktable.shopId=:shopId ORDER BY stocktable.ID DESC";
 												$query = $dbh -> prepare($sql);
+												$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
 												$query->execute();
 												$results=$query->fetchAll(PDO::FETCH_OBJ);
 												

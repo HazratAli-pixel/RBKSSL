@@ -45,9 +45,11 @@ if(isset($_GET['StatusCng'])){
 }
 if(isset($_GET['DeleteBatch'])){
 	$batchNumber = $_GET['DeleteBatch'];
-	$sql = "DELETE FROM stocktable WHERE BatchNumber=:batchNumber";
+	$sql = "DELETE FROM stocktable WHERE BatchNumber=:batchNumber AND shopId=:shopId AND branchId=:branchId";
 	$query = $dbh -> prepare($sql);
 	$query->bindParam(':batchNumber',$batchNumber,PDO::PARAM_STR);
+	$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+	$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 	$query->execute();
 	echo "Record Delete Successful";
 }

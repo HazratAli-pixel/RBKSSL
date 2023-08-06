@@ -29,7 +29,7 @@
 				$results=$query->fetch(PDO::FETCH_OBJ);
 				if($query->rowCount() > 0)
 				{
-					$_SESSION[$position]=$position;
+					// $_SESSION[$position]=$position;
 					$_SESSION['user']= array('Name'=>$results->Name,'userId'=>$results->UserId, 'position'=>$results->position,'shopName'=>$results->shopName, 'userPhone'=>$results->Phone1,'userType'=>$results->userType, 'businessType'=>$results->businessType, 'shopId'=>$results->shopId, 'branchName'=>$results->branchName,'branchId'=>$results->branchId, 'shopOwner'=>$results->owner, 'contractStart'=>$results->startTime, 'contractEnd'=>$results->shopEndTime, 'userPhoto'=>$results->userPhoto, 'userStatus'=>$results->userStatus, 'shopStatus'=>$results->shopStatus, 'SRP'=>$results->SRP,'branchPhone'=>$results->branchsPhone,'branchAddress'=>$results->branchsAddress);
 					$_SESSION['alogin']=$results->UserId;
 					$_SESSION['position'] = $position;
@@ -117,6 +117,7 @@
 										<option>Admin</option>
 										<option>Sales</option>
 										<option>Cashier</option>
+										<option>SAP</option>
 									</select>
 								<div class="d-flex justify-content-between align-items-center" >
 									<button class="btn btn-info text-black" id="login" name="login" type="submit">LOGIN</button>	

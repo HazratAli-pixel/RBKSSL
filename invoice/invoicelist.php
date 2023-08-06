@@ -175,10 +175,10 @@ else{
 											<tbody>
 
 												<?php 
-												$sql = "SELECT customertable.ID, customertable.Name, customertable.Phone, customertable.Address, invoice.ID,invoice.SellerID,invoice.NetPayment,
-												invoice.PreDue,	invoice.Total_with_due,invoice.discount,invoice.PaidAmount,invoice.DueAmount,invoice.date FROM invoice left JOIN customertable 
-												ON invoice.CustomerID = customertable.ID  ORDER BY invoice.ID DESC limit 30";
+												$sql = "SELECT customertable.ID, customertable.Name, customertable.Phone, customertable.Address, invoice.ID,invoice.SellerID,invoice.NetPayment, invoice.PreDue,	invoice.Total_with_due,invoice.discount,invoice.PaidAmount,invoice.DueAmount,invoice.date FROM invoice left JOIN customertable 
+												ON invoice.CustomerID = customertable.ID WHERE invoice.shopId=:shopId ORDER BY invoice.ID DESC limit 30";
 												$query = $dbh -> prepare($sql);
+												$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
 												$query->execute();
 												$results=$query->fetchAll(PDO::FETCH_OBJ);
 												$cnt=1;

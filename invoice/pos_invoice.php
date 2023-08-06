@@ -289,68 +289,6 @@ include('../includes/config.php');
 												</table>
 											</div>
 											<div class="row">
-												<div class="col-8">
-													<!-- <div class="row">
-														<div class="form-check form-switch pe-2">
-															<input class="form-check-input" value="1" type="checkbox" onclick="emi_display(this.value)" name="switch" id="flexSwitchCheckDefault2">
-															<label class="form-check-label" for="flexSwitchCheckDefault2">EMI</label>
-														</div>
-													</div>
-													<div id="emi_info" class="d-flex justify-content-between d-none" >
-														<div class="p-1 col-6">
-															<div class="row mb-2">
-																<label  for="" class="fw-bold col-5 text-end">Name: </label>
-																<div class="col-7">
-																	<input id="ivoicediscount" type="text" class="form-control text-end" value="" placeholder="Name....">
-																</div>
-															</div>
-															<div class="row mb-2">
-																<label  for="" class="fw-bold col-5 text-end"> Reference-1: </label>
-																<div class="col-7">
-																	<input id="ivoicediscount" type="text" class="form-control text-end" value="" placeholder="Reference 1">
-																</div>
-															</div>
-															<div class="row mb-2">
-																<label  for="" class="fw-bold col-5 text-end">Reference-2: </label>
-																<div class="col-7">
-																	<input id="ivoicediscount" type="text" class="form-control text-end" value="" placeholder="Reference 2">
-																</div>
-															</div>
-															<div class="row mb-2">
-																<label  for="" class="fw-bold col-5 text-end">EMI type: </label>
-																<div class="col-7">
-																	<input id="ivoicediscount" type="text" class="form-control text-end" value="" placeholder="0.00">
-																</div>
-															</div>
-															<div class="row mb-2">
-																<label  for="" class="fw-bold col-5 text-end">EMI Day: </label>
-																<div class="col-7">
-																	<input id="ivoicediscount" type="text" class="form-control text-end" value="" placeholder="0.00">
-																</div>
-															</div>
-														</div>
-														<div class="p-1 col-6">
-															<div class="row mb-2">
-																<label  for="" class="fw-bold col-5 text-end">EMI: </label>
-																<div class="col-7">
-																	<input id="ivoicediscount" type="text" class="form-control text-end" value="" placeholder="0.00">
-																</div>
-															</div>
-															<div class="row mb-2">
-																<label  for="" class="fw-bold col-5 text-end">Loan Amount: </label>
-																<div class="col-7">
-																	<input id="ivoicediscount" type="text" class="form-control text-end" value="" placeholder="0.00">
-																</div>
-															</div>
-															<div class="row mb-2">
-																<label  for="" class="fw-bold col-5 text-end">EMI Start: </label>
-																<div class="col-7">
-																	<input id="ivoicediscount" type="calender" class="form-control text-end" value="" placeholder="0.00">
-																</div>
-															</div>
-														</div>
-													</div> -->
-												</div>
 												<div class="col-4">
 													<div class="col-12 d-flex flex-column justify-content-end">
 														<div class="row mb-2">

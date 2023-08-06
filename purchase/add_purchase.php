@@ -71,9 +71,9 @@ function uniqidReal($lenght = 7) {
 			$shopId= $_SESSION['user']['shopId'];
 			$branchId = $_SESSION['user']['branchId'];
 
-			foreach($batch_id as $key => $value){  // need to add shop and branch id
-				$sql = "INSERT INTO purchaseslist (InvoiceId, ProductId, BatchId, Qty, Mprice, MRP, shopId, branchId) VALUES 
-				('".$invoice_no."','".$product_id[$key]."','".$batch_id[$key]."','".$product_quantity[$key]."','".$product_rate[$key]."','".$mrp[$key]."','".$shopId."','".$branchId."')";
+			foreach($batch_id as $key => $value){ 
+				$sql = "INSERT INTO purchaseslist (InvoiceId, ProductId, BatchId, ExDate, Qty, Mprice, MRP, shopId, branchId) VALUES 
+				('".$invoice_no."','".$product_id[$key]."','".$batch_id[$key]."','".$expeire_date[$key]."','".$product_quantity[$key]."','".$product_rate[$key]."','".$mrp[$key]."','".$shopId."','".$branchId."')";
 				$query = mysqli_query($con,$sql);
 			}
 			if($lastInsertId)
@@ -271,6 +271,7 @@ function uniqidReal($lenght = 7) {
 														<th class="text-center"><nobr>Product name<i class="text-danger">*</i></nobr></th> 
 														<th class="text-center"><nobr>Product Id<i class="text-danger"></i></nobr></th>
 														<th class="text-center"><nobr>Batch no<i class="text-danger"></i></nobr></th>
+														<th class="text-center"><nobr>Ex Date<i class="text-danger"></i></nobr></th>
 														<th class="text-center"><nobr>Quantity <i class="text-danger">*</i></nobr></th>
 														<th class="text-center"><nobr>Manufacturer Price<i class="text-danger">*</i></nobr></th>
 														<th class="text-center"><nobr>MRP <i class="text-danger">*</i></nobr></th>
@@ -293,6 +294,9 @@ function uniqidReal($lenght = 7) {
 														</td>
 														<td>
 															<input type="text" name="batch_id[]" id="batch_id_1" class="batch_class text-center form-control text-end"  tabindex="7" placeholder="Batch no" required>
+														</td>
+														<td>
+															<input type="date" name="expeire_date[]" id="expeire_date_1" class="batch_class text-center form-control text-end text-red"  tabindex="7"  required>
 														</td>
 													
 														<td class="text-end">
