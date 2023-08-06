@@ -191,9 +191,6 @@ else{
 				<div class="modal-body" id="mbody8">
 					<div class=" text-center">
 						<h1 class="" id="invoiceids"></h1>
-						<!-- <button onclick="InvoicePrint(this.id)" type="button" id="print" class="btn btn-warning"><i class="fas fa-print mr-2" style="margin-right: 10px;"></i> <span id="print"></span> Print</button>
-						<button onclick="InvoicePrint(this.id)" type="button" id="download" class="btn btn-info"><i class="fas fa-download mr-2" style="margin-right: 10px;"></i> Download</button> -->
-						<!-- <a href="customer_ledger.php" class="btn btn-primary mr-3"><i class="fas fa-print mr-2" style="margin-right: 10px;"></i>ledger list</a>   -->
 					</div>
 					<div class="card-body">
 						<div class="col-12 rounded">

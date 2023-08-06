@@ -101,6 +101,7 @@ function cssStyle($lastLinkName,$currenFileName) {
 		</li> -->
 		<li class="<?php echo $FolderName=='report' ? "open":'close' ?>"><a href="#"><i class="fas fa-book-open mr-2"></i> Report</a>
 			<ul>
+				<li <?php echo cssStyle($FileName, 'report.php')?>><a href="<?php echo $BaseUrl."/report/report.php";?>">Report</a></li>
 				<li <?php echo cssStyle($FileName, 'msg.php')?>><a href="<?php echo $BaseUrl."/msg.php";?>">Add Closing</a></li>
 				<li <?php echo cssStyle($FileName, 'msg.php')?>><a href="<?php echo $BaseUrl."/msg.php";?>">Closing List</a></li>
 				<li <?php echo cssStyle($FileName, 'msg.php')?>><a href="<?php echo $BaseUrl."/msg.php";?>">Sales Report</a></li>

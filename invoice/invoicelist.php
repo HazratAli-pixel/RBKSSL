@@ -392,6 +392,11 @@ else{
 			xmlhttp.open('GET', `../query.php?invodetails=${clicked_id}`, true);
 			xmlhttp.send();
 		}
+		const InvoicePrint =(event) =>{
+			const name =event.target.name
+			const id =event.target.id
+			window.open(`http://localhost:8080/rbkssl/invoice/invoice.php?invoiceid=${id}&ptype=${name}`, "_blank")
+		}
 		
 	</script>
 
