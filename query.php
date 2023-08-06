@@ -23,7 +23,7 @@
 		$ItemId=$_GET['ItemId'];
 
 		$sql = "SELECT medicine_list.medicine_name, medicine_list.status, stocktable.BatchNumber, stocktable.InQty, stocktable.OutQty, stocktable.PurPrice, stocktable.SellPrice, stocktable.SellBoxPrice,stocktable.Date, stocktable.Status  FROM medicine_list Right JOIN stocktable ON
-		medicine_list.item_code = stocktable.Item_code WHERE stocktable.Item_code=:ItemId AND stocktable.Status!=0 AND stocktable.RestQty!=0 AND stocktable.shopId=:shopId";
+		medicine_list.item_code = stocktable.Item_code WHERE stocktable.Item_code=:ItemId AND stocktable.Status!=0  AND stocktable.shopId=:shopId";
 		$query= $dbh -> prepare($sql);
 		$query-> bindParam(':ItemId', $ItemId, PDO::PARAM_STR);
 		$query-> bindParam(':shopId', $_SESSION['user']['shopId'], PDO::PARAM_STR);

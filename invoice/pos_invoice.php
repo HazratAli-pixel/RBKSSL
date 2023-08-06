@@ -185,11 +185,12 @@ include('../includes/config.php');
 
 												<!-- <div class="row p-0 m-0">
 													<div class="col-12 flex-wrap d-flex justify-content-between w-100" style="overflow-x: hidden;overflow-y: scroll; height: 700px;" >
-														<?php $sql = "SELECT * from  medicine_list ORDER BY medicine_name ASC ";
-														$query = $dbh -> prepare($sql);
-														$query->execute();
-														$results=$query->fetchAll(PDO::FETCH_OBJ);
-														$cnt=1;
+														<?php
+														// $sql = "SELECT * from  medicine_list ORDER BY medicine_name ASC ";
+														// $query = $dbh -> prepare($sql);
+														// $query->execute();
+														// $results=$query->fetchAll(PDO::FETCH_OBJ);
+														// $cnt=1;
 														if($query->rowCount() > 0)
 														{
 															foreach($results as $result)
@@ -208,7 +209,10 @@ include('../includes/config.php');
 																		<div class="card">
 																		<img src="./pic/ali2.jpg" class="h-100 card-img-top" alt="...">
 																		<div class="card-body">
-																			<p class="text-center fw-bold"><?php echo htmlentities($result->medicine_name);?></p>
+																			<p class="text-center fw-bold">
+																				<?php 
+																				// echo htmlentities($result->medicine_name);
+																				?></p>
 																		</div>
 																		</div>
 																	</div>
