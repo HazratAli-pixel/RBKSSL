@@ -143,7 +143,7 @@ function uniqidReal($lenght = 7) {
 										<label for="manufacturer" class="col-md-2 text-end col-form-label">Manufacturer <i class="text-danger"> * </i>:</label>
 										<div class="col-md-4">
 										<?php 
-														$cname="SELECT ID, name, Status from company";
+														$cname="SELECT ID, name, Status from company WHERE shopId=:shopId";
 														$cquery = $dbh -> prepare($cname);			
 														$cquery->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
 														$cquery->execute();

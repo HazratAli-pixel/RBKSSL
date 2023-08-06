@@ -3,7 +3,7 @@ session_start();
 error_reporting(0);
 // require_once('../middleware.php');
 include('includes/config.php');
-if(strlen($_SESSION['alogin'])==0 || $_SESSION['user']['SRP']==0)
+if($_SESSION['user']['SRP']==0)
 	{	
 	header('location:../dashboard.php');
 }

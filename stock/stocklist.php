@@ -162,7 +162,6 @@ else{
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-bs-label="Close"></button>
 				</div>
 				<div class="modal-body" id="mbody2">
-			
 				</div>
 			</div>
 		</div>
@@ -192,7 +191,7 @@ else{
 					});
 				}
 			};
-			xmlhttp.open('GET', `query2.php?StatusCng=${BatchNumber}&Status=${status}`, true);
+			xmlhttp.open('GET', `../query2.php?StatusCng=${BatchNumber}&Status=${status}`, true);
 			xmlhttp.send();
 
 		}
@@ -213,7 +212,7 @@ else{
 						});
 					}
 				};
-				xmlhttp.open('GET', `query2.php?DeleteBatch=${clickedId}`, true);
+				xmlhttp.open('GET', `../query2.php?DeleteBatch=${clickedId}`, true);
 				xmlhttp.send();
 				} else {
 					return;
@@ -275,7 +274,7 @@ else{
 					});
 				}
 			};
-			xmlhttp.open('GET', `query2.php?updatePrice=${batch}&price=${updateRate}`, true);
+			xmlhttp.open('GET', `../query2.php?updatePrice=${batch}&price=${updateRate}`, true);
 			xmlhttp.send();
 		}
 	</script>

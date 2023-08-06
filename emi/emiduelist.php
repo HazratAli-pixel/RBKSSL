@@ -97,6 +97,8 @@ else{
 												customertable.Phone,customertable.Address FROM emi_table RIGHT JOIN loan_table ON loan_table.ID = emi_table.loanID JOIN customertable ON loan_table.CustomerID = customertable.ID WHERE emi_table.Status = 0 AND emi_table.shopId=:shopId AND emi_table.branchId=:branchId AND emi_table.Date<:date";
 												$query = $dbh -> prepare($sql);
 												$query->bindParam(':date',$date,PDO::PARAM_STR);
+												$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+												$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 												$query->execute();
 												$results=$query->fetchAll(PDO::FETCH_OBJ);
 												$cnt=1;
