@@ -227,7 +227,7 @@ else{
 			const SID = document.getElementById('seller_id').value;
 			const name =event.target.name
 			const id =event.target.id
-			window.open(`http://localhost:8080/rbkssl/report/reportprint.php?customReport&startDate=${startDate}&endDate=${endDate}&SID=${SID}&PID=${PID}&ptype=${name}`, "_blank")
+			window.open(`./reportprint.php?customReport&startDate=${startDate}&endDate=${endDate}&SID=${SID}&PID=${PID}&ptype=${name}`, "_blank")
 		}
 	</script>
 
