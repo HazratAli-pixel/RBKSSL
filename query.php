@@ -22,8 +22,7 @@
 	if(isset($_GET['ItemId'])){
 		$ItemId=$_GET['ItemId'];
 
-		$sql = "SELECT medicine_list.medicine_name, medicine_list.status, stocktable.BatchNumber, stocktable.InQty, stocktable.OutQty, stocktable.PurPrice, stocktable.SellPrice, stocktable.SellBoxPrice,stocktable.Date, stocktable.Status  FROM medicine_list Right JOIN stocktable ON
-		medicine_list.item_code = stocktable.Item_code WHERE stocktable.Item_code=:ItemId AND stocktable.Status!=0  AND stocktable.shopId=:shopId";
+		$sql = "SELECT medicine_list.medicine_name, medicine_list.status,medicine_list.strength,  stocktable.BatchNumber, stocktable.InQty, stocktable.OutQty, stocktable.PurPrice, stocktable.SellPrice, stocktable.SellBoxPrice,stocktable.Date, stocktable.Status  FROM medicine_list Right JOIN stocktable ON medicine_list.item_code = stocktable.Item_code WHERE stocktable.Item_code=:ItemId AND stocktable.Status!=0  AND stocktable.shopId=:shopId";
 		$query= $dbh -> prepare($sql);
 		$query-> bindParam(':ItemId', $ItemId, PDO::PARAM_STR);
 		$query-> bindParam(':shopId', $_SESSION['user']['shopId'], PDO::PARAM_STR);
@@ -60,7 +59,7 @@
 						$qty=1;
 						$stock = $result->InQty-$result->OutQty;
 						$_SESSION['items'][$count] = array('ItemId'=>$ItemId,'ProductName'=>$result->medicine_name, 'SellQty'=>$qty,'Batch'=>$result->BatchNumber,'Exdate'=>$result->Date, 'InQty'=>$result->InQty,
-						'OutQty'=>$result->OutQty,'InStock'=>$stock,'Price'=>$result->SellPrice, 'PursingPrice'=>$result->PurPrice,'Mstatus'=>$result->status,'SStatus'=>$result->Status);
+						'OutQty'=>$result->OutQty,'InStock'=>$stock,'Price'=>$result->SellPrice, 'PursingPrice'=>$result->PurPrice,'Mstatus'=>$result->status,'SStatus'=>$result->Status, 'strength'=>$result->strength);
 					}
 					
 					
@@ -68,8 +67,7 @@
 				else if($result->InQty>$result->OutQty){
 					$qty=1;
 					$stock = $result->InQty-$result->OutQty;
-					$_SESSION['items'][0]=array('ItemId'=>$ItemId,'ProductName'=>$result->medicine_name, 'SellQty'=>$qty,'Batch'=>$result->BatchNumber,'Exdate'=>$result->Date, 'InQty'=>$result->InQty,
-					'OutQty'=>$result->OutQty,'InStock'=>$stock, 'Price'=>$result->SellPrice, 'PursingPrice'=>$result->PurPrice,'Mstatus'=>$result->status,'SStatus'=>$result->Status);
+					$_SESSION['items'][0]=array('ItemId'=>$ItemId,'ProductName'=>$result->medicine_name, 'SellQty'=>$qty,'Batch'=>$result->BatchNumber,'Exdate'=>$result->Date, 'InQty'=>$result->InQty,'OutQty'=>$result->OutQty,'InStock'=>$stock, 'Price'=>$result->SellPrice, 'PursingPrice'=>$result->PurPrice,'Mstatus'=>$result->status,'SStatus'=>$result->Status,'strength'=>$result->strength );
 				}
 				else{
 					echo 2;
@@ -84,7 +82,7 @@
 			foreach($_SESSION['items'] as $key => $value){
 				$Itotal = $value['SellQty']* $value['Price'];
 				$Data.="<tr>						
-							<td class='text-center'> <p class='form-control'>$value[ProductName]</p>  </td>
+							<td class='text-center'> <p class='form-control'>$value[ProductName]-$value[strength]</p>  </td>
 							<td class='text-center'> <p class='form-control'>$value[Batch]</p> </td>
 							<td class='text-center'>
 								<input type='number' class='form-control $value[SellQty] text-center' id='$value[ItemId]' onChange='changeQty(this.id,this.value)' value='$value[SellQty]' min='1' max='120'>
@@ -114,7 +112,7 @@
 		$results=$query->fetch(PDO::FETCH_OBJ);
 		$cnt=1;
 			$Data2="
-			<p> <span class='fw-bold'>Name : </span> $results->medicine_name</p>
+			<p> <span class='fw-bold'>Name : </span> $results->medicine_name </p>
 			<p> <span class='fw-bold fw-2xl'>In Stock : </span> $results->RestQty</p>
 			<p> <span class='fw-bold'>Pursing Price : </span> $results->PurPrice</p>";
 			echo $Data2;
@@ -191,8 +189,8 @@
 			$lastInsertId = $dbh->lastInsertId();
 			
 			$i= count($_SESSION['items']);
-			$sql2="INSERT INTO sellingproduct(InvoiceId, ProductId, BatchId, Qty, Price, NetPrice,SellerId) 
-			VALUES(:lastInsertId,:ItemId,:Batch,:SellQty,:Price,:PursingPrice,:userid)";
+			$sql2="INSERT INTO sellingproduct(InvoiceId, ProductId, BatchId, Qty, Price, NetPrice,SellerId, shopId, branchId) 
+			VALUES(:lastInsertId,:ItemId,:Batch,:SellQty,:Price,:PursingPrice,:userid, :shopId, :branchId)";
 
 			$sql3="Update stocktable set SellQty=:SellQty where BatchNumber=:BatchNumber AND Item_code=:productID AND shopId=:shopId AND branchId=:branchId";
 			
@@ -206,7 +204,9 @@
 				':SellQty'	=>	$_SESSION['items'][$count]['SellQty'],
 				':Price'	=>	$T_price,
 				':PursingPrice'	=>	$_SESSION['items'][$count]['Price'],
-				':userid'	=>	$_SESSION['alogin']			
+				':userid'	=>	$_SESSION['alogin'],	
+				':shopId'	=>	$_SESSION['user']['shopId'],		
+				':branchId'	=>	$_SESSION['user']['branchId'],		
 				); 
 				$InsertSellItem= $dbh->prepare($sql2);
 				$InsertSellItem->execute($data);
@@ -369,16 +369,18 @@
 	if(isset($_GET['CustomerID'])){
 		$str = $_GET['CustomerID'];
 		$value =explode("-",$str);
-		$sql = "SELECT * from customertable WHERE (Name=:name AND Phone=:phone AND Address=:address) OR (Name=:name2 AND Phone=:phone2) 
+		$sql = "SELECT * from customertable WHERE (Name=:name AND Phone=:phone AND Address=:address and shopId=:shopId) OR (Name=:name2 AND Phone=:phone2 and shopId=:shopId2) 
 		OR (Name=:name3 AND Address=:address3)";
 		$query = $dbh -> prepare($sql);
 		$query->bindParam(':name',$phone[0],PDO::PARAM_STR);
 		$query->bindParam(':phone',$value[1],PDO::PARAM_STR);
 		$query->bindParam(':address',$value[2],PDO::PARAM_STR);
+		$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
 		$query->bindParam(':name2',$phone[0],PDO::PARAM_STR);
 		$query->bindParam(':phone2',$value[1],PDO::PARAM_STR);
 		$query->bindParam(':name3',$phone[0],PDO::PARAM_STR);
 		$query->bindParam(':address3',$value[2],PDO::PARAM_STR);
+		$query->bindParam(':shopId2',$_SESSION['user']['shopId'],PDO::PARAM_STR);
 		$query->execute();
 		$result=$query->fetch(PDO::FETCH_OBJ);
 		//$inqty = $result->Status;
@@ -396,9 +398,10 @@
 		$ID = $value[0];
 		$_SESSION['C_ID'] = $value[0];
 		$sql = "SELECT customerledger.NewDue, customertable.Phone from customerledger LEFT JOIN customertable ON 
-		customerledger.CustomerID=customertable.ID WHERE customerledger.CustomerID=:id ORDER BY customerledger.ID DESC limit 1";
+		customerledger.CustomerID=customertable.ID WHERE customerledger.CustomerID=:id and customerledger.shopId=:shopId ORDER BY customerledger.ID DESC limit 1";
 		$query = $dbh -> prepare($sql);
 		$query->bindParam(':id',$ID,PDO::PARAM_STR);
+		$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
 		$query->execute();
 		$result=$query->fetch(PDO::FETCH_OBJ);
 		$_SESSION['cusPhone']= $result->Phone;
@@ -409,9 +412,10 @@
 	if(isset($_GET['invodetails'])){
 		$invoId = $_GET['invodetails'];
 		$sql = "SELECT sellingproduct.BatchId,sellingproduct.Qty,sellingproduct.Price,sellingproduct.NetPrice, medicine_list.medicine_name from 
-		sellingproduct left join  medicine_list ON sellingproduct.ProductId = medicine_list.item_code WHERE InvoiceId=:id";
+		sellingproduct left join  medicine_list ON sellingproduct.ProductId = medicine_list.item_code WHERE sellingproduct.InvoiceId=:id and sellingproduct.shopId=:shopId";
 		$query = $dbh -> prepare($sql);
 		$query->bindParam(':id',$invoId,PDO::PARAM_STR);
+		$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
 		$query->execute();
 		$results=$query->fetchAll(PDO::FETCH_OBJ);
 		if($query->rowCount() > 0)
@@ -449,13 +453,9 @@
 		$pattern = '%'.$medicineName.'%';
 		$pattern2 = '%'.$strength.'%';
 		$manufacturer_id = '%'.$manufacturer_id.'%';
-		$sql = "SELECT * from  medicine_list WHERE medicine_name like :pattern and menufacturer like  :manufacturer_id";
+		$sql = "SELECT * from  medicine_list WHERE medicine_name like :pattern and menufacturer like  :manufacturer_id and shopId=:shopId";
 		$query = $dbh -> prepare($sql);
-		// $query->bindParam(':pattern',$pattern,PDO::PARAM_STR);
-		// $stmt->execute(['limit' => $limit, 'offset' => $offset]); 
-		$query->execute([':pattern' => $pattern,':manufacturer_id' => $manufacturer_id]);
-		// $query->execute([':pattern' => $pattern, ':pattern2' => $pattern2,':manufacturer_id' => $manufacturer_id]);
-		// $query->execute();
+		$query->execute([':pattern' => $pattern,':manufacturer_id' => $manufacturer_id, ':shopId'=>$_SESSION['user']['shopId']]);
 		$results=$query->fetchAll(PDO::FETCH_OBJ);
 		if($query->rowCount() > 0)
 		{ $cnt=1;

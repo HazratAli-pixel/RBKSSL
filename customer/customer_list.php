@@ -131,7 +131,7 @@
 									
 									<tbody>
 
-                                        <?php $sql = "SELECT * from  customertable shopId=:shopId";
+                                        <?php $sql = "SELECT * from  customertable WHERE shopId=:shopId";
                                         $query = $dbh -> prepare($sql);
 										$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
                                         $query->execute();

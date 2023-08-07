@@ -320,7 +320,7 @@ function uniqidReal($lenght = 7) {
 												</tbody>
 												<tfoot>
 													<tr>
-														<td class="text-end" colspan="6"><b>Sub Total:</b></td>
+														<td class="text-end" colspan="7"><b>Sub Total:</b></td>
 														<td class="text-end">
 															<input type="text" id="sub_total"  class="text-end form-control" name="sub_total" placeholder="0.00" readonly="" />
 														</td>
@@ -329,7 +329,7 @@ function uniqidReal($lenght = 7) {
 														</td>
 													</tr>
 													<tr>
-														<td class="text-end" colspan="6"><b>Vat:</b></td>
+														<td class="text-end" colspan="7"><b>Vat:</b></td>
 														<td class="text-end">
 															<input type="number" id="vat" onkeyup="purchase_vatcalculation()" class="text-end form-control valid_number" name="vat" placeholder="%" tabindex="15" />
 														</td>
@@ -338,7 +338,7 @@ function uniqidReal($lenght = 7) {
 														</td>
 													</tr>
 													<tr>
-														<td class="text-end" colspan="6"><b>Discount:</b></td>
+														<td class="text-end" colspan="7"><b>Discount:</b></td>
 														<td class="text-end">
 															<input type="number" id="discount" onkeyup="disoucnt_calculation()" class="text-end form-control valid_number" name="discount" placeholder="0.00" tabindex="16" />
 														</td>
@@ -348,7 +348,7 @@ function uniqidReal($lenght = 7) {
 													</tr>
 													<tr>
 														
-														<td class="text-end" colspan="6"><b>Grand Total:</b></td>
+														<td class="text-end" colspan="7"><b>Grand Total:</b></td>
 														<td class="text-end">
 															<input type="text" id="grandTotal" class="text-end form-control" name="grand_total_price" value="0.00" readonly="readonly" />
 														</td>
@@ -357,7 +357,7 @@ function uniqidReal($lenght = 7) {
 														</td>
 													</tr>
 													<tr>
-														<td class="text-end" colspan="6"><b>Paid Amount:</b></td>
+														<td class="text-end" colspan="7"><b>Paid Amount:</b></td>
 														<td class="text-end">
 															<input type="number" id="paid_amount" class="text-end form-control valid_number" name="paid_amount" onkeyup="paid_calculation()" placeholder="0.00" tabindex="18" />
 														</td>
@@ -366,7 +366,7 @@ function uniqidReal($lenght = 7) {
 														</td>
 													</tr>
 													<tr>
-														<td class="text-end" colspan="6"><b>Due Amount:</b></td>
+														<td class="text-end" colspan="7"><b>Due Amount:</b></td>
 														<td class="text-end">
 															<input type="text" id="due_amount" class="text-end form-control" name="due_amount" placeholder="0.00" readonly="readonly" />
 														</td>
@@ -428,6 +428,7 @@ function add_purchaseRow(click){
 				output+='</td>';
 				output+='<td> <input type="text" name="product_id2[]" id="product_id2_'+count+'" class="form-control batch_class text-center"  tabindex="7" placeholder="Product ID" readonly="readonly"/></td>';
 				output+='<td> <input type="text" name="batch_id[]" id="batch_id_'+count+'" class="form-control batch_class text-center"  tabindex="7" placeholder="Batch no" /></td>';
+				output+='<td><input type="date" name="expeire_date[]" id="expeire_date_1" class="batch_class text-center form-control text-end text-red"  tabindex="7"  required></td>';
 				
 				
 				

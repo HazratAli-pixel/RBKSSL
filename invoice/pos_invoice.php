@@ -131,7 +131,7 @@ include('../includes/config.php');
 												}?>
 											</div>
 										</div> -->
-										<!-- button Part ends here -->
+										<!-- button Part ends here
 
 										<!-- Medicine list Part starts here -->
 										<div class="col-12 col-md-10 col-lg-2">
@@ -166,7 +166,7 @@ include('../includes/config.php');
 																		<tr style="user-select: none"  id="<?php echo htmlentities($result->item_code);?>" onClick="reply_click(this.id)" class="header">
 																			<!-- <td hidden class="text-center"><?php echo htmlentities($cnt);?></td> -->
 																			<td style="visibility: none;" hidden class="text-center"><?php echo htmlentities($result->category);?> - All</td>
-																			<td class="text-center fw-bold" ><?php echo htmlentities($result->medicine_name);?>  
+																			<td class="text-center fw-bold" ><?php echo htmlentities($result->medicine_name . "-".$result->strength);?>  
 																				<input type="hidden" name= "MedicineName" value="<?php echo htmlentities($result->medicine_name);?>">
 																			</td>
 																			<!-- <td style="text-align: center; ">
@@ -268,7 +268,7 @@ include('../includes/config.php');
 															{
 																$Itotal = $value['SellQty']*$value['Price'];
 																echo "<tr>						
-																		<td class='text-center'> <p class='form-control'>$value[ProductName]</p>  </td>
+																		<td class='text-center'> <p class='form-control'>$value[ProductName]-$value[strength]</p>  </td>
 																		<td class='text-center'> <p class='form-control'>$value[Batch]</p> </td>
 																		<td class='text-center'>
 																			<input type='number' class='form-control $value[SellQty] text-center' id='$value[ItemId]' onChange='changeQty(this.id,this.value)' value='$value[SellQty]' min='1' max='120'>

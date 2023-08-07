@@ -1,3 +1,18 @@
+<?php 
+function uniqidReal($lenght = 10) {
+	// uniqid gives 13 chars, but you could adjust it to your needs.
+	if (function_exists("random_bytes")) {
+		$bytes = random_bytes(ceil($lenght / 2));
+	} elseif (function_exists("openssl_random_pseudo_bytes")) {
+		$bytes = openssl_random_pseudo_bytes(ceil($lenght / 2));
+	} else {
+		throw new Exception("no cryptographically secure random function available");
+	}
+	return substr(bin2hex($bytes), 0, $lenght);
+}
+?>
+
+
 <?php
 session_start();
 error_reporting(0);
@@ -12,7 +27,7 @@ if(strlen($_SESSION['alogin'])==0)
 	
 		if(isset($_POST['submit']))
 	  		{
-			$barcode=$_POST['barcode'];
+			$item_code=$_SESSION['user']['shopId'].uniqidReal().$_SESSION['user']['branchId'];
 			$medicinename=$_POST['medicinename'];
 			$companyID=$_POST['companyID'];;
 			$medicinedetails=$_POST['medicinedetails'];
@@ -29,9 +44,10 @@ if(strlen($_SESSION['alogin'])==0)
 			move_uploaded_file($file_tmp_name, $location);
 			//$status=1;
 		
-			$sql="INSERT INTO medicine_list (medicine_name, unit, box_size,strength, medicine_details, category, menufacturer, status,shopId,branchId) VALUES(:medicinename,:unit,:boxsize,:strength,:medicinedetails,:category,:companyID,:radio_value,:shopId,:branchId)";
+			$sql="INSERT INTO medicine_list (medicine_name,item_code, unit, box_size,strength, medicine_details, category, menufacturer, status,shopId,branchId) VALUES(:medicinename,:item_code,:unit,:boxsize,:strength,:medicinedetails,:category,:companyID,:radio_value,:shopId,:branchId)";
 			$query = $dbh->prepare($sql);
 			$query->bindParam(':medicinename',$medicinename,PDO::PARAM_STR);
+			$query->bindParam(':item_code',$item_code,PDO::PARAM_STR);
 			$query->bindParam(':unit',$unit,PDO::PARAM_STR);
 			$query->bindParam(':boxsize',$boxsize,PDO::PARAM_STR);
 			$query->bindParam(':strength',$strength,PDO::PARAM_STR);
@@ -113,14 +129,14 @@ if(strlen($_SESSION['alogin'])==0)
 										</div>
 										<div class="card-body">
 											<form method="post" class="row" enctype="multipart/form-data" onsubmit="return" >
-												<div class="col-md-6">
+												<!-- <div class="col-md-6">
 													<div class="row mb-3">
 														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Bar Code/ Item code<i class="text-danger">* </i> : </label>
 														<div class="col-sm-8">
 														<input type="text" class="form-control" name="barcode" placeholder="Bar code / Item Code" required>
 														</div>
-													</div>
-												</div>
+													</div> 
+												</div> -->
 												<div class="col-md-6">
 													<div class="row mb-3">
 														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Product Name <i class="text-danger">* </i>:</label>
@@ -185,7 +201,7 @@ if(strlen($_SESSION['alogin'])==0)
 												<?php 
 													$medcinetype ="SELECT * from medicine_unit WHERE shopId=:shopId";
 													$cquery = $dbh -> prepare($medcinetype);
-													$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+													$cquery->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
 													$cquery->execute();
 													$results=$cquery->fetchAll(PDO::FETCH_OBJ);							   
 												?>
@@ -213,7 +229,7 @@ if(strlen($_SESSION['alogin'])==0)
 												<?php 
 													$medcinetype ="SELECT * from medicine_category WHERE shopId=:shopId";
 													$cquery = $dbh -> prepare($medcinetype);
-													$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+													$cquery->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
 													$cquery->execute();
 													$results=$cquery->fetchAll(PDO::FETCH_OBJ);							   
 												?>
@@ -265,12 +281,11 @@ if(strlen($_SESSION['alogin'])==0)
 													</div>
 												</div>					
 												<div class="hr-dashed"></div>
-
 													<div class="col-md-12">
 														<div class="d-grid gap-2 d-md-flex d-sm-flex justify-content-md-end justify-content-sm-end justify-content-lg-end">
 															<button style="min-width: 150px;" class="btn btn-danger me-md-2" type="reset">Reset</button>
 															<button style="min-width: 150px;" class="btn btn-success" type="submit" name="submit" >Submit</button>
-														</div>
+													</div>
 												</div>						
 											</form>	
 										</div>
