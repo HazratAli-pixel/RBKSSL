@@ -166,7 +166,7 @@ include('../includes/config.php');
 																		<tr style="user-select: none"  id="<?php echo htmlentities($result->item_code);?>" onClick="reply_click(this.id)" class="header">
 																			<!-- <td hidden class="text-center"><?php echo htmlentities($cnt);?></td> -->
 																			<td style="visibility: none;" hidden class="text-center"><?php echo htmlentities($result->category);?> - All</td>
-																			<td class="text-center fw-bold" ><?php echo htmlentities($result->medicine_name . "-".$result->strength);?>  
+																			<td class="text-center fw-bold" title=<?php echo $result->medicine_details;  ?> ><?php echo htmlentities($result->medicine_name . "-".$result->strength);?>  
 																				<input type="hidden" name= "MedicineName" value="<?php echo htmlentities($result->medicine_name);?>">
 																			</td>
 																			<!-- <td style="text-align: center; ">
