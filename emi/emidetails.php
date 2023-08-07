@@ -37,19 +37,19 @@ else{
 			$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
 			$query->execute();
 			
-			$cusName=$_POST['cusName2'];
+			// $cusName=$_POST['cusName2'];
 
-			$sql2="INSERT INTO customerledger (AdminID,CustomerID,PreDue,Credit,shopId,branchId) 
-			VALUES(:userid,:cusId,:PreDue,:paidAmount,:shopId,:branchId)";
+			// $sql2="INSERT INTO customerledger (AdminID,CustomerID,PreDue,Credit,shopId,branchId) 
+			// VALUES(:userid,:cusId,:PreDue,:paidAmount,:shopId,:branchId)";
 
-			$query2 = $dbh->prepare($sql2);
-			$query2->bindParam(':userid',$userid,PDO::PARAM_STR);
-			$query2->bindParam(':cusId',$cusId,PDO::PARAM_STR);
-			$query2->bindParam(':PreDue',$preDue,PDO::PARAM_STR);
-			$query2->bindParam(':paidAmount',$paidAmount,PDO::PARAM_STR);
-			$query2->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
-			$query2->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
-			$query2->execute();
+			// $query2 = $dbh->prepare($sql2);
+			// $query2->bindParam(':userid',$userid,PDO::PARAM_STR);
+			// $query2->bindParam(':cusId',$cusId,PDO::PARAM_STR);
+			// $query2->bindParam(':PreDue',$preDue,PDO::PARAM_STR);
+			// $query2->bindParam(':paidAmount',$paidAmount,PDO::PARAM_STR);
+			// $query2->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
+			// $query2->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
+			// $query2->execute();
 			
 		}
 
@@ -113,23 +113,27 @@ else{
 
 								<?php
 								$id = $_GET['customerID'];
-								$sql = "SELECT customertable.Name,customertable.Address, customertable.Phone, customerledger.NewDue FROM customertable LEFT JOIN customerledger ON customerledger.CustomerID =customertable.ID WHERE customerledger.CustomerID=:id AND customertable.shopId=:shopId AND customertable.branchId=:branchId ORDER BY customerledger.ID DESC limit 1"; 
+								$sql = "SELECT customertable.Name, customertable.Fname, customertable.Address, customertable.Phone, loan_table.InvoiceID, loan_table.loanAmount, loan_table.EMItype,loan_table.Day, loan_table.Duration, loan_table.InterestRate, loan_table.Interest, loan_table.EMI, loan_table.totalEMI, loan_table.inputDate FROM `loan_table` JOIN customertable ON loan_table.CustomerID = customertable.ID WHERE loan_table.uuid=:id AND loan_table.shopId=:shopId"; 
 								$query = $dbh -> prepare($sql);
 								$query->bindParam(':id',$id,PDO::PARAM_STR);
 								$query->bindParam(':shopId',$_SESSION['user']['shopId'],PDO::PARAM_STR);
-								$query->bindParam(':branchId',$_SESSION['user']['branchId'],PDO::PARAM_STR);
 								$query->execute();
 								$result2=$query->fetch(PDO::FETCH_OBJ);
 								
 								?>
 								<div class="row">
 									<div class="col-12  d-flex">
-										<table>
+										<table class="">
 											<thead>
 												<tr>
 													<th>Name</th>
 													<td>:</td>
 													<td id="name"><?php echo htmlentities($result2->Name);?></td>
+												</tr>
+												<tr>
+													<th>Father Name</th>
+													<td>:</td>
+													<td id="name"><?php echo htmlentities($result2->FName);?></td>
 												</tr>
 												<tr>
 													<th>Phone</th>
@@ -142,9 +146,24 @@ else{
 													<td><?php echo htmlentities($result2->Address);?></td>
 												</tr>
 												<tr>
-													<th>Total Due</th>
+													<th>Loan Amount</th>
 													<td>:</td>
-													<td id="totalDue"><?php echo htmlentities($result2->NewDue);?></td>
+													<td id="totalDue"><?php echo htmlentities($result2->loanAmount);?></td>
+												</tr>
+												<tr>
+													<th>EMI Type</th>
+													<td>:</td>
+													<td id="totalDue"><?php echo htmlentities($result2->EMItype);?></td>
+												</tr>
+												<tr>
+													<th>Total EMI</th>
+													<td>:</td>
+													<td id="totalDue"><?php echo htmlentities($result2->totalEMI);?> (<?php echo htmlentities($result2->Duration);?> month)</td>
+												</tr>
+												<tr>
+													<th>Loan Time</th>
+													<td>:</td>
+													<td id="totalDue"><?php echo htmlentities($result2->inputDate );?></td>
 												</tr>
 											</thead>
 										</table>
@@ -153,10 +172,7 @@ else{
 								<br>
 								<div class="row table-responsive">
 									<div class="col-12 col-md-12 col-lg-12 col-xl-12 d-flex row flex-sm-column">
-								
-										<table id="zctb" class="display table table-striped table-bordered table-hover" >
-
-
+										<table id="zctb" class="display table table-striped table-bordered table-hover">
 											<thead class="bg-style">
 												<tr>
 													<th class="text-center">#</th>
@@ -365,7 +381,7 @@ else{
 			let name, phone, date, emiNo, emi, predue, preEmiDue,NewDue;
 			name= document.getElementById('name').innerText;
 			phone= document.getElementById('phone').innerText;
-			predue= document.getElementById('totalDue').innerText;
+			// predue= document.getElementById('totalDue').innerText;
 			date= document.getElementById("date-"+id).innerText;
 			emiNo= document.getElementById("emisl-"+id).innerText;
 			emi= document.getElementById("emi-"+id).innerText;
@@ -382,14 +398,14 @@ else{
 			
 
 			emiID.value = id;
-			c_p_due.value =predue; 
-			c_p_total_due.value = predue;
+			c_p_due.value =0; 
+			c_p_total_due.value =0;
 			c_name.value = name;
 			c_phone.value = phone;
 			c_date.value = date;
 			c_emi_no.value = emiNo;
 			c_emi.value = emi;
-			emipay();
+			// emipay();
 		}
 		const emipay = (event) =>{
 			// let val = event.target.value;
@@ -397,16 +413,15 @@ else{
 			let c_paid= document.getElementById('c_paid').value;
 			let c_new_due= document.getElementById('c_new_due');
 			let c_p_total_due = document.getElementById('c_p_total_due').value;
-			c_new_due.value = (c_p_total_due-c_paid).toFixed(2);
+			c_new_due.value = ((Number(c_p_total_due)+Number(emi))-Number(c_paid)).toFixed(2);
 
 		}
 		const fullemipay = (event) =>{
 			let c_p_total_due = document.getElementById('c_p_total_due').value;
 			let emi= document.getElementById('c_emi').value;
 			let c_paid= document.getElementById('c_paid');
-			let c_new_due= document.getElementById('c_new_due');
-			c_paid.value = emi;
-			c_new_due.value = (Number(c_p_total_due)-emi).toFixed(2);
+			c_paid.value = (Number(c_p_total_due)+Number(emi)).toFixed(2);
+			c_new_due.value =0;
 		}
 		const StatusCng = (event)=>{
 			let clickedId = event.target.id

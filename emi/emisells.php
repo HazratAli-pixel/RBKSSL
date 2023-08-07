@@ -1,3 +1,19 @@
+<?php 
+function uniqidReal($lenght = 13) {
+	// uniqid gives 13 chars, but you could adjust it to your needs.
+	if (function_exists("random_bytes")) {
+		$bytes = random_bytes(ceil($lenght / 2));
+	} elseif (function_exists("openssl_random_pseudo_bytes")) {
+		$bytes = openssl_random_pseudo_bytes(ceil($lenght / 2));
+	} else {
+		throw new Exception("no cryptographically secure random function available");
+	}
+	return substr(bin2hex($bytes), 0, $lenght);
+}
+
+?>
+
+
 <?php
 session_start();
 error_reporting(0);
@@ -14,6 +30,7 @@ include('../includes/config.php');
 	  		{
 			$userid = $_SESSION['alogin'];
 			$customerID=$_POST['customerName'];
+			$uuid = "dshop".uniqidReal().
 			$ref_1=$_POST['ref_1'];
 			$ref_2=$_POST['ref_2'];
 			$inoviceId=$_POST['inoviceId'];
@@ -29,11 +46,12 @@ include('../includes/config.php');
 			$emi=$_POST['monthlyEMI'];
 			$status=0;
 
-			$sql="INSERT INTO loan_table (SellerID, InvoiceID, CustomerID, Ref1_id, Ref2_id, loanAmount, EMItype, Day, Duration, InterestRate, Interest, EMI, totalEMI, Status,shopId,branchId) 
-			VALUES(:userid,:inoviceId,:customerID,:ref_1,:ref_2,:loanamount,:type,:day,:month,:interestrate,:total_interest,:usualEMI,:total_emi,:status,:shopId,:branchId)";
+			$sql="INSERT INTO loan_table (SellerID, InvoiceID, uuid, CustomerID, Ref1_id, Ref2_id, loanAmount, EMItype, Day, Duration, InterestRate, Interest, EMI, totalEMI, Status,shopId,branchId) 
+			VALUES(:userid,:inoviceId,:uuid,:customerID,:ref_1,:ref_2,:loanamount,:type,:day,:month,:interestrate,:total_interest,:usualEMI,:total_emi,:status,:shopId,:branchId)";
 			$query = $dbh->prepare($sql);
 			$query->bindParam(':userid',$userid,PDO::PARAM_STR);
 			$query->bindParam(':inoviceId',$inoviceId,PDO::PARAM_STR);
+			$query->bindParam(':uuid',$uuid,PDO::PARAM_STR);
 			$query->bindParam(':customerID',$customerID,PDO::PARAM_STR);
 			$query->bindParam(':ref_1',$ref_1,PDO::PARAM_STR);
 			$query->bindParam(':ref_2',$ref_2,PDO::PARAM_STR);
@@ -81,8 +99,8 @@ include('../includes/config.php');
 				$temp2=round($temp-$emi,2);
 
 
-				$sql2="INSERT INTO emi_table(loanID, EMI_SL, Date, Day, Balance, EMI,R_balance,shopId,branchId) 
-				VALUES(:loanID,:EMI_SL,:Date,:Day,:Balance,:EMI,:R_balance,:shopId,:branchId)";
+				$sql2="INSERT INTO emi_table(loanID, EMI_SL, uuid, Date, Day, Balance, EMI,R_balance,shopId,branchId) 
+				VALUES(:loanID,:EMI_SL,:uuid,:Date,:Day,:Balance,:EMI,:R_balance,:shopId,:branchId)";
 
 				for ($i = $for_start; $i <= $for_end; $i = strtotime("+1 $type", $i)) {
 					$datess = date('Y-m-d', $i);
@@ -90,6 +108,7 @@ include('../includes/config.php');
 					$data = array(
 						':loanID'	=>	$lastInsertId,
 						':EMI_SL'	=>	$y,
+						':uuid'	=>	$uuid,
 						':Date'	=>	$datess,
 						':Day'	=>	$dates,
 						':Balance'	=>	$temp,
